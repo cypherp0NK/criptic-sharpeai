@@ -172,41 +172,14 @@ function Status() {
 
 const FarmsPage: NextPageWithLayout = () => {
 
-  const [establishedConnection, establishedConnectionState] = useState<boolean>(false)
-  useEffect(() => {
-    try { if (window) {
-      // Check if web3modal wallet connection is available on storage
-        establishedConnectionState(true)
-    } else {
-      console.log('window is not available');
-    } }
-    catch{
-      console.log('cannot connect to client window')
-    }
-  }, [establishedConnectionState])
   return (
     <>
       <NextSeo
         title="Taurus Pools"
         description="Sharpe - Structured Investment Products, For the World."
       />
-      {establishedConnection ? <div className="mx-auto w-full sm:pt-8">
-        {/* <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center md:gap-6">
-          <div className="flex items-center justify-between gap-4">
-            <Status />
-            <div className="md:hidden">
-              <StackedSwitch />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 lg:gap-8">
-            <div className="hidden shrink-0 md:block">
-              <StackedSwitch />
-            </div>
-            <Search />
-            <SortList />
-          </div>
-        </div> */}
+      <div>{process.browser ? <div className="mx-auto w-full sm:pt-8">
+        
 
         <div className="mb-3 hidden grid-cols-3 gap-6 rounded-lg bg-white shadow-card dark:bg-light-dark sm:grid lg:grid-cols-5">
           <span className="px-8 py-6 text-sm tracking-wider text-gray-500 dark:text-gray-300">
@@ -227,7 +200,7 @@ const FarmsPage: NextPageWithLayout = () => {
         </div>
 
         {FarmsData.map((farm) => {
-            const { address, shareBalance1, shareBalance2, shareBalance3, poolPos1, poolPos2, poolPos3, 
+            const { shareBalance1, shareBalance2, shareBalance3, poolPos1, poolPos2, poolPos3, 
               v1P1,
               v1P2,
               v2P1,
@@ -416,7 +389,6 @@ const FarmsPage: NextPageWithLayout = () => {
             }
             const handleWithdrawSubmit = () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
-                    console.log(address)
                     const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
                     return [shareWithdrawn(amountAsWei.toString())]
                  }
@@ -565,7 +537,7 @@ const FarmsPage: NextPageWithLayout = () => {
             </FarmList>
           );
         })}
-      </div> : <div></div>}
+      </div> : <div></div>}</div>
     </>
   );
 };
