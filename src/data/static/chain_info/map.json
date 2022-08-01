@@ -1,0 +1,60 @@
+{
+  "137": {
+    "Vault1": [
+      "0xBE8DB36731fF8072B1c58d32Aacf8D1BCeDeC77b"
+    ],
+    "USDC": [
+      "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
+    ],
+    "USDT": [
+      "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+    ],
+    "Pool1": [
+      "0xDaC8A8E6DBf8c690ec6815e0fF03491B2770255D"
+    ],
+    "Vault2": [
+      "0xFD3B52fDF0CE5E0919400Fc90C2C5183BE517eE8"
+    ],
+    "FRAX": [
+      "0x45c32fA6DF82ead1e2EF74d17b76547EDdFaFF89"
+    ],
+    "Pool2": [
+      "0x1eDBF151B7A4BFB611030efcB460ae0D3516AEE7"
+    ],
+    "Vault3": [
+      "0x9db685d9E4f2e5A7fAEC5760F2946C32c8422b91"
+    ],
+    "MIMATIC": [
+      "0xa3Fa99A148fA48D14Ed51d610c367C61876997F1"
+    ],
+    "Pool3": [
+      "0x7de263D0Ad6e5D208844E65118c3a02A9A5D56B6"
+    ]
+
+  },
+  "42": {
+    "SharpeAI": [
+      "0x43F2dFDf2CbDc1Ea0Bcfd23aEc6f12b374525979"
+    ],
+    "WethToken": [
+      "0xd0A1E359811322d97991E03f863a0C30C2cF029C"
+    ],
+    "DaiToken": [
+      "0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa"
+    ],
+    "PoolAddress": [
+      "0x77BAEEB630da5bc5DabdBd15eeB84A37E473fFb3"
+    ]
+  },
+  "4": {
+    "SharpeAI": [
+      "0x1ebdb78C9612567dF28e6ec1b9A2Ee98Af7Fb6eE"
+    ],
+    "WethToken": [
+      "0xc778417E063141139Fce010982780140Aa0cD5Ab"
+    ],
+    "DaiToken": [
+      "0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735"
+    ]
+  }
+}

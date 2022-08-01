@@ -38,6 +38,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [poolApy2, setPoolApy2] = useState<string>('0%')
   const [poolApy3, setPoolApy3] = useState<string>('0%')
   const [totalPoolApy, setTotalPoolApy] = useState<string>('0%')
+  const [monthlyApy, setMonthlyApy] = useState<string>('0%')
+
   const [shareBalance1, setShareBalance1] = useState<string>('0.00')
   const [shareBalance2, setShareBalance2] = useState<string>('0.00')
   const [shareBalance3, setShareBalance3] = useState<string>('0.00')
@@ -129,7 +131,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         const [b, roi] = await allBalances(web3Address)
         const [userYield1, userYield2, userYield3, e] = await allEarnings(web3Address)
         const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(web3Address)
-        const [apy1, apy2, apy3, totalAPY] = await fetchAPY(web3Address)
+        const [apy1, apy2, apy3, totalAPY, monthlyAPY] = await fetchAPY(web3Address)
         const [sBal1, sBal2, sBal3] = await singleBalances(web3Address)
         const [tBal1, tBal2, tBal3, tBal4] = await fetchTokenBalances(web3Address)
         setDeposits(('$').concat((b.toFixed(2)).toString()))
@@ -145,6 +147,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setPoolApy2(((apy2.toFixed(2)).toString()).concat('%'))
         setPoolApy3(((apy3.toFixed(2)).toString()).concat('%'))
         setTotalPoolApy(((totalAPY.toFixed(2)).toString()).concat('%'))
+        setMonthlyApy(((monthlyAPY.toFixed(2)).toString()).concat('%'))
+
         setTB1((tBal1.toFixed(2)).toString())
         setTB2((tBal2.toFixed(2)).toString())
         setTB3((tBal3.toFixed(2)).toString())
@@ -231,6 +235,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         deposits,
         earnings,
         roi,
+        monthlyApy,
         vE1,
         vE2,
         vE3,
