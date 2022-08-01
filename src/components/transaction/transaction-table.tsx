@@ -22,7 +22,7 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 
 
 export default function TransactionTable() {
-  const { poolPos1, poolPos2, poolPos3, poolApy1, poolApy2, poolApy3 } = useContext(WalletContext);
+  const { address, poolPos1, poolPos2, poolPos3, poolApy1, poolApy2, poolApy3 } = useContext(WalletContext);
 
   const COLUMNS = [
     {
@@ -46,7 +46,7 @@ export default function TransactionTable() {
       accessor: 'createdAt',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value === "USDC-USDT" ? poolPos1 : value === "USDC-FRAX" ? poolPos2 : value === "USDC-MIMATIC" ? poolPos3 : '--'}</div>
+        address ? <div className="ltr:text-right rtl:text-left">{value === "USDC-USDT" ? poolPos1 : value === "USDC-FRAX" ? poolPos2 : value === "USDC-MIMATIC" ? poolPos3 : '0'}</div> : <div className="ltr:text-right rtl:text-left">--</div>
       ),
       minWidth: 50,
       maxWidth: 50,
@@ -77,7 +77,7 @@ export default function TransactionTable() {
       accessor: 'apy',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value === "USDC-USDT" ? poolApy1 : value === "USDC-FRAX" ? poolApy2 : value === "USDC-MIMATIC" ? poolApy3 : '--'}</div>
+        address ? <div className="ltr:text-right rtl:text-left">{value === "USDC-USDT" ? poolApy1 : value === "USDC-FRAX" ? poolApy2 : value === "USDC-MIMATIC" ? poolApy3 : '0'}</div> : <div className="ltr:text-right rtl:text-left">--</div>
       ),
       minWidth: 60,
       maxWidth: 60,
