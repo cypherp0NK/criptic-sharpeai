@@ -171,14 +171,26 @@ function Status() {
 }
 
 const FarmsPage: NextPageWithLayout = () => {
-  
+
+  const [establishedConnection, establishedConnectionState] = useState<boolean>(false)
+  useEffect(() => {
+    try { if (window) {
+      // Check if web3modal wallet connection is available on storage
+        establishedConnectionState(true)
+    } else {
+      console.log('window is not available');
+    } }
+    catch{
+      console.log('cannot connect to client window')
+    }
+  }, [establishedConnectionState])
   return (
     <>
       <NextSeo
         title="Taurus Pools"
         description="Sharpe - Structured Investment Products, For the World."
       />
-      <div className="mx-auto w-full sm:pt-8">
+      {establishedConnection ? <div className="mx-auto w-full sm:pt-8">
         {/* <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-center md:gap-6">
           <div className="flex items-center justify-between gap-4">
             <Status />
@@ -553,7 +565,7 @@ const FarmsPage: NextPageWithLayout = () => {
             </FarmList>
           );
         })}
-      </div>
+      </div> : <div></div>}
     </>
   );
 };
