@@ -175,7 +175,7 @@ const FarmsPage: NextPageWithLayout = () => {
   // const [establishedConnection, establishedConnectionState] = useState<boolean>(false)
   // useEffect(() => {
   //   try { if (window) {
-  //     // Check if web3modal wallet connection is available on storage
+  //     //Check if web3modal wallet connection is available on storage
   //       establishedConnectionState(true)
   //   } else {
   //     console.log('window is not available');
