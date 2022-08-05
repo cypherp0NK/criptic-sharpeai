@@ -9,6 +9,9 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import Sidebar from '@/layouts/dashboard/_sidebar';
 import WalletConnect from '@/components/nft/wallet-connect';
+import Button from '@/components/ui/button';
+import { Close } from '@/components/icons/close';
+import { ExportIcon } from '@/components/icons/export-icon';
 
 function NotificationButton() {
   return (
@@ -75,6 +78,7 @@ export default function Layout({
   
   return (
       <div className="ltr:xl:pl-72 rtl:xl:pr-72 ltr:2xl:pl-80 rtl:2xl:pr-80">
+
         <Header />
         <Sidebar className="hidden xl:block" />
         <main
