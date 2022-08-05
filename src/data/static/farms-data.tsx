@@ -9,7 +9,7 @@ export const FarmsData = [
     earned: '0',
     apr: '29.72%',
     liquidity: '$232,941,720',
-    multiplier: '40x',
+    multiplier: '',
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ export const FarmsData = [
     earned: '0',
     apr: '25.20%',
     liquidity: '$132,941,720',
-    multiplier: '10x',
+    multiplier: '',
   },
   {
     id: 3,
@@ -33,6 +33,6 @@ export const FarmsData = [
     earned: '0',
     apr: '33.73%',
     liquidity: '$332,941,720',
-    multiplier: '22x',
+    multiplier: '',
   },
 ];
