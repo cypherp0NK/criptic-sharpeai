@@ -47,7 +47,7 @@ const HomePage: NextPageWithLayout<
           {/* <CoinSlider coins={coinSlideData} /> */}
           <PriceFeedSlider priceFeeds={priceFeedData} />
         </div> :
-        <div className="w-full flex flex-col items-center justify-center rounded-lg bg-white px-4 py-16 text-center shadow-card dark:bg-light-dark h-40 sm:h-6 xs:px-6 md:px-5 md:py-24">
+        <div className="w-full flex flex-col items-center justify-center rounded-lg bg-white px-4 py-16 text-center shadow-card dark:bg-light-dark h-44 sm:h-6 xs:px-6 md:px-5 md:py-24">
             <div className="w-full mb-2 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white shadow-card md:h-24 md:w-24">
               <svg
                 stroke="currentColor"
