@@ -21,6 +21,11 @@ import {WalletContext} from "@/lib/hooks/use-connect"
 import {TabContext, TabPanel} from "@material-ui/lab"
 import { useWithdrawTokens } from '@/data/utils/useWithdrawTokens';
 import { getEventListeners } from "events";
+import { Divider } from "@material-ui/core";
+import { Close } from '@/components/icons/close';
+import { ExportIcon } from '@/components/icons/export-icon';
+import { Spinner } from '../components/icons/spinner';
+import { ERROR_EVENT } from "web3modal";
 
 
 const sort = [
@@ -172,6 +177,7 @@ function Status() {
 
 const FarmsPage: NextPageWithLayout = () => {
 
+  
   return (
     <>
       <NextSeo
@@ -200,7 +206,7 @@ const FarmsPage: NextPageWithLayout = () => {
         </div>
 
         {FarmsData.map((farm) => {
-            const { shareBalance1, shareBalance2, shareBalance3, poolPos1, poolPos2, poolPos3, 
+            const { address, shareBalance1, shareBalance2, shareBalance3, poolPos1, poolPos2, poolPos3, 
               v1P1,
               v1P2,
               v2P1,
@@ -212,13 +218,28 @@ const FarmsPage: NextPageWithLayout = () => {
               tB3,
               tB4 } = useContext(WalletContext);
 
-            const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, provider} = useDepositTokens(farm.token1, farm.token2, farm.vault)
+            const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi, provider} = useDepositTokens(farm.token1, farm.token2, farm.vault)
             const {totalSupply, fetchPrice, tokenBalances} = vaultData(farm.vault, farm.token1, farm.token2)
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
             const [amt1, setAmt] = useState<string>('')
             const [amt2, setAmt2] = useState<string>('')
             const [approved, setApproved] = useState<boolean>(false)
+            const [approvedToken1, setApprovedToken1] = useState<boolean>(false)
+            const [approvedToken2, setApprovedToken2] = useState<boolean>(false)
+            const [card0Of3, setCard0Of3] = useState<boolean>(false)
+            const [card1Of3, setCard1Of3] = useState<boolean>(false)
+            const [card2Of3, setCard2Of3] = useState<boolean>(false)
+            const [card3Of3, setCard3Of3] = useState<boolean>(false)
+            const [usdcPending, setUsdcPending] = useState<boolean>(false)
+            const [usdtPending, setUsdtPending] = useState<boolean>(false)
+            const [isMining1, setIsMining1] = useState<boolean>(false)
+            const [isMining2, setIsMining2] = useState<boolean>(false)
+            const [isMining3, setIsMining3] = useState<boolean>(false)
+            const [depositHash, setDepositHash] = useState<string>('https://polygonscan.com/tx/')
+            const [withdrawHash, setWithdrawHash] = useState<string>('https://polygonscan.com/tx/')
+            const [errorCard, setErrorCard] = useState<boolean>(false)
+            const [errorMsg, setErrorMsg] = useState<string>('')
 
             const maxBalance1 = async () => {
               if (farm.from === "USDC" && farm.to === "USDT"){
@@ -320,37 +341,99 @@ const FarmsPage: NextPageWithLayout = () => {
                   else{
                     const amountAsWei = Number(amt1) * 1e6
                     const amount2AsWei = utils.parseEther(amt2.toString())
-                    const tS = totalSupply()
                     setApproved(true)
                     return [approveToken1(amountAsWei.toString()), approveToken2(amount2AsWei.toString())]
                   }
                   
               }
-              const getContractEvent = async () => {
-                console.log('running')
-                    
-                    let contr = new ethers.Contract(farm.token1, erc20ABI, provider)
-                    
-                    contr.on("approve", (from, to, amount, event) => {
-                        console.log("transfer happened")
-                        console.log(amount.toString())
-                        console.log(event)
-                        console.log(JSON.stringify(from))
-                    })
+
+            const handleApproveSubmit1 = async () => {
+                try{ 
+                    if (approvedToken2 === false) {
+                      setCard0Of3(true)
+                    }
+                    const amountAsWei = Number(amt1) * 1e6
+                    return [approveToken1(amountAsWei.toString()),setIsMining1(true)]}
+                catch (err) {
+                    if (err instanceof Error){
+                      setErrorMsg(err.message)
+                    }
+                    else{
+                      setErrorMsg('Something went wrong')
+                    }
+                    setErrorCard(true)
+                  }
+            }
+
+            const handleApproveSubmit2 = async () => {
+              
+              if (farm.from === "USDC" && farm.to === "USDT"){
+                try{
+                  const amount2AsWei = Number(amt2) * 1e6
+                  if (approvedToken1 === false) {
+                    setCard0Of3(true)
+                  }
+                  return [approveToken2(amount2AsWei.toString()), setIsMining2(true)]}
+
+                catch (err) {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
+                  }
+                  else{
+                    setErrorMsg('Something went wrong')
+                  }
+                  setErrorCard(true)
+                }
               }
+              else{
+                try{ const amount2AsWei = utils.parseEther(amt2.toString())
+                  if (approvedToken1 === false) {
+                    setCard0Of3(true)
+                  }
+                return [approveToken2(amount2AsWei.toString()), setIsMining2(true)]}
+
+                catch (err) {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
+                  }
+                  else{
+                    setErrorMsg('Something went wrong')
+                  }
+                  setErrorCard(true)
+                }
+              }
+            }
+              
               
             const handleDepositSubmit = async () => {
               if (farm.from === "USDC" && farm.to === "USDT"){
-                const amountAsWei = Number(amt1) * 1e6
-                const amount2AsWei = Number(amt2) * 1e6
-                setApproved(false)
-                return [depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))]
+                try {const amountAsWei = Number(amt1) * 1e6
+                  const amount2AsWei = Number(amt2) * 1e6
+                  return [depositTokens((amountAsWei.toString()), (amount2AsWei.toString())), setApproved(false), setIsMining3(true)]}
+                catch (err) {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
+                  }
+                  else{
+                    setErrorMsg('Cannot deposit')
+                  }
+                  setErrorCard(true)
+                }
               }
               else{
-                const amountAsWei = Number(amt1) * 1e6
-                const amount2AsWei = utils.parseEther(amt2.toString())
-                setApproved(false)
-                return [depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))]
+                try
+                  {const amountAsWei = Number(amt1) * 1e6
+                  const amount2AsWei = utils.parseEther(amt2.toString())
+                  return [depositTokens((amountAsWei.toString()), (amount2AsWei.toString())), setApproved(false), setIsMining3(true)]}
+                catch (err) 
+                  {if (err instanceof Error){
+                      setErrorMsg(err.message)
+                    }
+                    else{
+                      setErrorMsg('Cannot deposit tokens')
+                    }
+                  }
+                  setErrorCard(true)
               }
               
               }
@@ -368,6 +451,9 @@ const FarmsPage: NextPageWithLayout = () => {
               const {shareWithdrawn, shareWithdrawState} = useWithdrawTokens(farm.vault)
               const {sharesBalance} = vaultData(farm.vault, farm.token1, farm.token2)
               const [ amount, amountState ] = useState<string>('')
+              const [card0Of1, setCard0Of1] = useState<boolean>(false)
+              const [card1Of1, setCard1Of1] = useState<boolean>(false)
+              const [withdrawalMining, setWithdrawalMining] = useState<boolean>(false)
 
               const maxBalance3 = async () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
@@ -389,26 +475,83 @@ const FarmsPage: NextPageWithLayout = () => {
             }
             const handleWithdrawSubmit = () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
-                    const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
-                    return [shareWithdrawn(amountAsWei.toString())]
+                  try
+                    {const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
+                    return [shareWithdrawn(amountAsWei.toString()),setWithdrawalMining(true),setCard0Of1(true)]}
+                  catch (err) 
+                    {
+                      if (err instanceof Error){
+                        setErrorMsg(err.message)
+                      }
+                      else{
+                        setErrorMsg('Cannot withdraw tokens')
+                      }
+                      setErrorCard(true)
+                    }
                  }
                  else{      
-                    const amountAsWei = utils.parseEther((amount).toString())
-                    return [shareWithdrawn(amountAsWei.toString())]
+                    try
+                      {
+                        const amountAsWei = utils.parseEther((amount).toString())
+                        return [shareWithdrawn(amountAsWei.toString()),setWithdrawalMining(true),setCard0Of1(true)]
+                      }
+                    catch (err) 
+                      {
+                        if (err instanceof Error){
+                          setErrorMsg(err.message)
+                        }
+                        else{
+                          setErrorMsg('Cannot withdraw tokens')
+                        }
+                        setErrorCard(true)
+                      }
                  }
             }
-            // useEffect(() => {
-            //   try{
-            //     console.log('running')
-            //     let contr = new ethers.Contract(farm.token1, erc20ABI, provider)
-            //     contr.on("approve", (from, to, amount) => {
-            //         console.log("transfer happened")
-            //         console.log(JSON.stringify(to))
-            //     })}
-            //     catch {
-            //       console.log('aaaa')
-            //     }
-            // })
+            useEffect(() => {
+              
+                const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
+                const contr2 = new ethers.Contract(farm.token2, erc20ABI, provider)
+                const sharpeEvents = new ethers.Contract(farm.vault, abi, provider)
+              contr.on("Approval", (from, to, amount, event) => {
+                
+                  if (from === address && to === farm.vault)
+                    {
+                      setCard1Of3(true)
+                      setApprovedToken1(true)
+                      setUsdcPending(true)
+                      setIsMining1(false)
+                    }
+                  
+              })
+              contr2.on("Approval", (from, to, amount) => {
+                if (from === address && to === farm.vault)
+                  {
+                    
+                    setCard1Of3(true)
+                    setApprovedToken2(true)
+                    setUsdtPending(true)
+                    setIsMining2(false)
+                  }
+            })
+              sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
+                if (to === address)
+                  {
+                    setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+                    setCard3Of3(true)
+                    setIsMining3(false)
+                  }
+            })
+            sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
+              if (to === address)
+                {
+                  setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+                  setCard1Of1(true)
+                  setWithdrawalMining(false)
+                }
+          })
+
+            
+            }, [])
            
           return (
             <FarmList
@@ -420,6 +563,162 @@ const FarmsPage: NextPageWithLayout = () => {
               liquidity={farm.liquidity}
               multiplier={farm.multiplier}
             >
+              <div className="fixed left-5 top-5 z-50 gap-2 flex flex-col bg-transparent w-96">
+            {card0Of3 ? <div className="bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-1/6"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>0/3 Transactions confirmed</div>
+                  <div>Approve token 1 in your wallet.</div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setCard0Of3(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            { card1Of3 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-1/4"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>1/3 Transactions confirmed</div>
+                  <div>Approve token 2 in your wallet.</div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small"
+                onClick={()=> {setCard1Of3(false)}} 
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {usdcPending && usdtPending ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-3/4"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>2/3 Transactions confirmed</div>
+                  <div>Click on deposit and<br></br>confirm transaction in your wallet.</div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setUsdcPending(false);setUsdtPending(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {card3Of3 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-full"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>3/3 Transactions confirmed</div>
+                  <div>Deposit Confirmed</div>
+                  <div className="flex flex-col border border-txngreen p-5 gap-2 rounded-md">
+                    <div>You have successfully deposited into the {farm.from}-{farm.to} vault</div>
+                    <div className="flex flex-row text-txngreen cursor-pointer">
+                    <a target="_blank"
+                rel="noopener noreferrer"
+                href={depositHash} className="inline-flex items-center">
+                  View on Explorer&nbsp;<ExportIcon className="h-auto w-2.5" /></a>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setCard3Of3(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {card0Of1 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-1/6"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>0/1 Transactions confirmed</div>
+                  <div>Confirm wallet transaction to complete withdrawal.</div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setCard0Of1(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {card1Of1 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-full"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+              <div className="flex flex-col text-little gap-2">
+                  <div>1/1 Transactions confirmed</div>
+                  <div>Withdraw Success</div>
+                  <div className="flex flex-col border border-txngreen p-5 gap-2 rounded-md">
+                    <div>You have successfully Withdrawn from the {farm.from}-{farm.to} vault</div>
+                    <div className="flex flex-row text-txngreen cursor-pointer">
+                    <a target="_blank"
+                      rel="noopener noreferrer"
+                      href={withdrawHash} className="inline-flex items-center">
+                        View on Explorer&nbsp;<ExportIcon className="h-auto w-2.5" /></a>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setCard1Of1(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {errorCard ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txnError p-2 w-full"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2 w-full">
+                  <div>Transaction Error</div>
+                  <div className="flex flex-col border border-txnError p-5 gap-2 rounded-md">
+                    <div>{errorMsg}</div>
+                  </div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setErrorCard(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+          </div>
+
               <TabContext value={SelectedTab}>
               <TabPanel value="1">
               <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
@@ -464,32 +763,163 @@ const FarmsPage: NextPageWithLayout = () => {
                   WITHDRAW
                 </Button>
               </div>
-              {farm.to === "USDT" ? approved ? (
-                <Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
-                DEPOSIT
-              </Button>
+              {farm.to === "USDT" ? approvedToken1 && approvedToken2 ? (
+                <>
+                { isMining3 ? (
+                  <Button shape="rounded" fullWidth size="large">
+                  <Spinner/>
+                  </Button>
+                ):
+                  (<Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
+                    DEPOSIT
+                  </Button>)}
+                </>
               )
-               : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit}>
-                APPROVE
-              </Button>) : farm.to === "FRAX" ? approved ? (
-                <Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
-                DEPOSIT
-              </Button>
+               : approvedToken1 ? (<>
+
+                { isMining2 ? (
+                  <Button shape="rounded" fullWidth size="large">
+                  <Spinner/>
+                  </Button>
+                ):
+                (<Button onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
+                Approve {farm.to}
+                  </Button>)}
+                  </>
+               ) : approvedToken2 ? (
+                 <>
+                  {isMining1 ? (
+                    <Button shape="rounded" fullWidth size="large">
+                    <Spinner/>
+                    </Button>
+                  ) : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
+                  Approve {farm.from}
+                  </Button>)}
+              </>
+               ) : (<div className="grid grid-cols-2 gap-4 sm:gap-6">
+               {isMining1 ? (<Button shape="rounded" fullWidth size="large">
+               <Spinner/>
+               </Button>) : 
+               (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+                 Approve {farm.from}
+               </Button>)}
+
+               {isMining2 ? (
+                 <Button shape="rounded" fullWidth size="large">
+                 <Spinner/>
+               </Button>
+               ):(
+               <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+                 Approve {farm.to}
+               </Button>)}
+             </div>) : farm.to === "FRAX" ? approvedToken1 && approvedToken2 ? (
+                 <>
+                 { isMining3 ? (
+                   <Button shape="rounded" fullWidth size="large">
+                   <Spinner/>
+                   </Button>
+                 ):
+                   (<Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
+                     DEPOSIT
+                   </Button>)}
+                 </>
               )
-               : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit}>
-                APPROVE
-              </Button>) : farm.to === "MIMATIC" ? approved? (
-                <Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
-                DEPOSIT
-              </Button>
+               : approvedToken1 ? (<>
+
+                { isMining2 ? (
+                  <Button shape="rounded" fullWidth size="large">
+                  <Spinner/>
+                  </Button>
+                ):
+                (<Button onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
+                Approve {farm.to}
+                  </Button>)}
+                  </>
+               ) : approvedToken2 ? (
+                 <>
+                  {isMining1 ? (
+                    <Button shape="rounded" fullWidth size="large">
+                    <Spinner/>
+                    </Button>
+                  ) : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
+                  Approve {farm.from}
+                  </Button>)}
+              </>
+               ) : (<div className="grid grid-cols-2 gap-4 sm:gap-6">
+               {isMining1 ? (<Button shape="rounded" fullWidth size="large">
+               <Spinner/>
+               </Button>) : 
+               (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+                 Approve {farm.from}
+               </Button>)}
+
+               {isMining2 ? (
+                 <Button shape="rounded" fullWidth size="large">
+                 <Spinner/>
+               </Button>
+               ):(
+               <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+                 Approve {farm.to}
+               </Button>)}
+             </div>) : farm.to === "MIMATIC" ? approvedToken1 && approvedToken2 ? (
+                 <>
+                 { isMining3 ? (
+                   <Button shape="rounded" fullWidth size="large">
+                   <Spinner/>
+                   </Button>
+                 ):
+                   (<Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
+                     DEPOSIT
+                   </Button>)}
+                 </>
               )
-               : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit}>
-                APPROVE
-              </Button>)  
+               : approvedToken1 ? (<>
+
+                { isMining2 ? (
+                  <Button shape="rounded" fullWidth size="large">
+                  <Spinner/>
+                  </Button>
+                ):
+                (<Button onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
+                Approve {farm.to}
+                  </Button>)}
+                  </>
+               ) : approvedToken2 ? (
+                 <>
+                  {isMining1 ? (
+                    <Button shape="rounded" fullWidth size="large">
+                    <Spinner/>
+                    </Button>
+                  ) : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
+                  Approve {farm.from}
+                  </Button>)}
+              </>
+               ) : (<div className="grid grid-cols-2 gap-4 sm:gap-6">
+               {isMining1 ? (<Button shape="rounded" fullWidth size="large">
+               <Spinner/>
+               </Button>) : 
+               (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+                 Approve {farm.from}
+               </Button>)}
+
+               {isMining2 ? (
+                 <Button shape="rounded" fullWidth size="large">
+                 <Spinner/>
+               </Button>
+               ):(
+               <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+                 Approve {farm.to}
+               </Button>)}
+             </div>)  
               : 
-              (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit}>
-                APPROVE
-              </Button>)}
+              (<div className="grid grid-cols-2 gap-4 sm:gap-6">
+              <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+                Approve {farm.from}
+              </Button>
+              <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+                Approve {farm.to}
+              </Button>
+            </div>)}
               
               </TabPanel>
               <TabPanel value="2">
@@ -526,9 +956,13 @@ const FarmsPage: NextPageWithLayout = () => {
                     </Button>
                     
                   </div>
-                  <Button shape="rounded" fullWidth size="large" onClick={handleWithdrawSubmit}>
+                  {withdrawalMining ? 
+                    (<Button shape="rounded" fullWidth size="large">
+                    <Spinner/>
+                  </Button>)
+                  : (<Button shape="rounded" fullWidth size="large" onClick={handleWithdrawSubmit}>
                     WITHDRAW
-                  </Button>
+                  </Button>)}
                 </div>
                 
               </TabPanel>
