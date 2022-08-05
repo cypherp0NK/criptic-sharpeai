@@ -16,11 +16,16 @@ module.exports = {
       '3xl': '1780px',
       '4xl': '2160px', // only need to control product grid mode in ultra 4k device
     },
+    
     extend: {
       colors: {
         brand: 'rgb(var(--color-brand) / <alpha-value>)',
         body: '#fcfcfc',
         dark: '#0D1321',
+        txnError: '#FF0045',
+        txnblack: '#171E2E',
+        txngrey: "#171e2e",
+        txngreen: '#009E60',
         'light-dark': '#171e2e',
       },
       spacing: {
@@ -41,6 +46,9 @@ module.exports = {
       },
       fontSize: {
         '13px': ['13px', '18px'],
+        'little': ['0.83rem', {
+          lineHeight: '1rem',
+        }],
       },
       borderWidth: {
         3: '3px',

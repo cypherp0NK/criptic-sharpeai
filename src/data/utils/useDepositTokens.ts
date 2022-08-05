@@ -30,5 +30,5 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
         const deposit = SharpeaiContract.deposit(amountA, amountB, 0, 0, address)
     }
     
-    return {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, provider}
+    return {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi, provider}
 }
