@@ -6,11 +6,11 @@ import routes from '@/config/routes';
 import DashboardLayout from '@/layouts/dashboard/_dashboard';
 import Image from '@/components/ui/image';
 // static data
-import votePool from '@/assets/images/vote-pool.svg';
+import twitter from '@/assets/images/twitter.svg'
 import discord from '@/assets/images/discord.svg';
-import forum from '@/assets/images/forum.svg';
-import bank from '@/assets/images/bank.svg';
-import mirror from '@/assets/images/mirror.svg';
+import docs from '@/assets/images/docs.svg'
+import medium from '@/assets/images/medium.svg'
+import github from '@/assets/images/github.svg'
 
 const VotePage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -20,8 +20,8 @@ const VotePage: NextPageWithLayout = () => {
         title="Socials"
         description="Sharpe - Structured Investment Products, For the World."
       />
-      <h1 className="text-base font-medium dark:text-gray-100">Socials</h1>
-      <div className="mx-auto w-full max-w-[1160px] text-sm md:pt-14 4xl:pt-24">
+      <h1 className="text-2xl font-medium dark:text-gray-100">Socials</h1>
+      <div className="mx-auto w-full max-w-[1160px] text-sm md:pt-7 4xl:pt-12">
       
         <div className="grid grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3">
           <motion.a
@@ -33,7 +33,7 @@ const VotePage: NextPageWithLayout = () => {
             className="flex cursor-pointer flex-col items-center justify-center rounded-lg bg-white p-6 text-center shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark xs:col-span-2 sm:col-auto sm:row-span-2"
           >
             <div className="h-auto w-16 xs:w-20 xl:w-24 3xl:w-28 4xl:w-auto">
-              <Image alt="Vote Pool" src={votePool} />
+              <Image alt="Vote Pool" src={twitter} />
             </div>
             <h3 className="mt-6 mb-2 text-sm font-medium uppercase text-gray-800 dark:text-gray-100 sm:text-base 3xl:text-lg">
               FOLLOW US ON TWITTER
@@ -68,7 +68,7 @@ const VotePage: NextPageWithLayout = () => {
             className="rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
           >
             <span className="inline-block h-auto w-12 sm:w-auto">
-              <Image alt="Forum" src={forum} />
+              <Image alt="Medium" src={medium} />
             </span>
             <h3 className="mt-6 text-sm font-medium uppercase text-orange-500 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
               View Blog
@@ -83,7 +83,7 @@ const VotePage: NextPageWithLayout = () => {
             className="cursor-pointer rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
           >
             <div className="h-auto w-12 sm:w-auto">
-              <Image alt="Bank" src={bank} />
+              <Image alt="Docs" src={docs} />
             </div>
             <h3 className="mt-6 text-sm font-medium uppercase text-blue-500 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
               View Documentation
@@ -98,7 +98,7 @@ const VotePage: NextPageWithLayout = () => {
             className="rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
           >
             <span className="inline-block h-auto w-11 sm:w-auto">
-              <Image alt="Github" src={mirror} />
+              <Image alt="Github" src={github} />
             </span>
             <h3 className="mt-6 text-sm font-medium uppercase text-gray-400 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
               View Github

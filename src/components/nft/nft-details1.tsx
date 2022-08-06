@@ -14,8 +14,170 @@ import { useModal } from '@/components/modal-views/context';
 import { nftData } from '@/data/static/single-nft';
 import NftDropDown from './nft-dropdown';
 import Avatar from '@/components/ui/avatar';
-import LiquidityChart from '@/components/ui/chats/liquidity-chart';
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { LiquidityData } from '@/data/static/liquidity';
 
+function CustomAxis({ x, y, payload }: any) {
+  const date = format(new Date(payload.value * 1000), 'd');
+  return (
+    <g
+      transform={`translate(${x},${y})`}
+      className="text-xs text-gray-500 md:text-sm"
+    >
+      <text x={0} y={0} dy={10} textAnchor="end" fill="currentColor">
+        {date}
+      </text>
+    </g>
+  );
+}
+
+const numberAbbr = (number: any) => {
+  if (number < 1e3) return number;
+  if (number >= 1e3 && number < 1e6) return +(number / 1e3).toFixed(1) + 'K';
+  if (number >= 1e6 && number < 1e9) return +(number / 1e6).toFixed(1) + 'M';
+  if (number >= 1e9 && number < 1e12) return +(number / 1e9).toFixed(1) + 'B';
+  if (number >= 1e12) return +(number / 1e12).toFixed(1) + 'T';
+};
+
+export function TVLChart() {
+  let [date, setDate] = useState(1624147200);
+  let [liquidity, setLiquidity] = useState('547792029');
+  const formattedDate = format(new Date(date * 1000), 'MMMM d, yyyy');
+  const dailyLiquidity = numberAbbr(liquidity);
+
+  return (
+    <div className="w-full rounded-lg bg-white p-6 shadow-card dark:bg-light-dark sm:p-8">
+      <h3 className="mb-1.5 text-sm uppercase tracking-wider text-gray-600 dark:text-gray-400 sm:mb-2 sm:text-base">
+        TOTAL VALUE LOCKED
+      </h3>
+      <div className="mb-1 text-base font-medium text-gray-900 dark:text-white sm:text-xl">
+        {dailyLiquidity}
+      </div>
+      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+        {formattedDate}
+      </div>
+      <div className="w-full mt-5 sm:mt-8 h-64 2xl:h-72 3xl:h-[340px] 4xl:h-[480px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart className='w-full'
+            data={LiquidityData}
+            margin={{
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+            onMouseMove={(data) => {
+              if (data.isTooltipActive) {
+                setDate(
+                  data.activePayload && data.activePayload[0].payload.date
+                );
+                setLiquidity(
+                  data.activePayload &&
+                    data.activePayload[0].payload.dailyVolumeUSD
+                );
+              }
+            }}
+          >
+            <defs>
+              <linearGradient
+                id="liquidity-gradient"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor="#bc9aff" stopOpacity={0.5} />
+                <stop offset="100%" stopColor="#7645D9" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tick={<CustomAxis />}
+              interval={0}
+              tickMargin={5}
+            />
+            <Tooltip content={<></>} cursor={{ stroke: '#7645D9' }} />
+            <Area
+              type="linear"
+              dataKey="dailyVolumeUSD"
+              stroke="#7645D9"
+              strokeWidth={1.5}
+              fill="url(#liquidity-gradient)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+export function UsdcCard() {
+  return (
+    <div className='w-full bg-txnLightMagenta rounded-lg'>
+      <div className="w-full p-4">
+        <div className='text-sm text-gray-600 dark:text-gray-400'>
+          ASSET DETAILS
+        </div>
+        <h3 className='font-medium'>USDC</h3>
+        <div className="flex flex-row gap-2">
+          <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.circle.com/en/usdc"
+          className="p-1 mt-1.5 inline-flex items-center text-xs -tracking-wider rounded-md tracking-tight bg-txnLightMagenta2">
+          Website<ArrowLinkIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
+          </a>
+          <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://polygonscan.com/token/0x2791bca1f2de4661ed88a30c99a7a9449aa84174"
+          className='p-1 mt-1.5 inline-flex items-center text-xs -tracking-wider rounded-md tracking-tighter bg-txnLightMagenta2'>
+          Token Contract<ArrowLinkIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
+          </a>
+        </div>
+
+      </div>
+      <div className='w-full text-xs text-gray-600 dark:text-gray-400 bg-txnLightMagenta2 p-4 rounded-b-lg'>
+          USDC is a fully collaterized US dollar stablecoin. USDC is issued by regulated financial institutions redeemable on a 1:1 basis for US dollars.
+      </div>
+    </div>
+  )
+}
+export function UsdtCard() {
+  return (
+    <div className='w-full bg-txnLightMagenta rounded-lg'>
+      <div className="w-full p-4">
+        <div className='text-sm text-gray-600 dark:text-gray-400'>
+          ASSET DETAILS
+        </div>
+        <h3 className='font-medium'>USDT</h3>
+        <div className="flex flex-row gap-2">
+          <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://tether.to/en/"
+          className="p-1 mt-1.5 inline-flex items-center text-xs -tracking-wider rounded-md tracking-tight bg-txnLightMagenta2">
+          Website<ArrowLinkIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
+          </a>
+          <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://polygonscan.com/token/0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+          className='p-1 mt-1.5 inline-flex items-center text-xs -tracking-wider rounded-md tracking-tighter bg-txnLightMagenta2'>
+          Token Contract<ArrowLinkIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
+          </a>
+        </div>
+
+      </div>
+      <div className='w-full text-xs text-gray-600 dark:text-gray-400 bg-txnLightMagenta2 p-4 rounded-b-lg'>
+        Tether converts cash into digital currency, to anchor or tether the value to the price of national currencies like the US dollar, the Euro and the offshore chinese yuan.
+      </div>
+    </div>
+  )
+}
 interface NftFooterProps {
   className?: string;
   currentBid: any;
@@ -45,7 +207,7 @@ function NftFooter({
           <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
             <div className="block w-1/2 shrink-0 md:w-2/5">
               <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
-                Blockchain <span className="md:hidden">Blockchain</span>{' '}
+                Blockchain
                 <AnchorLink
                   href=""
                   className="normal-case text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white md:hidden"
@@ -116,7 +278,7 @@ type NftDetailsProps = {
   minted_date: string;
   minted_slug: string;
   price: number;
-  creator: Avatar;
+  amm: Avatar;
   collection: Avatar;
   owner: Avatar;
   block_chains: Avatar[];
@@ -130,8 +292,8 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
     description,
     minted_date,
     minted_slug,
+    amm,
     price,
-    creator,
     collection,
     owner,
     block_chains,
@@ -139,8 +301,14 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
   return (
     <div className="flex flex-grow">
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
-        <div className="relative mb-5 flex flex-grow items-center justify-center md:pb-7 md:pt-4 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 rtl:md:pr-6 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
-        <LiquidityChart />
+        <div className="relative mb-5 flex flex-grow flex-col gap-2 items-center justify-center md:pb-7 md:pt-0 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 rtl:md:pr-6 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
+          <TVLChart />
+          <div className='hidden lg:hidden xs:block sm:block md:block w-full gap-1 rounded-lg bg-white px-6 py-2 shadow-card dark:bg-light-dark sm:px-8 sm:py-2'>
+            <UsdcCard/>
+          </div>
+          <div className='hidden lg:hidden xs:block sm:block md:block w-full gap-1 rounded-lg bg-white px-6 py-2 shadow-card dark:bg-light-dark sm:px-8 sm:py-2'>
+            <UsdtCard/>
+          </div>
         </div>
 
         <div className="relative flex w-full flex-grow flex-col justify-between ltr:md:ml-auto ltr:md:pl-8 rtl:md:mr-auto rtl:md:pr-8 lg:min-h-[calc(100vh-96px)] lg:w-[460px] ltr:lg:pl-12 rtl:lg:pr-12 xl:w-[592px] ltr:xl:pl-20 rtl:xl:pr-20">
@@ -164,7 +332,7 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
                   
                   <AnchorLink href="https://uniswap.org" className="inline-flex">
                     <ListCard
-                      item={creator}
+                      item={amm}
                       className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                     />
                   </AnchorLink>
@@ -199,7 +367,7 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
                       <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
                         Performance:<br></br>
                         This strategy works best in both bull and bear markets, collecting premiums earned for supplying concentrated range orders on Uni v3 pools. 
-                        Check out our vault’s performance on Dune.<br></br><br></br>
+                        Check out our vault’s performance on <a className="underline" href="">Dune</a>.<br></br><br></br>
                         Risk:<br></br>
                         • Smart contract risk: The smart contracts are audit pending.<br></br>
                         • Stablecoin risk: This strategy could have an impermanent loss if the stablecoin loses its peg.

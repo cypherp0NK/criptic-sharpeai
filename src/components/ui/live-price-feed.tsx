@@ -55,64 +55,8 @@ export function LivePriceFeed({
         <div className="mb-2 text-sm font-medium tracking-tighter text-gray-900 dark:text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
           <span className="ml-3"></span>
           {id === '0' ? deposits : id === '1' ? earnings : id === '2' ? totalPoolApy : id === '3' ? monthlyApy : '--' }
-        </div>
-
-        {/* <div className="flex items-center text-xs font-medium 2xl:text-sm">
-          <span
-            className="truncate tracking-tighter text-gray-600 ltr:mr-5 rtl:ml-5 dark:text-gray-400 2xl:w-24 3xl:w-auto"
-            title={`${usdBalance} USD`}
-          >
-            {usdBalance} USD
-          </span>
-
-          <span
-            className={`flex items-center  ${
-              isChangePositive ? 'text-green-500' : 'text-red-500'
-            }`}
-          >
-            <span
-              className={`ltr:mr-2 rtl:ml-2 ${
-                !isChangePositive ? 'rotate-180' : ''
-              }`}
-            >
-              <ArrowUp />
-            </span>
-            {change}
-          </span>
-        </div> */}
+        </div>        
       </div>
-
-      {/* <div
-        className="h-20 w-full"
-        data-hello={isChangePositive ? '#22c55e' : '#D6455D'}
-      >
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={prices}>
-            <defs>
-              <linearGradient id={`${name}-${id}`} x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor={isChangePositive ? '#22c55e' : '#D6455D'}
-                  stopOpacity={0.5}
-                />
-                <stop
-                  offset="100%"
-                  stopColor={isChangePositive ? '#22c55e' : '#D6455D'}
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
-            <Area
-              type="linear"
-              dataKey="value"
-              stroke={isChangePositive ? '#22c55e' : '#D6455D'}
-              strokeWidth={2.5}
-              fill={`url(#${`${name}-${id}`})`}
-              dot={false}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div> */}
     </div>
   );
 }
@@ -122,61 +66,12 @@ interface PriceFeedSliderProps {
 }
 
 export default function PriceFeedSlider({ priceFeeds }: PriceFeedSliderProps) {
-  const isMounted = useIsMounted();
-  const breakpoint = useBreakpoint();
-
-  const sliderBreakPoints = {
-    500: {
-      slidesPerView: 1.2,
-      spaceBetween: 20,
-    },
-    640: {
-      slidesPerView: 1.5,
-      spaceBetween: 20,
-    },
-    768: {
-      slidesPerView: 2,
-      spaceBetween: 20,
-    },
-    1024: {
-      slidesPerView: 2.5,
-      spaceBetween: 24,
-    },
-    1280: {
-      slidesPerView: 3,
-      spaceBetween: 24,
-    },
-    1440: {
-      slidesPerView: 3.2,
-      spaceBetween: 24,
-    },
-    1700: {
-      slidesPerView: 3,
-      spaceBetween: 24,
-    },
-  };
-
   return  (
-    <Swiper
-      modules={[A11y]}
-      spaceBetween={24}
-      slidesPerView={1}
-      breakpoints={sliderBreakPoints}
-      observer={true}
-      dir="ltr"
-    >
+    <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-4">
       {priceFeeds.map((item) => (
-        <SwiperSlide key={item.id}>
-          <LivePriceFeed {...item} />
-        </SwiperSlide>
+        <LivePriceFeed key={item.id} {...item} />
       ))}
-    </Swiper>
+    </div>
+  
   )
-  // ) : (
-  //   // <div className="grid grid-cols-1 gap-6 2xl:grid-cols-4">
-  //   //   {priceFeeds.map((item) => (
-  //   //     <LivePriceFeed key={item.id} {...item} />
-  //   //   ))}
-  //   // </div>
-  // );
 }

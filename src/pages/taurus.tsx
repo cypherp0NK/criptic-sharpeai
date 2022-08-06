@@ -718,7 +718,6 @@ const FarmsPage: NextPageWithLayout = () => {
               </div>
             </div> : ''}
           </div>
-
               <TabContext value={SelectedTab}>
               <TabPanel value="1">
               <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
@@ -756,7 +755,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 </div>
               </div>
               <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
-                <Button shape="rounded" fullWidth size="large">
+                <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
                   DEPOSIT
                 </Button>
                 <Button onClick={switchTab2} shape="rounded" fullWidth size="large">
@@ -770,7 +769,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   <Spinner/>
                   </Button>
                 ):
-                  (<Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
+                  (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
                     DEPOSIT
                   </Button>)}
                 </>
@@ -782,7 +781,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   <Spinner/>
                   </Button>
                 ):
-                (<Button onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
+                (<Button className="bg-txngreen" onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
                 Approve {farm.to}
                   </Button>)}
                   </>
@@ -792,7 +791,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     <Button shape="rounded" fullWidth size="large">
                     <Spinner/>
                     </Button>
-                  ) : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
+                  ) : (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
                   Approve {farm.from}
                   </Button>)}
               </>
@@ -800,7 +799,7 @@ const FarmsPage: NextPageWithLayout = () => {
                {isMining1 ? (<Button shape="rounded" fullWidth size="large">
                <Spinner/>
                </Button>) : 
-               (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+               (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
                  Approve {farm.from}
                </Button>)}
 
@@ -809,7 +808,7 @@ const FarmsPage: NextPageWithLayout = () => {
                  <Spinner/>
                </Button>
                ):(
-               <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+               <Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
                  Approve {farm.to}
                </Button>)}
              </div>) : farm.to === "FRAX" ? approvedToken1 && approvedToken2 ? (
@@ -819,7 +818,7 @@ const FarmsPage: NextPageWithLayout = () => {
                    <Spinner/>
                    </Button>
                  ):
-                   (<Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
+                   (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
                      DEPOSIT
                    </Button>)}
                  </>
@@ -831,7 +830,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   <Spinner/>
                   </Button>
                 ):
-                (<Button onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
+                (<Button className="bg-txngreen" onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
                 Approve {farm.to}
                   </Button>)}
                   </>
@@ -841,7 +840,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     <Button shape="rounded" fullWidth size="large">
                     <Spinner/>
                     </Button>
-                  ) : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
+                  ) : (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
                   Approve {farm.from}
                   </Button>)}
               </>
@@ -849,7 +848,7 @@ const FarmsPage: NextPageWithLayout = () => {
                {isMining1 ? (<Button shape="rounded" fullWidth size="large">
                <Spinner/>
                </Button>) : 
-               (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+               (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
                  Approve {farm.from}
                </Button>)}
 
@@ -858,7 +857,7 @@ const FarmsPage: NextPageWithLayout = () => {
                  <Spinner/>
                </Button>
                ):(
-               <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+               <Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
                  Approve {farm.to}
                </Button>)}
              </div>) : farm.to === "MIMATIC" ? approvedToken1 && approvedToken2 ? (
@@ -868,7 +867,7 @@ const FarmsPage: NextPageWithLayout = () => {
                    <Spinner/>
                    </Button>
                  ):
-                   (<Button shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
+                   (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleDepositSubmit}>
                      DEPOSIT
                    </Button>)}
                  </>
@@ -880,7 +879,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   <Spinner/>
                   </Button>
                 ):
-                (<Button onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
+                (<Button className="bg-txngreen" onClick={handleApproveSubmit2} shape="rounded" fullWidth size="large">
                 Approve {farm.to}
                   </Button>)}
                   </>
@@ -890,7 +889,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     <Button shape="rounded" fullWidth size="large">
                     <Spinner/>
                     </Button>
-                  ) : (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
+                  ) : (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1} >
                   Approve {farm.from}
                   </Button>)}
               </>
@@ -898,7 +897,7 @@ const FarmsPage: NextPageWithLayout = () => {
                {isMining1 ? (<Button shape="rounded" fullWidth size="large">
                <Spinner/>
                </Button>) : 
-               (<Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+               (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
                  Approve {farm.from}
                </Button>)}
 
@@ -907,16 +906,16 @@ const FarmsPage: NextPageWithLayout = () => {
                  <Spinner/>
                </Button>
                ):(
-               <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+               <Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
                  Approve {farm.to}
                </Button>)}
              </div>)  
               : 
               (<div className="grid grid-cols-2 gap-4 sm:gap-6">
-              <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
+              <Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit1}>
                 Approve {farm.from}
               </Button>
-              <Button shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
+              <Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleApproveSubmit2}>
                 Approve {farm.to}
               </Button>
             </div>)}
@@ -951,7 +950,7 @@ const FarmsPage: NextPageWithLayout = () => {
                       DEPOSIT
                     </Button>
                   
-                    <Button shape="rounded" fullWidth size="large">
+                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
                         WITHDRAW
                     </Button>
                     
@@ -960,7 +959,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     (<Button shape="rounded" fullWidth size="large">
                     <Spinner/>
                   </Button>)
-                  : (<Button shape="rounded" fullWidth size="large" onClick={handleWithdrawSubmit}>
+                  : (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={handleWithdrawSubmit}>
                     WITHDRAW
                   </Button>)}
                 </div>

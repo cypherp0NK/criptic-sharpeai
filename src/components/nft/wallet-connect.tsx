@@ -130,15 +130,16 @@ export default function WalletConnect() {
               selectedOption={chain}
               onChange={setChain}
             />
+            <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-txngreen shadow-light sm:h-3 sm:w-3" />
           </div>
 
           {network === 137 ? (
-            <Button className="shadow-main hover:shadow-large">{address.slice(0, 5)}
+            <Button className="bg-txngreen shadow-main hover:shadow-large">{address.slice(0, 5)}
             {'...'}
             {address.slice(address.length - 4)}
                 </Button>
           ) : 
-          <Button className="shadow-main hover:shadow-large">WRONG NETWORK {address.slice(0, 5)}
+          <Button className="bg-txnError shadow-main hover:shadow-large">WRONG NETWORK {address.slice(0, 5)}
             {'...'}
             {address.slice(address.length - 4)}
                 </Button>
@@ -149,7 +150,7 @@ export default function WalletConnect() {
       ) : (
         <Button
           onClick={() => openModal('WALLET_CONNECT_VIEW')}
-          className="shadow-main hover:shadow-large"
+          className="bg-txngreen shadow-main hover:shadow-large"
         >
           CONNECT
         </Button>

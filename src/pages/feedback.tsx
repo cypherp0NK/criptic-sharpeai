@@ -234,7 +234,7 @@ function ActionFields() {
           )}
         </>
       </div>
-      <Button variant="primary" className="mt-2 xs:mt-3">
+      <Button variant="primary" className="mt-2 xs:mt-3 font-medium bg-transparent border-2 border-buttonMagenta text-buttonMagenta">
         Submit
       </Button>
     </div>
@@ -265,7 +265,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
                 ASK AWAY!
               </h2>
               <p className="leading-[1.8] text-gray-600 dark:text-gray-400">
-                If you have any questions, Please view our Documentation or join us on our       
+                If you have any questions, Please view our Documentation or join us on our&nbsp;
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
@@ -281,10 +281,10 @@ const CreateProposalPage: NextPageWithLayout = () => {
             <Button
               shape="rounded"
               fullWidth={true}
-              className="uppercase"
+              className="uppercase bg-buttonMagenta"
               onClick={() => {window.location.href = "https://docs.sharpe.ai" }}
             >
-              DOCUMENTATION
+              VIEW DOCUMENTATION
             </Button>
           </div>
         </header>
@@ -330,7 +330,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
             size="large"
             shape="rounded"
             fullWidth={true}
-            className="xs:w-64 md:w-72"
+            className="xs:w-64 md:w-72 bg-buttonMagenta"
           >
             Submit Feedback
           </Button>

@@ -1,23 +1,41 @@
-import logo from './mimatic.svg';
-export function Mimatic(props: React.SVGAttributes<{}>) {
+export function Mimatic() {
     return (
-        <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        {...props}
-      >
-        <path
-          d="M12 0C18.6267 0 24 5.37333 24 12C24 18.6267 18.6267 24 12 24C5.37333 24 0 18.63 0 12C0 5.37 5.37333 0 12 0Z"
-          fill="#26A17B"
-        />
-        <path
-          d="M13.6896 10.6619V8.87524H17.773V6.15527H6.65628V8.87524H10.7396V10.6619C7.42295 10.8152 4.92627 11.4719 4.92627 12.2585C4.92627 13.0452 7.42295 13.7018 10.7396 13.8552V19.5718H13.693V13.8552C17.0063 13.7018 19.4963 13.0452 19.4963 12.2585C19.493 11.4719 17.003 10.8152 13.6896 10.6619ZM13.693 13.3718C13.6096 13.3752 13.183 13.4018 12.2296 13.4018C11.4663 13.4018 10.933 13.3818 10.743 13.3718V13.3752C7.81295 13.2452 5.62294 12.7352 5.62294 12.1252C5.62294 11.5152 7.80961 11.0052 10.743 10.8752V12.8618C10.9363 12.8752 11.483 12.9085 12.243 12.9085C13.153 12.9085 13.6096 12.8718 13.6963 12.8618V10.8685C16.623 10.9985 18.8063 11.5085 18.8063 12.1185C18.7997 12.7285 16.6163 13.2385 13.693 13.3718Z"
-          fill="white"
-        />
+      <svg width="27" height="33" viewBox="0 0 171 177" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="85.5001" cy="85.5" r="68.2845" stroke="url(#paint2_linear)" stroke-width="2" fill="url(#paint1_linear)"/>
+      <g filter="url(#filter0_d)">
+      <path d="M117.797 51.6981H109.464L84.9135 103.538L60.4526 51.6981H52.0302V120.205H61.3486V74.9087L82.6735 120.205H87.2431L108.478 74.9087V120.205H117.797V51.6981Z" fill="white"/>
+      <path d="M38.3276 71.3725H131.497V81.1798H38.3276V71.3725Z" fill="white"/>
+      <path d="M38.3305 93.4392H131.5V103.247H38.3305V93.4392Z" fill="white"/>
+      </g>
+      <defs>
+      <filter id="filter0_d" x="36.3276" y="51.6981" width="97.1724" height="74.507" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="4"/>
+      <feGaussianBlur stdDeviation="1"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.845833 0 0 0 0 0.267847 0 0 0 0 0.295702 0 0 0 1 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+      </filter>
+      <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(84.7629 172.474) rotate(90) scale(4.42241 56.7543)">
+      <stop stop-color="#CB1922"/>
+      <stop offset="0.296875" stop-color="#FF636B"/>
+      <stop offset="1" stop-color="#FF636B" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="paint1_linear" x1="85.5" y1="0" x2="85.5" y2="171" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFA6AA"/>
+      <stop offset="0.205653" stop-color="#FB7C83"/>
+      <stop offset="0.518899" stop-color="#FA515A"/>
+      <stop offset="1" stop-color="#FF5C65"/>
+      </linearGradient>
+      <linearGradient id="paint2_linear" x1="85.5001" y1="16.2155" x2="85.5001" y2="154.784" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E3252E"/>
+      <stop offset="1" stop-color="#FF898F"/>
+      </linearGradient>
+      </defs>
       </svg>
+      
     );
   }
   

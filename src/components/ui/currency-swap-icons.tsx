@@ -5,12 +5,13 @@ import { Bnb } from '@/components/icons/bnb';
 import { Usdc } from '@/components/icons/usdc';
 import { Cardano } from '@/components/icons/cardano';
 import { Doge } from '@/components/icons/doge';
-import { Frax } from '@/components/icons/frax';
+// import { Frax } from '@/components/icons/frax';
 import { Mimatic } from '@/components/icons/mimatic';
+import {Frax} from '@/components/icons/frax'
 
 export type CoinList = 'BTC' | 'ETH' | 'USDT' | 'BNB' | 'USDC' | 'ADA' | 'DOGE' | 'FRAX' | 'MIMATIC';
 
-const coinIcons: Record<CoinList, JSX.Element> = {
+const coinIcons: Record<CoinList, JSX.Element>= {
   BTC: <Bitcoin />,
   ETH: <Ethereum />,
   USDT: <Tether />,

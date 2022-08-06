@@ -46,7 +46,7 @@ export default function Listbox({
           )}
         >
           <div className="flex items-center">{selectedOption?.name}</div>
-          <ChevronDown />
+          {/* <ChevronDown /> */}
         </HeadlessListbox.Button>
         <Transition
           as={Fragment}
