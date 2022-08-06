@@ -20,7 +20,7 @@ const VotePage: NextPageWithLayout = () => {
         title="Socials"
         description="Sharpe - Structured Investment Products, For the World."
       />
-      <h1 className="text-2xl font-medium dark:text-gray-100 mb-2">Socials</h1>
+      <h1 className="text-2xl font-medium dark:text-gray-100 mb-3">Socials</h1>
       <div className="mx-auto w-full max-w-[1160px] text-sm md:pt-7 4xl:pt-12">
       
         <div className="grid grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3">
