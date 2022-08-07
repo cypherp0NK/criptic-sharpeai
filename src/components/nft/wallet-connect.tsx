@@ -134,7 +134,7 @@ export default function WalletConnect() {
           </div>
 
           {network === 137 ? (
-            <Button className="bg-txngreen shadow-main hover:shadow-large">{address.slice(0, 5)}
+            <Button className="bg-txngreen shadow-main hover:shadow-large">CONNECTED {address.slice(0, 5)}
             {'...'}
             {address.slice(address.length - 4)}
                 </Button>
