@@ -20,12 +20,11 @@ export default function SelectWallet({ ...props }) {
         Connect Wallet
       </h2>
       <p className="text-center text-sm leading-loose tracking-tight text-gray-600 dark:text-gray-400">
-        By connecting your wallet, you agree to our Terms of Service and our
-        Privacy Policy.
+        Connecting your wallet is like “logging in” to Web3. Select Metamask wallet to get started.
       </p>
 
       <div
-        className="mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
+        className="mt-4 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
         onClick={() => connectToWallet()}
       >
         <span>MetaMask</span>

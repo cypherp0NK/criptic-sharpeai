@@ -304,10 +304,10 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
       <div className="relative mb-5 flex flex-grow flex-col gap-2 items-center justify-center md:pb-7 md:pt-0 ltr:md:left-0 ltr:md:pl-6 rtl:md:right-0 rtl:md:pr-6 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] ltr:lg:pl-8 rtl:lg:pr-8 xl:w-[calc(100%-550px)] ltr:xl:pr-12 ltr:xl:pl-[340px] rtl:xl:pl-12 rtl:xl:pr-[340px] ltr:2xl:pl-96 rtl:2xl:pr-96 3xl:w-[calc(100%-632px)] ltr:4xl:pl-0 rtl:4xl:pr-0">
           <TVLChart />
-          <div className='hidden lg:hidden xs:block sm:block md:block w-full gap-1 rounded-lg bg-white px-6 py-2 shadow-card dark:bg-light-dark sm:px-8 sm:py-2'>
+          <div className='block lg:hidden xl:hidden 2xl:hidden xs:block sm:block md:block w-full gap-1 rounded-lg bg-white px-6 py-2 shadow-card dark:bg-light-dark sm:px-8 sm:py-2'>
             <UsdcCard/>
           </div>
-          <div className='hidden lg:hidden xs:block sm:block md:block w-full gap-1 rounded-lg bg-white px-6 py-2 shadow-card dark:bg-light-dark sm:px-8 sm:py-2'>
+          <div className='block lg:hidden xl:hidden 2xl:hidden xs:block sm:block md:block w-full gap-1 rounded-lg bg-white px-6 py-2 shadow-card dark:bg-light-dark sm:px-8 sm:py-2'>
             <MiMaticCard/>
           </div>
         </div>

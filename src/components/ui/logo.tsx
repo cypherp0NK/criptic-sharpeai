@@ -5,6 +5,7 @@ import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
 // import lightLogo from '@/assets/images/logo.svg';
 // import darkLogo from '@/assets/images/logo-white.svg';
 import logo from './logo.png';
+import logo2 from './logo2.jpeg';
 
 const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
   const isMounted = useIsMounted();
@@ -21,7 +22,7 @@ const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
           <Image src={logo} alt="Sharpe" priority />
         )}
         {isMounted && !isDarkMode && (
-          <Image src={logo} alt="Sharpe" priority />
+          <Image src={logo2} alt="Sharpe" priority />
         )}
       </span>
     </AnchorLink>

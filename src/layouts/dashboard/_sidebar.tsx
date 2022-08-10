@@ -116,45 +116,18 @@ export default function Sidebar({ className }: SidebarProps) {
               />
             ))}
           </div>
-
-        <div>
-          <RadioGroup className="mt-4"
-        value={theme}
-        onChange={setTheme}
+          {theme === "light" ? 
+          <div className='fixed bottom-5 z-50 p-2.5 text-gray-500 light:hover:text-white hover:bg-brand dark:hover:text-white w-fit cursor-pointer flex flex-column gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          onClick={()=>{setTheme("dark")}}>
+            <Moon />
+            <div className='text-sm text-center'>Switch to dark</div>
+          </div> : 
+          <div className='fixed bottom-5 z-50 p-2.5 text-gray-500 hover:text-brand dark:hover:text-white w-fit cursor-pointer flex flex-column gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          onClick={()=>{setTheme("light")}}>
+            <Sun />
+            <div className='text-sm text-center'>Switch to light</div>
+          </div>}
         
-      >
-        <RadioGroup.Option value="light">
-        {({ checked }) => (
-            <div className="group cursor-pointer">
-              <span
-                className={`flex h-[30px] items-center justify-center rounded-lg text-center text-sm font-medium uppercase tracking-wide transition-all ${
-                  checked
-                    ? 'bg-white shadow-large dark:bg-gray-600'
-                    : 'bg-gray-100 text-gray-500 group-hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700'
-                }`}
-              ><Sun />
-              </span>
-              
-            </div>)}
-        </RadioGroup.Option>
-        <RadioGroup.Option value="dark">
-        {({ checked }) => (
-            <div className="group cursor-pointer">
-              <span
-                className={`mt-2 flex h-[30px] items-center justify-center rounded-lg text-center text-sm font-medium uppercase tracking-wide transition-all ${
-                  checked
-                    ? 'bg-white shadow-large dark:bg-gray-600'
-                    : 'bg-gray-100 text-gray-500 group-hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700'
-                }`}
-              ><Moon />
-              </span>
-              
-            </div>)}
-        </RadioGroup.Option>
-
-
-      </RadioGroup>
-          </div>
         </div>
         
       </Scrollbar>

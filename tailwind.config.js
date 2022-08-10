@@ -22,6 +22,7 @@ module.exports = {
         brand: 'rgb(var(--color-brand) / <alpha-value>)',
         body: '#fcfcfc',
         dark: '#0D1321',
+        txnTheme: '#4F46BA',
         buttonMagenta: '#9370DB',
         txnLightMagenta: '#bc9aff13',
         txnLightMagenta2: '#bc9aff23',
