@@ -15,7 +15,7 @@ import FarmList from '@/components/farms/list';
 import { FarmsData } from '@/data/static/farms-data';
 import { useDepositTokens } from '@/data/utils/useDepositTokens';
 import { vaultData } from '@/data/utils/vaultData';
-import { utils, ethers } from 'ethers';
+import { utils, ethers, providers } from 'ethers';
 import { formatUnits } from "@ethersproject/units"
 import {WalletContext} from "@/lib/hooks/use-connect"
 import {TabContext, TabPanel} from "@material-ui/lab"
@@ -184,7 +184,7 @@ const FarmsPage: NextPageWithLayout = () => {
         title="Taurus Pools"
         description="Sharpe - Structured Investment Products, For the World."
       />
-      <div>{process.browser ? <div className="mx-auto w-full sm:pt-8">
+      <div className="mx-auto w-full sm:pt-8">
         
 
         <div className="mb-3 hidden grid-cols-3 gap-6 rounded-lg bg-white shadow-card dark:bg-light-dark sm:grid lg:grid-cols-5">
@@ -216,10 +216,11 @@ const FarmsPage: NextPageWithLayout = () => {
               tB1,
               tB2,
               tB3,
-              tB4 } = useContext(WalletContext);
+              tB4, error } = useContext(WalletContext);
 
-            const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi, provider} = useDepositTokens(farm.token1, farm.token2, farm.vault)
+            const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
             const {totalSupply, fetchPrice, tokenBalances} = vaultData(farm.vault, farm.token1, farm.token2)
+            const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
             const [amt1, setAmt] = useState<string>('')
@@ -330,38 +331,36 @@ const FarmsPage: NextPageWithLayout = () => {
                   setAmt(calcEquiv)
                   }
                 }
-            const handleApproveSubmit = async () => {
-                  if (farm.from === "USDC" && farm.to === "USDT"){
-                    const amountAsWei = Number(amt1) * 1e6
-                    const amount2AsWei = Number(amt2) * 1e6
-                    setApproved(true)
-                    return [approveToken1(amountAsWei.toString()), approveToken2(amount2AsWei.toString())]
-                    
-                  }
-                  else{
-                    const amountAsWei = Number(amt1) * 1e6
-                    const amount2AsWei = utils.parseEther(amt2.toString())
-                    setApproved(true)
-                    return [approveToken1(amountAsWei.toString()), approveToken2(amount2AsWei.toString())]
-                  }
-                  
-              }
 
             const handleApproveSubmit1 = async () => {
                 try{ 
-                    if (approvedToken2 === false) {
-                      setCard0Of3(true)
-                    }
                     const amountAsWei = Number(amt1) * 1e6
-                    return [approveToken1(amountAsWei.toString()),setIsMining1(true)]}
+                    const status = await approveToken1(amountAsWei.toString())
+                    if (status === 'wallet error'){
+                      setCard0Of3(false)
+                      setErrorMsg('No WALLET detected!')
+                      setErrorCard(true)
+                    }
+                    else{
+                      if (approvedToken2 === false) {
+                        setCard0Of3(true)
+                        
+                        }
+                        setIsMining1(true)
+                      }
+                    }
                 catch (err) {
                     if (err instanceof Error){
                       setErrorMsg(err.message)
+                    }
+                    if (error){
+                      setErrorMsg('No WALLET detected!')
                     }
                     else{
                       setErrorMsg('Something went wrong')
                     }
                     setErrorCard(true)
+                    setCard0Of3(false)
                   }
             }
 
@@ -370,10 +369,20 @@ const FarmsPage: NextPageWithLayout = () => {
               if (farm.from === "USDC" && farm.to === "USDT"){
                 try{
                   const amount2AsWei = Number(amt2) * 1e6
-                  if (approvedToken1 === false) {
-                    setCard0Of3(true)
+                  const status = await approveToken2(amount2AsWei.toString())
+                  if (status === 'wallet error'){
+                    setCard0Of3(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
                   }
-                  return [approveToken2(amount2AsWei.toString()), setIsMining2(true)]}
+                  else{
+                    if (approvedToken1 === false) {
+                      setCard0Of3(true)
+                      
+                    }
+                    setIsMining2(true)
+                  }
+                }
 
                 catch (err) {
                   if (err instanceof Error){
@@ -386,11 +395,25 @@ const FarmsPage: NextPageWithLayout = () => {
                 }
               }
               else{
-                try{ const amount2AsWei = utils.parseEther(amt2.toString())
+                try{
+                  const amount2AsWei = utils.parseEther(amt2.toString())
                   if (approvedToken1 === false) {
                     setCard0Of3(true)
                   }
-                return [approveToken2(amount2AsWei.toString()), setIsMining2(true)]}
+                  const status = await approveToken2(amount2AsWei.toString())
+                  if (status === 'wallet error'){
+                    setCard0Of3(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
+                  }
+                  else{
+                    if (approvedToken1 === false) {
+                      setCard0Of3(true)
+                      
+                    }
+                    setIsMining2(true)
+                  }
+              }
 
                 catch (err) {
                   if (err instanceof Error){
@@ -407,9 +430,20 @@ const FarmsPage: NextPageWithLayout = () => {
               
             const handleDepositSubmit = async () => {
               if (farm.from === "USDC" && farm.to === "USDT"){
-                try {const amountAsWei = Number(amt1) * 1e6
+                try {
+                  const amountAsWei = Number(amt1) * 1e6
                   const amount2AsWei = Number(amt2) * 1e6
-                  return [depositTokens((amountAsWei.toString()), (amount2AsWei.toString())), setApproved(false), setIsMining3(true)]}
+                  const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+                  if (status === 'wallet error'){
+                    setCard0Of3(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
+                  }
+                  else{
+                    setApproved(false)
+                    setIsMining3(true)
+                  }
+                }
                 catch (err) {
                   if (err instanceof Error){
                     setErrorMsg(err.message)
@@ -422,18 +456,31 @@ const FarmsPage: NextPageWithLayout = () => {
               }
               else{
                 try
-                  {const amountAsWei = Number(amt1) * 1e6
+                  {
+                  const amountAsWei = Number(amt1) * 1e6
                   const amount2AsWei = utils.parseEther(amt2.toString())
-                  return [depositTokens((amountAsWei.toString()), (amount2AsWei.toString())), setApproved(false), setIsMining3(true)]}
+                  const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+                  if (status === 'wallet error'){
+                    setCard0Of3(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
+                  }
+                  else{
+                    setApproved(false)
+                    setIsMining3(true)
+                  }
+                }
                 catch (err) 
-                  {if (err instanceof Error){
+                  {
+                    if (err instanceof Error){
                       setErrorMsg(err.message)
                     }
                     else{
                       setErrorMsg('Cannot deposit tokens')
                     }
+                    setErrorCard(true)
                   }
-                  setErrorCard(true)
+                  
               }
               
               }
@@ -473,11 +520,22 @@ const FarmsPage: NextPageWithLayout = () => {
                 const newAmount = event.target.value === "" ? "" : (event.target.value)
                 amountState(newAmount)
             }
-            const handleWithdrawSubmit = () => {
+            const handleWithdrawSubmit = async () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
                   try
-                    {const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
-                    return [shareWithdrawn(amountAsWei.toString()),setWithdrawalMining(true),setCard0Of1(true)]}
+                    {
+                    const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
+                    const status = await shareWithdrawn(amountAsWei.toString())
+                    if (status === 'wallet error'){
+                      setCard0Of1(false)
+                      setErrorMsg('No WALLET detected!')
+                      setErrorCard(true)
+                    }
+                    else{
+                      setWithdrawalMining(true)
+                      setCard0Of1(true)
+                    }
+                  }
                   catch (err) 
                     {
                       if (err instanceof Error){
@@ -493,7 +551,16 @@ const FarmsPage: NextPageWithLayout = () => {
                     try
                       {
                         const amountAsWei = utils.parseEther((amount).toString())
-                        return [shareWithdrawn(amountAsWei.toString()),setWithdrawalMining(true),setCard0Of1(true)]
+                        const status = await shareWithdrawn(amountAsWei.toString())
+                        if (status === 'wallet error'){
+                          setCard0Of1(false)
+                          setErrorMsg('No WALLET detected!')
+                          setErrorCard(true)
+                        }
+                        else{
+                          setWithdrawalMining(true)
+                          setCard0Of1(true)
+                        }
                       }
                     catch (err) 
                       {
@@ -516,10 +583,18 @@ const FarmsPage: NextPageWithLayout = () => {
                 
                   if (from === address && to === farm.vault)
                     {
-                      setCard1Of3(true)
+                      
+                      setCard0Of3(false)
                       setApprovedToken1(true)
                       setUsdcPending(true)
                       setIsMining1(false)
+                      if (usdtPending === true){
+                        setCard1Of3(false)
+                      }
+                      else{
+                        setCard1Of3(true)
+                      }
+                      
                     }
                   
               })
@@ -527,16 +602,26 @@ const FarmsPage: NextPageWithLayout = () => {
                 if (from === address && to === farm.vault)
                   {
                     
-                    setCard1Of3(true)
+                    setCard0Of3(false)
+
                     setApprovedToken2(true)
                     setUsdtPending(true)
                     setIsMining2(false)
+                    if (usdcPending === true){
+                      setCard1Of3(false)
+                    }
+                    else{
+                      setCard1Of3(true)
+                    }
+                    
                   }
             })
               sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
                 if (to === address)
                   {
                     setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+                    setCard1Of3(false)
+                    setUsdcPending(false)
                     setCard3Of3(true)
                     setIsMining3(false)
                   }
@@ -545,10 +630,13 @@ const FarmsPage: NextPageWithLayout = () => {
               if (to === address)
                 {
                   setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+                  setCard0Of1(false)
+
                   setCard1Of1(true)
                   setWithdrawalMining(false)
                 }
           })
+         
 
             
             }, [])
@@ -970,7 +1058,7 @@ const FarmsPage: NextPageWithLayout = () => {
             </FarmList>
           );
         })}
-      </div> : <div></div>}</div>
+      </div>
     </>
   );
 };

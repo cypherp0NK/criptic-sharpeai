@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { ethers, providers } from 'ethers'
 import SharpeAI from '../static/chain_info/SharpeAI.json'
 import ERC20 from '../static/chain_info/WethToken.json'
 
@@ -7,7 +7,8 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
         
         const { abi } = SharpeAI
         const erc20ABI = ERC20.abi
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
+        // new ethers.providers.Web3Provider(window.ethereum);
         const SharpeaiContract = new ethers.Contract(vault, abi, provider)
         const tokenContract1 = new ethers.Contract(tokenAddress1, erc20ABI, provider)
         const tokenContract2 = new ethers.Contract(tokenAddress2, erc20ABI, provider)
