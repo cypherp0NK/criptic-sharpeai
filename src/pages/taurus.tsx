@@ -579,22 +579,19 @@ const FarmsPage: NextPageWithLayout = () => {
                 const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
                 const contr2 = new ethers.Contract(farm.token2, erc20ABI, provider)
                 const sharpeEvents = new ethers.Contract(farm.vault, abi, provider)
+                if (usdtPending && usdcPending) {
+                  setCard1Of3(false)
+                }
+                
               contr.on("Approval", (from, to, amount, event) => {
                 
                   if (from === address && to === farm.vault)
                     {
-                      
                       setCard0Of3(false)
                       setApprovedToken1(true)
                       setUsdcPending(true)
-                      setIsMining1(false)
-                      if (usdtPending === true){
-                        setCard1Of3(false)
-                      }
-                      else{
-                        setCard1Of3(true)
-                      }
-                      
+                      setIsMining1(false)                      
+                      setCard1Of3(true)
                     }
                   
               })
@@ -607,15 +604,12 @@ const FarmsPage: NextPageWithLayout = () => {
                     setApprovedToken2(true)
                     setUsdtPending(true)
                     setIsMining2(false)
-                    if (usdcPending === true){
-                      setCard1Of3(false)
-                    }
-                    else{
-                      setCard1Of3(true)
-                    }
+                    setCard1Of3(true)
+                    
                     
                   }
             })
+            
               sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
                 if (to === address)
                   {
