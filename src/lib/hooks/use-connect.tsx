@@ -14,48 +14,50 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [balance, setBalance] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [deposits, setDeposits] = useState<string>('0')
-  const [earnings, setEarnings] = useState<string>('0')
-  const [roi, setRoi] = useState<string>('0%')
-  const [vE1, setVE1] = useState<string>('0')
-  const [vE2, setVE2] = useState<string>('0')
-  const [vE3, setVE3] = useState<string>('0')
-  const [vol1, setVol1] = useState<string>('0')
-  const [vol2, setVol2] = useState<string>('0')
-  const [vol3, setVol3] = useState<string>('0')
-  const [totalVol, setTotalVol] = useState<string>('0')
-  const [tvl1, setTVL1] = useState<string>('0')
-  const [tvl2, setTVL2] = useState<string>('0')
-  const [tvl3, setTVL3] = useState<string>('0')
-  const [totalTvl, setTotalTVL] = useState<string>('0')
-  const [ UY1, setUY1 ] = useState<string>('0')
-  const [ UY2, setUY2 ] = useState<string>('0')
-  const [ UY3, setUY3] = useState<string>('0')
-  const [poolPos1, setPoolPos1] = useState<string>('0')
-  const [poolPos2, setPoolPos2] = useState<string>('0')
-  const [poolPos3, setPoolPos3] = useState<string>('0')
-  const [poolApy1, setPoolApy1] = useState<string>('0%')
-  const [poolApy2, setPoolApy2] = useState<string>('0%')
-  const [poolApy3, setPoolApy3] = useState<string>('0%')
-  const [totalPoolApy, setTotalPoolApy] = useState<string>('0%')
-  const [monthlyApy, setMonthlyApy] = useState<string>('0%')
+  const [deposits, setDeposits] = useState<string>('--')
+  const [earnings, setEarnings] = useState<string>('--')
+  const [roi, setRoi] = useState<string>('--')
+  const [vE1, setVE1] = useState<string>('--')
+  const [vE2, setVE2] = useState<string>('--')
+  const [vE3, setVE3] = useState<string>('--')
+  const [vol1, setVol1] = useState<string>('--')
+  const [vol2, setVol2] = useState<string>('--')
+  const [vol3, setVol3] = useState<string>('--')
+  const [totalVol, setTotalVol] = useState<string>('--')
+  const [tvl1, setTVL1] = useState<string>('--')
+  const [tvl2, setTVL2] = useState<string>('--')
+  const [tvl3, setTVL3] = useState<string>('--')
+  const [totalTvl, setTotalTVL] = useState<string>('--')
+  const [ UY1, setUY1 ] = useState<string>('--')
+  const [ UY2, setUY2 ] = useState<string>('--')
+  const [ UY3, setUY3] = useState<string>('--')
+  const [poolPos1, setPoolPos1] = useState<string>('--')
+  const [poolPos2, setPoolPos2] = useState<string>('--')
+  const [poolPos3, setPoolPos3] = useState<string>('--')
+  const [poolApy1, setPoolApy1] = useState<string>('--')
+  const [poolApy2, setPoolApy2] = useState<string>('--')
+  const [poolApy3, setPoolApy3] = useState<string>('--')
+  const [totalPoolApy, setTotalPoolApy] = useState<string>('--')
+  const [monthlyApy, setMonthlyApy] = useState<string>('--')
 
-  const [shareBalance1, setShareBalance1] = useState<string>('0.00')
-  const [shareBalance2, setShareBalance2] = useState<string>('0.00')
-  const [shareBalance3, setShareBalance3] = useState<string>('0.00')
-  const [tB1, setTB1] = useState<string>('0.00')
-  const [tB2, setTB2] = useState<string>('0.00')
-  const [tB3, setTB3] = useState<string>('0.00')
-  const [tB4, setTB4] = useState<string>('0.00')
+  const [shareBalance1, setShareBalance1] = useState<string>('--')
+  const [shareBalance2, setShareBalance2] = useState<string>('--')
+  const [shareBalance3, setShareBalance3] = useState<string>('--')
+  const [shareBalance4, setShareBalance4] = useState<string>('--')
 
-  const [v1P1, setV1P1] = useState<string>('0.00')
-  const [v1P2, setV1P2] = useState<string>('0.00')
+  const [tB1, setTB1] = useState<string>('--')
+  const [tB2, setTB2] = useState<string>('--')
+  const [tB3, setTB3] = useState<string>('--')
+  const [tB4, setTB4] = useState<string>('--')
 
-  const [v2P1, setV2P1] = useState<string>('0.00')
-  const [v2P2, setV2P2] = useState<string>('0.00')
+  const [v1P1, setV1P1] = useState<string>('--')
+  const [v1P2, setV1P2] = useState<string>('--')
 
-  const [v3P1, setV3P1] = useState<string>('0')
-  const [v3P2, setV3P2] = useState<string>('0')
+  const [v2P1, setV2P1] = useState<string>('--')
+  const [v2P2, setV2P2] = useState<string>('--')
+
+  const [v3P1, setV3P1] = useState<string>('--')
+  const [v3P2, setV3P2] = useState<string>('--')
 
 
 
@@ -132,7 +134,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         const [userYield1, userYield2, userYield3, e] = await allEarnings(web3Address)
         const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(web3Address)
         const [apy1, apy2, apy3, totalAPY, monthlyAPY] = await fetchAPY(web3Address)
-        const [sBal1, sBal2, sBal3] = await singleBalances(web3Address)
+        const [sBal1, sBal2, sBal3, sBal4] = await singleBalances(web3Address)
         const [tBal1, tBal2, tBal3, tBal4] = await fetchTokenBalances(web3Address)
         setDeposits(('$').concat((b.toFixed(2)).toString()))
         setEarnings(('$').concat((e.toFixed(2)).toString()))
@@ -156,6 +158,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         setShareBalance1((sBal1.toFixed(2)).toString())
         setShareBalance2((sBal2.toFixed(2)).toString())
         setShareBalance3((sBal3.toFixed(2)).toString())
+        setShareBalance4((sBal4.toFixed(2)).toString())
         setV1P1((p1.toFixed(2)).toString())
         setV1P2((p2.toFixed(2)).toString())
         setV2P1((p3.toFixed(2)).toString())
@@ -260,6 +263,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         shareBalance1,
         shareBalance2,
         shareBalance3,
+        shareBalance4,
         v1P1,
         v1P2,
         v2P1,

@@ -206,7 +206,7 @@ const FarmsPage: NextPageWithLayout = () => {
         </div>
 
         {FarmsData.map((farm) => {
-            const { address, shareBalance1, shareBalance2, shareBalance3, poolPos1, poolPos2, poolPos3, 
+            const { address, shareBalance1, shareBalance2, shareBalance3, shareBalance4, poolPos1, poolPos2, poolPos3, 
               v1P1,
               v1P2,
               v2P1,
@@ -219,7 +219,7 @@ const FarmsPage: NextPageWithLayout = () => {
               tB4, error } = useContext(WalletContext);
 
             const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
-            const {totalSupply, fetchPrice, tokenBalances} = vaultData(farm.vault, farm.token1, farm.token2)
+            const {totalSupply, fetchPrice, tokenBalances, } = vaultData(farm.vault, farm.token1, farm.token2)
             const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
@@ -242,255 +242,273 @@ const FarmsPage: NextPageWithLayout = () => {
             const [errorCard, setErrorCard] = useState<boolean>(false)
             const [errorMsg, setErrorMsg] = useState<string>('')
 
-            const maxBalance1 = async () => {
-              if (farm.from === "USDC" && farm.to === "USDT"){
-                const newAmount = tB1
-                const [p1, p2] = await fetchPrice(6)
-                const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-                setAmount(newAmount)
-                setAmount2(calcEquiv)
-                setAmt(newAmount)
-                setAmt2(calcEquiv)
-                }
-              else{
-                const newAmount = tB1
-                const [p1, p2] = await fetchPrice(18)
-                const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-                setAmount(newAmount)
-                setAmount2(calcEquiv)
-                setAmt(newAmount)
-                setAmt2(calcEquiv)
-              }         
-          }
-          const maxBalance2 = async () => {
-            if (farm.from === "USDC" && farm.to === "USDT"){
-              const newAmount = tB2
-              const [p1, p2] = await fetchPrice(6)
-              const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-              setAmount2(newAmount)
-              setAmount(calcEquiv)
-              setAmt2(newAmount)
-              setAmt(calcEquiv)
-              }
-          else if (farm.from === "USDC" && farm.to === "FRAX"){
-            const newAmount = tB3
-              const [p1, p2] = await fetchPrice(18)
-              const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-              setAmount2(newAmount)
-              setAmount(calcEquiv)
-              setAmt2(newAmount)
-              setAmt(calcEquiv)
-              }
-          else if (farm.from === "USDC" && farm.to === "MIMATIC"){
-            const newAmount = tB4
-              const [p1, p2] = await fetchPrice(18)
-              const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-              setAmount2(newAmount)
-              setAmount(calcEquiv)
-              setAmt2(newAmount)
-              setAmt(calcEquiv)
-              }
-          }
-            const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (farm.from === "USDC" && farm.to === "USDT"){
-                    const newAmount = event.target.value === "" ? "" : (event.target.value)
-                    const [p1, p2] = await fetchPrice(6)
-                    const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-                    setAmount(newAmount)
-                    setAmount2(calcEquiv)
-                    setAmt(newAmount)
-                    setAmt2(calcEquiv)
-                    }
-                  else{
-                    const newAmount = event.target.value === "" ? "" : (event.target.value)
-                    const [p1, p2] = await fetchPrice(18)
-                    const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-                    setAmount(newAmount)
-                    setAmount2(calcEquiv)
-                    setAmt(newAmount)
-                    setAmt2(calcEquiv)
-                  }
-                }
-            const handleInputChange2 = async (event: React.ChangeEvent<HTMLInputElement>) => {
-              if (farm.from === "USDC" && farm.to === "USDT"){
-                  const newAmount = event.target.value === "" ? "" : (event.target.value)
-                  const [p1, p2] = await fetchPrice(6)
-                  const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-                  setAmount2(newAmount)
-                  setAmount(calcEquiv)
-                  setAmt2(newAmount)
-                  setAmt(calcEquiv)
-                  }
-              else{
-                const newAmount = event.target.value === "" ? "" : (event.target.value)
-                  const [p1, p2] = await fetchPrice(18)
-                  const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-                  setAmount2(newAmount)
-                  setAmount(calcEquiv)
-                  setAmt2(newAmount)
-                  setAmt(calcEquiv)
-                  }
-                }
+          //   const maxBalance1 = async () => {
+          //     if (farm.from === "USDC" && farm.to === "USDT"){
+          //       const newAmount = tB1
+          //       const [p1, p2] = await fetchPrice(6)
+          //       const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
+          //       setAmount(newAmount)
+          //       setAmount2(calcEquiv)
+          //       setAmt(newAmount)
+          //       setAmt2(calcEquiv)
+          //       }
+          //     else{
+          //       const newAmount = tB1
+          //       const [p1, p2] = await fetchPrice(18)
+          //       const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
+          //       setAmount(newAmount)
+          //       setAmount2(calcEquiv)
+          //       setAmt(newAmount)
+          //       setAmt2(calcEquiv)
+          //     }         
+          // }
+          // const maxBalance2 = async () => {
+          //   if (farm.from === "USDC" && farm.to === "USDT"){
+          //     const newAmount = tB2
+          //     const [p1, p2] = await fetchPrice(6)
+          //     const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
+          //     setAmount2(newAmount)
+          //     setAmount(calcEquiv)
+          //     setAmt2(newAmount)
+          //     setAmt(calcEquiv)
+          //     }
+          // else if (farm.from === "USDC" && farm.to === "FRAX"){
+          //   const newAmount = tB3
+          //     const [p1, p2] = await fetchPrice(18)
+          //     const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
+          //     setAmount2(newAmount)
+          //     setAmount(calcEquiv)
+          //     setAmt2(newAmount)
+          //     setAmt(calcEquiv)
+          //     }
+          // else if (farm.from === "USDC" && farm.to === "MIMATIC"){
+          //   const newAmount = tB4
+          //     const [p1, p2] = await fetchPrice(18)
+          //     const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
+          //     setAmount2(newAmount)
+          //     setAmount(calcEquiv)
+          //     setAmt2(newAmount)
+          //     setAmt(calcEquiv)
+          //     }
+          // }
+          //   const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+          //         if (farm.from === "USDC" && farm.to === "USDT"){
+          //           const newAmount = event.target.value === "" ? "" : (event.target.value)
+          //           const [p1, p2] = await fetchPrice(6)
+          //           const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
+          //           setAmount(newAmount)
+          //           setAmount2(calcEquiv)
+          //           setAmt(newAmount)
+          //           setAmt2(calcEquiv)
+          //           }
+          //         else{
+          //           const newAmount = event.target.value === "" ? "" : (event.target.value)
+          //           const [p1, p2] = await fetchPrice(18)
+          //           const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
+          //           setAmount(newAmount)
+          //           setAmount2(calcEquiv)
+          //           setAmt(newAmount)
+          //           setAmt2(calcEquiv)
+          //         }
+          //       }
+          //   const handleInputChange2 = async (event: React.ChangeEvent<HTMLInputElement>) => {
+          //     if (farm.from === "USDC" && farm.to === "USDT"){
+          //         const newAmount = event.target.value === "" ? "" : (event.target.value)
+          //         const [p1, p2] = await fetchPrice(6)
+          //         const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
+          //         setAmount2(newAmount)
+          //         setAmount(calcEquiv)
+          //         setAmt2(newAmount)
+          //         setAmt(calcEquiv)
+          //         }
+          //     else{
+          //       const newAmount = event.target.value === "" ? "" : (event.target.value)
+          //         const [p1, p2] = await fetchPrice(18)
+          //         const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
+          //         setAmount2(newAmount)
+          //         setAmount(calcEquiv)
+          //         setAmt2(newAmount)
+          //         setAmt(calcEquiv)
+          //         }
+          //       }
 
-            const handleApproveSubmit1 = async () => {
-                try{ 
-                    const amountAsWei = Number(amt1) * 1e6
-                    const status = await approveToken1(amountAsWei.toString())
-                    if (status === 'wallet error'){
-                      setCard0Of3(false)
-                      setErrorMsg('No WALLET detected!')
-                      setErrorCard(true)
-                    }
-                    else{
-                      if (approvedToken2 === false) {
-                        setCard0Of3(true)
+          //   const handleApproveSubmit1 = async () => {
+          //       try{ 
+          //           const amountAsWei = Number(amt1) * 1e6
+          //           const status = await approveToken1(amountAsWei.toString())
+          //           if (status === 'wallet error'){
+          //             setCard0Of3(false)
+          //             setErrorMsg('No WALLET detected!')
+          //             setErrorCard(true)
+          //           }
+          //           else{
+          //             if (approvedToken2 === false) {
+          //               setCard0Of3(true)
                         
-                        }
-                        setIsMining1(true)
-                      }
-                    }
-                catch (err) {
-                    if (err instanceof Error){
-                      setErrorMsg(err.message)
-                    }
-                    if (error){
-                      setErrorMsg('No WALLET detected!')
-                    }
-                    else{
-                      setErrorMsg('Something went wrong')
-                    }
-                    setErrorCard(true)
-                    setCard0Of3(false)
-                  }
-            }
+          //               }
+          //               setIsMining1(true)
+          //             }
+          //           }
+          //       catch (err) {
+          //           if (err instanceof Error){
+          //             setErrorMsg(err.message)
+          //           }
+          //           if (error){
+          //             setErrorMsg('No WALLET detected!')
+          //           }
+          //           else{
+          //             setErrorMsg('Something went wrong')
+          //           }
+          //           setErrorCard(true)
+          //           setCard0Of3(false)
+          //         }
+          //   }
 
-            const handleApproveSubmit2 = async () => {
+          //   const handleApproveSubmit2 = async () => {
               
-              if (farm.from === "USDC" && farm.to === "USDT"){
-                try{
-                  const amount2AsWei = Number(amt2) * 1e6
-                  const status = await approveToken2(amount2AsWei.toString())
-                  if (status === 'wallet error'){
-                    setCard0Of3(false)
-                    setErrorMsg('No WALLET detected!')
-                    setErrorCard(true)
-                  }
-                  else{
-                    if (approvedToken1 === false) {
-                      setCard0Of3(true)
+          //     if (farm.from === "USDC" && farm.to === "USDT"){
+          //       try{
+          //         const amount2AsWei = Number(amt2) * 1e6
+          //         const status = await approveToken2(amount2AsWei.toString())
+          //         if (status === 'wallet error'){
+          //           setCard0Of3(false)
+          //           setErrorMsg('No WALLET detected!')
+          //           setErrorCard(true)
+          //         }
+          //         else{
+          //           if (approvedToken1 === false) {
+          //             setCard0Of3(true)
                       
-                    }
-                    setIsMining2(true)
-                  }
-                }
+          //           }
+          //           setIsMining2(true)
+          //         }
+          //       }
 
-                catch (err) {
-                  if (err instanceof Error){
-                    setErrorMsg(err.message)
-                  }
-                  else{
-                    setErrorMsg('Something went wrong')
-                  }
-                  setErrorCard(true)
-                }
-              }
-              else{
-                try{
-                  const amount2AsWei = utils.parseEther(amt2.toString())
-                  if (approvedToken1 === false) {
-                    setCard0Of3(true)
-                  }
-                  const status = await approveToken2(amount2AsWei.toString())
-                  if (status === 'wallet error'){
-                    setCard0Of3(false)
-                    setErrorMsg('No WALLET detected!')
-                    setErrorCard(true)
-                  }
-                  else{
-                    if (approvedToken1 === false) {
-                      setCard0Of3(true)
+          //       catch (err) {
+          //         if (err instanceof Error){
+          //           setErrorMsg(err.message)
+          //         }
+          //         else{
+          //           setErrorMsg('Something went wrong')
+          //         }
+          //         setErrorCard(true)
+          //       }
+          //     }
+          //     else{
+          //       try{
+          //         const amount2AsWei = utils.parseEther(amt2.toString())
+          //         if (approvedToken1 === false) {
+          //           setCard0Of3(true)
+          //         }
+          //         const status = await approveToken2(amount2AsWei.toString())
+          //         if (status === 'wallet error'){
+          //           setCard0Of3(false)
+          //           setErrorMsg('No WALLET detected!')
+          //           setErrorCard(true)
+          //         }
+          //         else{
+          //           if (approvedToken1 === false) {
+          //             setCard0Of3(true)
                       
-                    }
-                    setIsMining2(true)
-                  }
-              }
+          //           }
+          //           setIsMining2(true)
+          //         }
+          //     }
 
-                catch (err) {
-                  if (err instanceof Error){
-                    setErrorMsg(err.message)
-                  }
-                  else{
-                    setErrorMsg('Something went wrong')
-                  }
-                  setErrorCard(true)
-                }
-              }
-            }
+          //       catch (err) {
+          //         if (err instanceof Error){
+          //           setErrorMsg(err.message)
+          //         }
+          //         else{
+          //           setErrorMsg('Something went wrong')
+          //         }
+          //         setErrorCard(true)
+          //       }
+          //     }
+          //   }
               
               
-            const handleDepositSubmit = async () => {
-              if (farm.from === "USDC" && farm.to === "USDT"){
-                try {
-                  const amountAsWei = Number(amt1) * 1e6
-                  const amount2AsWei = Number(amt2) * 1e6
-                  const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
-                  if (status === 'wallet error'){
-                    setCard0Of3(false)
-                    setErrorMsg('No WALLET detected!')
-                    setErrorCard(true)
-                  }
-                  else{
-                    setApproved(false)
-                    setIsMining3(true)
-                  }
-                }
-                catch (err) {
-                  if (err instanceof Error){
-                    setErrorMsg(err.message)
-                  }
-                  else{
-                    setErrorMsg('Cannot deposit')
-                  }
-                  setErrorCard(true)
-                }
-              }
-              else{
-                try
-                  {
-                  const amountAsWei = Number(amt1) * 1e6
-                  const amount2AsWei = utils.parseEther(amt2.toString())
-                  const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
-                  if (status === 'wallet error'){
-                    setCard0Of3(false)
-                    setErrorMsg('No WALLET detected!')
-                    setErrorCard(true)
-                  }
-                  else{
-                    setApproved(false)
-                    setIsMining3(true)
-                  }
-                }
-                catch (err) 
-                  {
-                    if (err instanceof Error){
-                      setErrorMsg(err.message)
-                    }
-                    else{
-                      setErrorMsg('Cannot deposit tokens')
-                    }
-                    setErrorCard(true)
-                  }
+          //   const handleDepositSubmit = async () => {
+          //     if (farm.from === "USDC" && farm.to === "USDT"){
+          //       try {
+          //         const amountAsWei = Number(amt1) * 1e6
+          //         const amount2AsWei = Number(amt2) * 1e6
+          //         const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+          //         if (status === 'wallet error'){
+          //           setCard0Of3(false)
+          //           setErrorMsg('No WALLET detected!')
+          //           setErrorCard(true)
+          //         }
+          //         else{
+          //           setApproved(false)
+          //           setIsMining3(true)
+          //         }
+          //       }
+          //       catch (err) {
+          //         if (err instanceof Error){
+          //           setErrorMsg(err.message)
+          //         }
+          //         else{
+          //           setErrorMsg('Cannot deposit')
+          //         }
+          //         setErrorCard(true)
+          //       }
+          //     }
+          //     else{
+          //       try
+          //         {
+          //         const amountAsWei = Number(amt1) * 1e6
+          //         const amount2AsWei = utils.parseEther(amt2.toString())
+          //         const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+          //         if (status === 'wallet error'){
+          //           setCard0Of3(false)
+          //           setErrorMsg('No WALLET detected!')
+          //           setErrorCard(true)
+          //         }
+          //         else{
+          //           setApproved(false)
+          //           setIsMining3(true)
+          //         }
+          //       }
+          //       catch (err) 
+          //         {
+          //           if (err instanceof Error){
+          //             setErrorMsg(err.message)
+          //           }
+          //           else{
+          //             setErrorMsg('Cannot deposit tokens')
+          //           }
+          //           setErrorCard(true)
+          //         }
                   
-              }
+          //     }
               
-              }
+          //     }
 
-              const [SelectedTab, setSelectedTab] = useState("1")
+              const [SelectedTab, setSelectedTab] = useState("3")
               const switchTab1 = () => {
                 setSelectedTab("1")
             }
               const switchTab2 = () => {
                   setSelectedTab("2")
+              }
+              const zappTab1 = () => {
+                setSelectedTab("3")
+                setZappCard0of2(false)
+                setZappCard1of2(false)
+                setZappCard2of2(false)
+                setIsMining1(false)
+                setIsMining2(false)
+                setIsMining3(false)
+              }
+              const zappTab2 = () => {
+                setSelectedTab("4")
+                setZappCard0of2(false)
+                setZappCard1of2(false)
+                setZappCard2of2(false)
+                setIsMining1(false)
+                setIsMining2(false)
+                setIsMining3(false)
               }
 
               // Withdraw Tab
@@ -574,6 +592,209 @@ const FarmsPage: NextPageWithLayout = () => {
                       }
                  }
             }
+
+            // Zapp1 Tab
+            const [ zappAmount1, zappAmount1State ] = useState<string>('')
+            const [zappCard0of2, setZappCard0of2] = useState<boolean>(false)
+            const [zappCard1of2, setZappCard1of2] = useState<boolean>(false)
+            const [zappCard2of2, setZappCard2of2] = useState<boolean>(false)
+            const inputZapp1  = (event: React.ChangeEvent<HTMLInputElement>) => {
+              const amt = event.target.value === "" ? "" : (event.target.value)
+              zappAmount1State(amt)
+            }
+            const maxZappInput1 = async () => {
+                zappAmount1State(tB1)  
+            }
+            
+            const zappApprove1 = async () => {
+              try{ 
+                  const amountAsWei = Number(zappAmount1) * 1e6
+                  const status = await approveToken1(amountAsWei.toString())
+                  if (status === 'wallet error'){
+                    setZappCard0of2(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
+                  }
+                  else{
+                      setZappCard0of2(true)
+                      setIsMining1(true)
+                    }
+                  }
+              catch (err) {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
+                  }
+                  if (error){
+                    setErrorMsg('No WALLET detected!')
+                  }
+                  else{
+                    setErrorMsg('Something went wrong')
+                  }
+                  setErrorCard(true)
+                  setCard0Of3(false)
+                }
+          }
+          
+            const zappDeposit1 = async () => {
+                try {
+                  const amountAsWei = Number(zappAmount1) * 1e6
+                  const amount2AsWei = 0
+                  const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+                  if (status === 'wallet error'){
+                    setZappCard0of2(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
+                  }
+                  else{
+                    setApproved(false)
+                    setIsMining3(true)
+                  }
+                }
+                catch (err) {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
+                  }
+                  else{
+                    setErrorMsg('Cannot deposit')
+                  }
+                  setErrorCard(true)
+                }              
+              }
+
+          //Zapp2 Tab
+          const [zappAmount2, zappAmount2State ] = useState<string>('')
+          const inputZapp2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+            const amt = event.target.value === "" ? "" : (event.target.value)
+            zappAmount2State(amt)
+          }
+          const maxZappInput2 = async () => {
+            if (farm.from === "USDC" && farm.to === "USDT"){
+                  zappAmount2State(tB2)
+                  }
+              else if (farm.from === "USDC" && farm.to === "FRAX"){
+                zappAmount2State(tB3)
+                  }
+              else if (farm.from === "USDC" && farm.to === "MIMATIC"){
+                zappAmount2State(tB4)
+                  } 
+          }
+          const zappApprove2 = async () => {
+              
+            if (farm.from === "USDC" && farm.to === "USDT"){
+              try{
+                const amount2AsWei = Number(zappAmount2) * 1e6
+                const status = await approveToken2(amount2AsWei.toString())
+                if (status === 'wallet error'){
+                  setZappCard0of2(false)
+                  setErrorMsg('No WALLET detected!')
+                  setErrorCard(true)
+                }
+                else{
+                  if (approvedToken1 === false) {
+                    setZappCard0of2(true)
+                    
+                  }
+                  setIsMining2(true)
+                }
+              }
+
+              catch (err) {
+                if (err instanceof Error){
+                  setErrorMsg(err.message)
+                }
+                else{
+                  setErrorMsg('Something went wrong')
+                }
+                setErrorCard(true)
+              }
+            }
+            else{
+              try{
+                const amount2AsWei = utils.parseEther(zappAmount2.toString())
+                if (approvedToken1 === false) {
+                  setZappCard0of2(true)
+                }
+                const status = await approveToken2(amount2AsWei.toString())
+                if (status === 'wallet error'){
+                  setZappCard0of2(false)
+                  setErrorMsg('No WALLET detected!')
+                  setErrorCard(true)
+                }
+                else{
+                  if (approvedToken1 === false) {
+                    setZappCard0of2(true)
+                    
+                  }
+                  setIsMining2(true)
+                }
+            }
+
+              catch (err) {
+                if (err instanceof Error){
+                  setErrorMsg(err.message)
+                }
+                else{
+                  setErrorMsg('Something went wrong')
+                }
+                setErrorCard(true)
+              }
+            }
+          }
+          const zappDeposit2 = async () => {
+            if (farm.from === "USDC" && farm.to === "USDT"){
+              try {
+                const amountAsWei = 0
+                const amount2AsWei = Number(zappAmount2) * 1e6
+                const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+                if (status === 'wallet error'){
+                  setZappCard0of2(false)
+                  setErrorMsg('No WALLET detected!')
+                  setErrorCard(true)
+                }
+                else{
+                  setApproved(false)
+                  setIsMining3(true)
+                }
+              }
+              catch (err) {
+                if (err instanceof Error){
+                  setErrorMsg(err.message)
+                }
+                else{
+                  setErrorMsg('Cannot deposit')
+                }
+                setErrorCard(true)
+              }
+            }
+            else{
+              try
+                {
+                const amountAsWei = 0
+                const amount2AsWei = utils.parseEther(zappAmount2.toString())
+                const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
+                if (status === 'wallet error'){
+                  setZappCard0of2(false)
+                  setErrorMsg('No WALLET detected!')
+                  setErrorCard(true)
+                }
+                else{
+                  setApproved(false)
+                  setIsMining3(true)
+                }
+              }
+              catch (err) 
+                {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
+                  }
+                  else{
+                    setErrorMsg('Cannot deposit tokens')
+                  }
+                  setErrorCard(true)
+                }
+                
+            }             
+          }
             useEffect(() => {
               
                 const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
@@ -588,25 +809,25 @@ const FarmsPage: NextPageWithLayout = () => {
                   if (from === address && to === farm.vault)
                     {
                       setCard0Of3(false)
+                      setZappCard0of2(false)
+                      setZappCard1of2(true)
                       setApprovedToken1(true)
-                      setUsdcPending(true)
+                      //setUsdcPending(true)
                       setIsMining1(false)                      
-                      setCard1Of3(true)
+                      // setCard1Of3(true)
                     }
                   
               })
               contr2.on("Approval", (from, to, amount) => {
                 if (from === address && to === farm.vault)
                   {
-                    
                     setCard0Of3(false)
-
+                    setZappCard0of2(false)
+                    setZappCard1of2(true)
                     setApprovedToken2(true)
-                    setUsdtPending(true)
+                    //setUsdtPending(true)
                     setIsMining2(false)
-                    setCard1Of3(true)
-                    
-                    
+                    // setCard1Of3(true)
                   }
             })
             
@@ -616,7 +837,9 @@ const FarmsPage: NextPageWithLayout = () => {
                     setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
                     setCard1Of3(false)
                     setUsdcPending(false)
-                    setCard3Of3(true)
+                    setZappCard1of2(false)
+                    setZappCard2of2(true)
+                    //setCard3Of3(true)
                     setIsMining3(false)
                   }
             })
@@ -778,6 +1001,72 @@ const FarmsPage: NextPageWithLayout = () => {
                 </Button>
               </div>
             </div> : ''}
+            {zappCard0of2 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-1/6"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>0/2 Transactions confirmed</div>
+                  <div>Approve token in your wallet.</div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setZappCard0of2(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {zappCard1of2 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-1/2"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+                <div className="flex flex-col text-little gap-2">
+                  <div>1/2 Transactions confirmed</div>
+                  <div>Click on deposit and<br></br>confirm transaction in your wallet.</div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setZappCard1of2(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
+            {zappCard2of2 ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
+              <div className="relative bg-txngreen p-2 w-full"></div>
+              <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
+              <div className="flex flex-col text-little gap-2">
+                  <div>2/2 Transactions confirmed</div>
+                  <div>Deposit Success</div>
+                  <div className="flex flex-col border border-txngreen p-5 gap-2 rounded-md">
+                    <div>You have successfully Deposited into the {farm.from}-{farm.to} vault</div>
+                    <div className="flex flex-row text-txngreen cursor-pointer">
+                    <a target="_blank"
+                      rel="noopener noreferrer"
+                      href={depositHash} className="inline-flex items-center">
+                        View on Explorer&nbsp;<ExportIcon className="h-auto w-2.5" /></a>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                title="Close"
+                color="white"
+                shape="circle"
+                variant="transparent"
+                size="small" 
+                onClick={()=> {setZappCard2of2(false)}}
+                >
+                  <Close className="h-auto w-2.5" />
+                </Button>
+              </div>
+            </div> : ''}
             {errorCard ? <div className=" bg-dark border-2 border-txngrey rounded-sm">
               <div className="relative bg-txnError p-2 w-full"></div>
               <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
@@ -802,40 +1091,61 @@ const FarmsPage: NextPageWithLayout = () => {
           </div>
               <TabContext value={SelectedTab}>
               <TabPanel value="1">
-              <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
-                <div className="text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
-                  Wallet Balance {farm.from}: {farm.from === "USDC" ? tB1 : '0.00'}<br></br>
-                  Wallet Balance {farm.to}: {farm.to === "USDT" ? tB2 : farm.to === "FRAX" ? tB3 : farm.to === "MIMATIC" ? tB4 : '0.00'}
+              {/* <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
+                  <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
+                  <div className="inline-flex">
+                    <div onClick={zappTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                    </div>&nbsp;
+                    {farm.from === "USDC" ? tB1 : '0.00'}&nbsp;{farm.from}
+                  </div>
+                  <div className="inline-flex">
+                    <div onClick={zappTab2} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                    </div>&nbsp;
+                    {farm.to === "USDT" ? tB2 : farm.to === "FRAX" ? tB3 : farm.to === "MIMATIC" ? tB4 : '0.00'} {farm.to}
+                  </div>
+                  <div className="inline-flex">
+                    <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                      <div className="bg-white h-full w-full rounded-full"></div>
+                    </div>&nbsp;
+                    {farm.from} / {farm.to}
+                  </div>
+                  </div>
+                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
+                    View Vault Details
+                  </div>
+                  <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
+                    <span>Your Position: {farm.to === "USDT" ? poolPos1 : farm.to === "FRAX" ? poolPos2 : farm.to === "MIMATIC" ? poolPos3 : '0.00'}</span>
+                    <span>{farm.to === "USDT" ? v1P1 : farm.to === "FRAX" ? v2P1 : farm.to === "MIMATIC" ? v3P1  : '0.00'} {farm.from} + {farm.to === "USDT" ? v1P2 : farm.to === "FRAX" ? v2P2 : farm.to === "MIMATIC" ? v3P2 : '0.00'} {farm.to}</span>
+                  </div>
+                  
                 </div>
-                <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
-                  <span>Your Position: {farm.to === "USDT" ? poolPos1 : farm.to === "FRAX" ? poolPos2 : farm.to === "MIMATIC" ? poolPos3 : '0.00'}</span>
-                  <span>{farm.to === "USDT" ? v1P1 : farm.to === "FRAX" ? v2P1 : farm.to === "MIMATIC" ? v3P1  : '0.00'} {farm.from} + {farm.to === "USDT" ? v1P2 : farm.to === "FRAX" ? v2P2 : farm.to === "MIMATIC" ? v3P2 : '0.00'} {farm.to}</span>
+                <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="0.0"
+                      value={amount1}
+                      onChange={handleInputChange}
+                      className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-200 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
+                    />
+                    <span onClick={maxBalance1} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                      Max
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="0.0"
+                      value={amount2}
+                      onChange={handleInputChange2}
+                      className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-200 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
+                    />
+                    <span onClick={maxBalance2} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                      Max
+                    </span>
+                  </div>
                 </div>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="0.0"
-                    value={amount1}
-                    onChange={handleInputChange}
-                    className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-200 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
-                  />
-                  <span onClick={maxBalance1} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                    Max
-                  </span>
-                </div>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="0.0"
-                    value={amount2}
-                    onChange={handleInputChange2}
-                    className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-200 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
-                  />
-                  <span onClick={maxBalance2} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                    Max
-                  </span>
-                </div>
-              </div>
+
               <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
                 <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
                   DEPOSIT
@@ -1001,12 +1311,12 @@ const FarmsPage: NextPageWithLayout = () => {
                 Approve {farm.to}
               </Button>
             </div>)}
-              
+               */}
               </TabPanel>
               <TabPanel value="2">
                 <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
                   <div className="text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
-                    Shares Balance: {farm.to === 'USDT'? shareBalance1 : farm.to === 'FRAX' ? shareBalance2 : farm.to === 'MIMATIC' ? shareBalance3 : "0.00"}
+                    Shares Balance: {farm.to === 'USDT'? shareBalance4 : farm.to === 'FRAX' ? shareBalance2 : farm.to === 'MIMATIC' ? shareBalance3 : "0.00"}
                   </div>
                   <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
                     <span>Your Position: {farm.to === "USDT" ? poolPos1 : farm.to === "FRAX" ? poolPos2 : farm.to === "MIMATIC" ? poolPos3 : '0.00'}</span>
@@ -1028,7 +1338,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     </span>
                   </div>
                   <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
-                    <Button onClick={switchTab1} shape="rounded" fullWidth size="large">
+                    <Button onClick={zappTab1} shape="rounded" fullWidth size="large">
                       DEPOSIT
                     </Button>
                   
@@ -1047,7 +1357,152 @@ const FarmsPage: NextPageWithLayout = () => {
                 </div>
                 
               </TabPanel>
-
+              <TabPanel value="3">
+                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
+                  <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
+                  <div className="inline-flex">
+                    <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                      <div className="bg-white h-full w-full rounded-full"></div>
+                    </div>&nbsp;
+                    {farm.from === "USDC" ? tB1 : '0.00'}&nbsp;{farm.from}
+                  </div>
+                  <div className="inline-flex">
+                    <div onClick={zappTab2} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                    </div>&nbsp;
+                    {farm.to === "USDT" ? tB2 : farm.to === "FRAX" ? tB3 : farm.to === "MIMATIC" ? tB4 : '0.00'} {farm.to}
+                  </div>
+                  {/* <div className="inline-flex">
+                    <div onClick={switchTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                    </div>&nbsp;
+                    {farm.from} / {farm.to}
+                  </div> */}
+                  </div>
+                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
+                  {farm.to === "USDT" ? <a href="/usdc-usdt">View Vault Details</a> : farm.to === "FRAX" ? <a href="/usdc-frax">View Vault Details</a> : farm.to === "MIMATIC" ? <a href="/usdc-mimatic">View Vault Details</a> : ''}
+                  </div>
+                  <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
+                    <span>Your Position: {farm.to === "USDT" ? poolPos1 : farm.to === "FRAX" ? poolPos2 : farm.to === "MIMATIC" ? poolPos3 : '0.00'}</span>
+                    <span>{farm.to === "USDT" ? v1P1 : farm.to === "FRAX" ? v2P1 : farm.to === "MIMATIC" ? v3P1  : '0.00'} {farm.from} + {farm.to === "USDT" ? v1P2 : farm.to === "FRAX" ? v2P2 : farm.to === "MIMATIC" ? v3P2 : '0.00'} {farm.to}</span>
+                  </div>
+                  
+                </div>
+                <div className="mb-4 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="0.0"
+                      value={zappAmount1}
+                      onChange={inputZapp1}
+                      className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-400 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
+                    />
+                    <span onClick={maxZappInput1} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                      Max
+                    </span>
+                  </div>
+                  <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
+                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
+                      DEPOSIT
+                    </Button>
+                  
+                    <Button onClick={switchTab2} shape="rounded" fullWidth size="large">
+                        WITHDRAW
+                    </Button>
+                    
+                  </div>
+                  {approvedToken1 ? 
+                    (<>
+                      { isMining3 ? (
+                        <Button shape="rounded" fullWidth size="large">
+                        <Spinner/>
+                        </Button>
+                      ):
+                        (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={zappDeposit1}>
+                          DEPOSIT
+                        </Button>)}
+                      </>)
+                  : isMining1 ? (
+                  <Button shape="rounded" fullWidth size="large">
+                    <Spinner/>
+                  </Button>)
+                  : (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={zappApprove1}>
+                    Approve {farm.from}
+                  </Button>)}
+                </div>
+                
+              </TabPanel>
+              <TabPanel value="4">
+                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
+                  <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
+                  <div className="inline-flex">
+                    <div onClick={zappTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                    </div>&nbsp;
+                    {farm.from === "USDC" ? tB1 : '0.00'}&nbsp;{farm.from}
+                  </div>
+                  <div className="inline-flex">
+                    <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                      <div className="bg-white h-full w-full rounded-full"></div>
+                    </div>&nbsp;
+                    {farm.to === "USDT" ? tB2 : farm.to === "FRAX" ? tB3 : farm.to === "MIMATIC" ? tB4 : '0.00'} {farm.to}
+                  </div>
+                  {/* <div className="inline-flex">
+                    <div onClick={switchTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                    </div>&nbsp;
+                    {farm.from} / {farm.to}
+                  </div> */}
+                  </div>
+                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
+                  {farm.to === "USDT" ? <a href="/usdc-usdt">View Vault Details</a> : farm.to === "FRAX" ? <a href="/usdc-frax">View Vault Details</a> : farm.to === "MIMATIC" ? <a href="/usdc-mimatic">View Vault Details</a> : ''}
+                  </div>
+                  <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
+                    <span>Your Position: {farm.to === "USDT" ? poolPos1 : farm.to === "FRAX" ? poolPos2 : farm.to === "MIMATIC" ? poolPos3 : '0.00'}</span>
+                    <span>{farm.to === "USDT" ? v1P1 : farm.to === "FRAX" ? v2P1 : farm.to === "MIMATIC" ? v3P1  : '0.00'} {farm.from} + {farm.to === "USDT" ? v1P2 : farm.to === "FRAX" ? v2P2 : farm.to === "MIMATIC" ? v3P2 : '0.00'} {farm.to}</span>
+                  </div>
+                  
+                </div>
+                <div className="mb-4 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="0.0"
+                      value={zappAmount2}
+                      onChange={inputZapp2}
+                      className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-400 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
+                    />
+                    <span onClick={maxZappInput2} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                      Max
+                    </span>
+                  </div>
+                  <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
+                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
+                      DEPOSIT
+                    </Button>
+                  
+                    <Button onClick={switchTab2} shape="rounded" fullWidth size="large">
+                        WITHDRAW
+                    </Button>
+                    
+                  </div>
+                  {approvedToken2 ? 
+                    (<>
+                      { isMining3 ? (
+                        <Button shape="rounded" fullWidth size="large">
+                        <Spinner/>
+                        </Button>
+                      ):
+                        (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={zappDeposit2}>
+                          DEPOSIT
+                        </Button>)}
+                      </>)
+                  : isMining1 ? (
+                  <Button shape="rounded" fullWidth size="large">
+                    <Spinner/>
+                  </Button>)
+                  : (<Button className="bg-txngreen" shape="rounded" fullWidth size="large" onClick={zappApprove2}>
+                    Approve {farm.to}
+                  </Button>)}
+                </div>
+                
+              </TabPanel>
               </TabContext>
             </FarmList>
           );

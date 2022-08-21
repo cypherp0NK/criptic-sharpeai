@@ -9,7 +9,6 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 import Button from '@/components/ui/button';
 import { ArrowLinkIcon } from '@/components/icons/arrow-link-icon';
 import { DotsIcon } from '@/components/icons/dots-icon';
-import Avatar1 from '@/assets/images/avatar/3.png';
 import { useModal } from '@/components/modal-views/context';
 import { nftData } from '@/data/static/single-nft';
 import NftDropDown from './nft-dropdown';
@@ -17,6 +16,9 @@ import Avatar from '@/components/ui/avatar';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { poolChart1 } from '@/data/static/poolChart1';
+import {useContext} from "react"
+import {WalletContext} from "@/lib/hooks/use-connect"
 import { LiquidityData } from '@/data/static/liquidity';
 
 function CustomAxis({ x, y, payload }: any) {
@@ -42,6 +44,7 @@ const numberAbbr = (number: any) => {
 };
 
 export function TVLChart() {
+  const {tvl1} = useContext(WalletContext);
   let [date, setDate] = useState(1624147200);
   let [liquidity, setLiquidity] = useState('547792029');
   const formattedDate = format(new Date(date * 1000), 'MMMM d, yyyy');
@@ -194,6 +197,7 @@ function NftFooter({
   price,
 }: NftFooterProps) {
   const { openModal } = useModal();
+  const {LiquidityData} = poolChart1()
   
   return (
     <div
@@ -227,7 +231,7 @@ function NftFooter({
                   View Vault Performance
               </div>
               <div className="rounded-full text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-              <AnchorLink href="" className="inline-block">
+              <AnchorLink href="https://dune.com/sharpeai/sharpe-vault" className="inline-block">
                   <div className="rounded-full p-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
                     <Button className="rounded-full text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                     >View</Button>
@@ -367,7 +371,7 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
                       <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
                         Performance:<br></br>
                         This strategy works best in both bull and bear markets, collecting premiums earned for supplying concentrated range orders on Uni v3 pools. 
-                        Check out our vault’s performance on <a className="underline" href="">Dune</a>.<br></br><br></br>
+                        Check out our vault’s performance on <a className="underline" href="https://dune.com/sharpeai/sharpe-vault">Dune</a>.<br></br><br></br>
                         Risk:<br></br>
                         • Smart contract risk: The smart contracts are audit pending.<br></br>
                         • Stablecoin risk: This strategy could have an impermanent loss if the stablecoin loses its peg.

@@ -1,11 +1,11 @@
 import { ethers, providers } from 'ethers'
-import SharpeAI from '../static/chain_info/SharpeAI.json'
+import Sharpe from '../static/chain_info/Sharpe.json'
 import ERC20 from '../static/chain_info/WethToken.json'
 
 import {formatUnits} from '@ethersproject/units'
 export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: string) => {
         
-        const { abi } = SharpeAI
+        const { abi } = Sharpe
         const erc20ABI = ERC20.abi
         const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
         // new ethers.providers.Web3Provider(window.ethereum);
@@ -13,7 +13,7 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
         const tokenContract1 = new ethers.Contract(tokenAddress1, erc20ABI, provider)
         const tokenContract2 = new ethers.Contract(tokenAddress2, erc20ABI, provider)
 
-        const SC1 = new ethers.Contract("0xBE8DB36731fF8072B1c58d32Aacf8D1BCeDeC77b", abi, provider)
+        const SC1 = new ethers.Contract("0x4E32A48F4f4f7B2594733dd7ffED871D9441e2c4", abi, provider)
         const SC2 = new ethers.Contract("0xFD3B52fDF0CE5E0919400Fc90C2C5183BE517eE8", abi, provider)
         const SC3 = new ethers.Contract("0x9db685d9E4f2e5A7fAEC5760F2946C32c8422b91", abi, provider)
 
@@ -37,7 +37,7 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
         }
         const fetchAPY = async (address: string) => {
             const [fC1, fC2, fC3, tY] = await allEarnings(address)
-            const [balance1, balance2, balance3] = await singleBalances(address)
+            const [balance1, balance2, balance3, balance4] = await singleBalances(address)
             const [l1, l2, l3, tL, tvl1, tvl2, tvl3, tvl4, tvl5, tvl6] = await singleTVL()
             const [tSupply1,tSupply2,tSupply3] = await singleTS()
 
@@ -65,7 +65,7 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
         }
         const allEarnings = async (address: string) => {
             const [v1fees0, v1fees1, v2fees0, v2fees1, v3fees0, v3fees1] = await income()
-            const [userBalance1, userBalance2, userBalance3] = await singleBalances(address)
+            const [userBalance1, userBalance2, userBalance3, userBalance4] = await singleBalances(address)
             const [totalSupply1, totalSupply2, totalSupply3] = await singleTS()
 
             const feesCalc1 = ((v1fees0*userBalance1) / totalSupply1) + ((v1fees1*userBalance1) / totalSupply1)
@@ -97,7 +97,7 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
 
         const allPositions = async (address: string) => {
             const [tS1, tS2, tS3] = await singleTS()
-            const [newBalance1,newBalance2,newBalance3] = await singleBalances(address)
+            const [newBalance1,newBalance2,newBalance3,newBalance4] = await singleBalances(address)
             const [l1, l2, l3, tL, tvl1, tvl2, tvl3, tvl4, tvl5, tvl6] = await singleTVL()
 
             const p1 = (tvl1*newBalance1) / tS1
@@ -225,8 +225,10 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
             const single1 = parseFloat(formatUnits(balance1, 6))
             const single2 = parseFloat(formatUnits(balance2, 18))
             const single3 = parseFloat(formatUnits(balance3, 18))
+            const single4 = parseFloat(formatUnits(balance1, 1)) - 10
+            
 
-            return [single1,single2,single3]
+            return [single1,single2,single3,single4]
         }
         const singleTS = async () => {
             const ts1 = await SC1.totalSupply()

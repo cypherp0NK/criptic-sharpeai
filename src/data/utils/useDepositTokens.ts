@@ -1,4 +1,4 @@
-import SharpeAI from "../static/chain_info/SharpeAI.json"
+import Sharpe from "../static/chain_info/Sharpe.json"
 import ERC20 from "../static/chain_info/WethToken.json"
 import { utils, ethers } from "ethers"
 import {useContext} from "react"
@@ -8,7 +8,7 @@ import Web3Modal from 'web3modal';
 export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, vault: string) => {
     const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
     const { address, balance } = useContext(WalletContext);
-    const { abi } = SharpeAI
+    const { abi } = Sharpe
     const erc20ABI = ERC20.abi
     // new ethers.providers.Web3Provider(window.ethereum);
     const approvingToken1State = false
@@ -56,7 +56,7 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
-            const deposit = SharpeaiContract.deposit(amountA, amountB, 0, 0, address)
+            const deposit = SharpeaiContract.deposit(amountA, amountB, 0, 0, 0, address)
         }
     }
     

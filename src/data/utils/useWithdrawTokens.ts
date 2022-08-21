@@ -1,4 +1,4 @@
-import SharpeAI from "../static/chain_info/SharpeAI.json"
+import Sharpe from "../static/chain_info/Sharpe.json"
 import { utils, ethers } from "ethers"
 import {useContext} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
@@ -7,7 +7,7 @@ import Web3Modal from 'web3modal';
 export const useWithdrawTokens = ( vault: string ) => {
     const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
     const { address, balance } = useContext(WalletContext);
-    const { abi } = SharpeAI
+    const { abi } = Sharpe
     const shareWithdrawState = false
 
     const shareWithdrawn = async (amount: string) => {

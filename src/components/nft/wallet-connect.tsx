@@ -12,32 +12,32 @@ import { useEthers } from "@usedapp/core"
 import {ethers} from 'ethers'
 
 const chains = [
-  {
-    value: "mainnet",
-    name: "Ethereum"
-  },
-  {
-    value: "fantom",
-    name: "Fantom"
-  },
+  // {
+  //   value: "mainnet",
+  //   name: "Ethereum"
+  // },
+  // {
+  //   value: "fantom",
+  //   name: "Fantom"
+  // },
   {
     value: "polygon",
     name: "Polygon"
     
   },
-  {
-    value: "bsc",
-    name: "BNB Chain"
-  },
-  {
-    value: "avalanche",
-    name: "Avalanche"
-  }
+  // {
+  //   value: "bsc",
+  //   name: "BNB Chain"
+  // },
+  // {
+  //   value: "avalanche",
+  //   name: "Avalanche"
+  // }
 ]
 
 export default function WalletConnect() {
   const { openModal } = useModal();
-  const [chain, setChain] = useState(chains[2]);
+  const [chain, setChain] = useState(chains[0]);
   const [network, setNetwork] = useState<number>();
   const { address, disconnectWallet, balance } = useContext(WalletContext);
 

@@ -1,4 +1,12 @@
-export const LiquidityData = [
+
+export const LiquidityData = 
+  [
+  {
+    dailyVolumeUSD: '333270564',
+    date: 1622505600,
+    totalLiquidityUSD: '3703090662',
+    name: '01',
+  },
   {
     dailyVolumeUSD: '333270564',
     date: 1622505600,
@@ -70,53 +78,5 @@ export const LiquidityData = [
     date: 1623456000,
     totalLiquidityUSD: '4063003713',
     name: '13',
-  },
-  {
-    dailyVolumeUSD: '522772374',
-    date: 1623542400,
-    totalLiquidityUSD: '4222396366',
-    name: '14',
-  },
-  {
-    dailyVolumeUSD: '598390916',
-    date: 1623628800,
-    totalLiquidityUSD: '4287632800',
-    name: '15',
-  },
-  {
-    dailyVolumeUSD: '558345299',
-    date: 1623715200,
-    totalLiquidityUSD: '4275282121',
-    name: '16',
-  },
-  {
-    dailyVolumeUSD: '589481920',
-    date: 1623801600,
-    totalLiquidityUSD: '4023020582',
-    name: '17',
-  },
-  {
-    dailyVolumeUSD: '548449241',
-    date: 1623888000,
-    totalLiquidityUSD: '4151293071',
-    name: '18',
-  },
-  {
-    dailyVolumeUSD: '547792029',
-    date: 1623974400,
-    totalLiquidityUSD: '4035278927',
-    name: '19',
-  },
-  {
-    dailyVolumeUSD: '410398073',
-    date: 1624060800,
-    totalLiquidityUSD: '4058540362',
-    name: '20',
-  },
-  {
-    dailyVolumeUSD: '479219596',
-    date: 1624147200,
-    totalLiquidityUSD: '4121875852',
-    name: '21',
-  },
+  }
 ];
