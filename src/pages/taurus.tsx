@@ -1314,9 +1314,12 @@ const FarmsPage: NextPageWithLayout = () => {
                */}
               </TabPanel>
               <TabPanel value="2">
-                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
-                  <div className="text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
+                <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
+                  <div className="text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
                     Shares Balance: {farm.to === 'USDT'? shareBalance4 : farm.to === 'FRAX' ? shareBalance2 : farm.to === 'MIMATIC' ? shareBalance3 : "0.00"}
+                  </div>
+                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
+                  {farm.to === "USDT" ? <a href="/usdc-usdt">View Vault Details</a> : farm.to === "FRAX" ? <a href="/usdc-frax">View Vault Details</a> : farm.to === "MIMATIC" ? <a href="/usdc-mimatic">View Vault Details</a> : ''}
                   </div>
                   <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
                     <span>Your Position: {farm.to === "USDT" ? poolPos1 : farm.to === "FRAX" ? poolPos2 : farm.to === "MIMATIC" ? poolPos3 : '0.00'}</span>
@@ -1324,7 +1327,18 @@ const FarmsPage: NextPageWithLayout = () => {
                   </div>
                   
                 </div>
-                <div className="mb-4 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                <div className="mb-2 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                  
+                  <div className="mb-2 grid grid-cols-2 gap-3 sm:mb-1 px-5 py-3 rounded-lg border border-slate-500 bg-body dark:border-gray-700 dark:bg-gray-900 sm:gap-3">
+                    <Button className="bg-gray-800" onClick={zappTab1} shape="rounded" fullWidth size="large">
+                      DEPOSIT
+                    </Button>
+                  
+                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
+                        WITHDRAW
+                    </Button>
+                    
+                  </div>
                   <div className="relative">
                     <input
                       type="text"
@@ -1337,16 +1351,6 @@ const FarmsPage: NextPageWithLayout = () => {
                       Max
                     </span>
                   </div>
-                  <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
-                    <Button onClick={zappTab1} shape="rounded" fullWidth size="large">
-                      DEPOSIT
-                    </Button>
-                  
-                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
-                        WITHDRAW
-                    </Button>
-                    
-                  </div>
                   {withdrawalMining ? 
                     (<Button shape="rounded" fullWidth size="large">
                     <Spinner/>
@@ -1358,7 +1362,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 
               </TabPanel>
               <TabPanel value="3">
-                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
+                <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
                   <div className="inline-flex">
                     <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
@@ -1386,7 +1390,18 @@ const FarmsPage: NextPageWithLayout = () => {
                   </div>
                   
                 </div>
-                <div className="mb-4 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                <div className="mb-2 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                  
+                  <div className="mb-2 grid grid-cols-2 gap-3 sm:mb-1 px-5 py-3 rounded-lg border border-slate-500 bg-body dark:border-gray-700 dark:bg-gray-900 sm:gap-3">
+                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
+                      DEPOSIT
+                    </Button>
+                  
+                    <Button className="bg-gray-800" onClick={switchTab2} shape="rounded" fullWidth size="large">
+                        WITHDRAW
+                    </Button>
+                    
+                  </div>
                   <div className="relative">
                     <input
                       type="text"
@@ -1398,16 +1413,6 @@ const FarmsPage: NextPageWithLayout = () => {
                     <span onClick={maxZappInput1} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
                       Max
                     </span>
-                  </div>
-                  <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
-                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
-                      DEPOSIT
-                    </Button>
-                  
-                    <Button onClick={switchTab2} shape="rounded" fullWidth size="large">
-                        WITHDRAW
-                    </Button>
-                    
                   </div>
                   {approvedToken1 ? 
                     (<>
@@ -1431,7 +1436,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 
               </TabPanel>
               <TabPanel value="4">
-                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
+                <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
                   <div className="inline-flex">
                     <div onClick={zappTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
@@ -1459,7 +1464,18 @@ const FarmsPage: NextPageWithLayout = () => {
                   </div>
                   
                 </div>
-                <div className="mb-4 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                <div className="mb-2 grid grid-cols-1 gap-4 sm:mb-6 sm:gap-6">
+                  
+                  <div className="mb-2 grid grid-cols-2 gap-3 sm:mb-1 px-5 py-3 rounded-lg border border-slate-500 bg-body dark:border-gray-700 dark:bg-gray-900 sm:gap-3">
+                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
+                      DEPOSIT
+                    </Button>
+                  
+                    <Button className="bg-gray-800" onClick={switchTab2} shape="rounded" fullWidth size="large">
+                        WITHDRAW
+                    </Button>
+                    
+                  </div>
                   <div className="relative">
                     <input
                       type="text"
@@ -1471,16 +1487,6 @@ const FarmsPage: NextPageWithLayout = () => {
                     <span onClick={maxZappInput2} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
                       Max
                     </span>
-                  </div>
-                  <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
-                    <Button className="bg-txngreen" shape="rounded" fullWidth size="large">
-                      DEPOSIT
-                    </Button>
-                  
-                    <Button onClick={switchTab2} shape="rounded" fullWidth size="large">
-                        WITHDRAW
-                    </Button>
-                    
                   </div>
                   {approvedToken2 ? 
                     (<>

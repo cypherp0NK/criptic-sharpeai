@@ -75,10 +75,11 @@ export default function WalletCard() {
           <span
             className={cn(
               'flex items-center text-base font-medium',
-              isChangePositive ? 'text-green-500' : 'text-red-500'
+              isChangePositive ? 'text-green-500' : 'text-green-500'
             )}
           >
-            {percentage}
+            {/* {percentage} */}
+            --
           </span>
         </div>
       </div>

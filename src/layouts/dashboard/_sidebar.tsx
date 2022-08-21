@@ -19,7 +19,8 @@ import { CompassIcon } from '@/components/icons/compass';
 import { InfoCircle } from '@/components/icons/info-circle';
 import { Sun } from '@/components/icons/sun';
 import { Moon } from '@/components/icons/moon';
-
+import sun from '@/components/icons/sun.png'
+import Image from '@/components/ui/image';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
@@ -27,13 +28,6 @@ import { useTheme } from 'next-themes';
 import { RadioGroup } from '@/components/ui/radio-group';
 
 
-const styles = {
-  container: {
-    paddingLeft: '1rem',
-    paddingTop: '1rem',
-    
-  }
-}
 const menuItems = [
   {
     name: 'Dashboard',
@@ -83,7 +77,7 @@ export default function Sidebar({ className }: SidebarProps) {
       )}
     >
       <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        <div style={styles.container}><Logo /></div>
+        <div className='pl-5 pt-4'><Logo /></div>
         <div className="md:hidden">
           <Button
             title="Close"
@@ -117,16 +111,18 @@ export default function Sidebar({ className }: SidebarProps) {
             ))}
           </div>
           {theme === "light" ? 
-          <div className='fixed bottom-5 z-50 p-2.5 text-gray-500 light:hover:text-white hover:bg-brand dark:hover:text-white w-fit cursor-pointer flex flex-column gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          <div className='fixed bottom-10 ml-5 z-50 py-2.5 px-5 text-gray-500 light:hover:text-white hover:bg-brand dark:hover:text-white w-fit cursor-pointer flex flex-row gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
           onClick={()=>{setTheme("dark")}}>
             <Moon />
             <div className='text-sm text-center'>Switch to dark</div>
           </div> : 
-          <div className='fixed bottom-5 z-50 p-2.5 text-gray-500 hover:text-brand dark:hover:text-white w-fit cursor-pointer flex flex-column gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          <div className='fixed bottom-10 ml-5 z-50 py-2.5 px-4 text-gray-500 hover:text-brand dark:hover:text-white w-fit cursor-pointer flex flex-row gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
           onClick={()=>{setTheme("light")}}>
+            {/* <div className="h-6 w-7 flex justify-center items-center"><Image src={sun} alt="Sharpe" /></div> */}
             <Sun />
             <div className='text-sm text-center'>Switch to light</div>
           </div>}
+          <div className='fixed bottom-1 z-50 ml-24 text-black dark:text-white w-fit text-xs font-thin flex flex-row justify-center items-center'>v0.1.1</div>
         
         </div>
         

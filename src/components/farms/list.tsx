@@ -74,11 +74,11 @@ export default function FarmList({
             }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
           >
-            <div className="border-t border-dashed border-gray-200 px-4 py-4 dark:border-gray-700 sm:px-8 sm:py-6">
-              <div className="mb-6 flex items-center justify-center rounded-lg bg-gray-100 p-3 text-center text-xs font-medium uppercase tracking-wider text-gray-900 dark:bg-gray-900 dark:text-white sm:h-13 sm:text-sm">
+            <div className="border-t border-dashed border-gray-200 px-4 pt-4 pb-0 dark:border-gray-700 sm:px-8 sm:pt-6 sm:pb-0">
+              <div className="mb-2 flex items-center justify-center rounded-lg bg-gray-100 p-3 text-center text-xs font-medium uppercase tracking-wider text-gray-900 dark:bg-gray-900 dark:text-white sm:h-13 sm:text-sm">
                 THIS VAULT AUTOMATICALLY MANAGES LIQUIDITY ON THE {from}/{to} POOL ON UNISWAP V3 PROVIDING CONCENTRATED LIQUIDITY TO EARN THE MAXIMUM YIELD.
               </div>
-              <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:hidden">
+              <div className="mt-1 mb-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:hidden">
                 <div className="flex flex-col gap-3 sm:gap-4">
                   <TransactionInfo
                     label="Liquidity:"
