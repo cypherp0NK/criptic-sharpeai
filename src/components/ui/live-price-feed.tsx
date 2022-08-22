@@ -54,7 +54,7 @@ export function LivePriceFeed({
 
         <div className="mb-2 text-sm font-medium tracking-tighter text-gray-900 dark:text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
           <span className="ml-3"></span>
-          {id === '0' ? totalTvl : id === '1' ? earnings : id === '2' ? totalPoolApy : id === '3' ? monthlyApy : '--' }
+          {id === '0' ? deposits : id === '1' ? earnings : id === '2' ? totalPoolApy : id === '3' ? monthlyApy : '--' }
         </div>        
       </div>
     </div>
