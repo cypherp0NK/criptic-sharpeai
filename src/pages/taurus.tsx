@@ -26,7 +26,11 @@ import { Close } from '@/components/icons/close';
 import { ExportIcon } from '@/components/icons/export-icon';
 import { Spinner } from '../components/icons/spinner';
 import { ERROR_EVENT } from "web3modal";
-
+import usdcsvgImage from '@/components/icons/usdcsvgImage.svg';
+import tethersvgImage from '@/components/icons/tethersvgImage.svg'
+import fraxsvgImage from '@/components/icons/fraxsvgImage.svg'
+import mimaticsvgImage from '@/components/icons/mimaticsvgImage.svg'
+import Image from '@/components/ui/image';
 
 const sort = [
   { id: 1, name: 'Hot' },
@@ -177,7 +181,6 @@ function Status() {
 
 const FarmsPage: NextPageWithLayout = () => {
 
-  
   return (
     <>
       <NextSeo
@@ -1364,16 +1367,35 @@ const FarmsPage: NextPageWithLayout = () => {
               <TabPanel value="3">
                 <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
-                  <div className="inline-flex">
+                  <div className="inline-flex items-center">
                     <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
                       <div className="bg-white h-full w-full rounded-full"></div>
                     </div>&nbsp;
+                    <Image height={"20"} width={"20"} src={usdcsvgImage} alt="usdc-img" />&nbsp;
                     {farm.from === "USDC" ? tB1 : '0.00'}&nbsp;{farm.from}
                   </div>
                   <div className="inline-flex">
                     <div onClick={zappTab2} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
                     </div>&nbsp;
-                    {farm.to === "USDT" ? tB2 : farm.to === "FRAX" ? tB3 : farm.to === "MIMATIC" ? tB4 : '0.00'} {farm.to}
+                    {farm.to === "USDT" ? 
+                      <div className="inline-flex items-center">
+                        <Image height={"20"} width={"20"} src={tethersvgImage} alt="usdc-img" />&nbsp;
+                          {tB2} 
+                      </div>
+                      : 
+                     farm.to === "FRAX" ? 
+                      <div className="inline-flex items-center">
+                        <Image height={"21"} width={"20"} src={fraxsvgImage} alt="usdc-img" />&nbsp;
+                          {tB3} 
+                      </div>
+                     : farm.to === "MIMATIC" ? 
+                      <div className="inline-flex items-center">
+                        <div className="-ml-1.5 -mr-2 inline-flex items-center">
+                          <Image height={"23"} width={"34"} src={mimaticsvgImage} alt="usdc-img" />&nbsp;
+                        </div>
+                          {tB4} 
+                      </div>
+                     : '0.00'}&nbsp;{farm.to}
                   </div>
                   {/* <div className="inline-flex">
                     <div onClick={switchTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
@@ -1381,7 +1403,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     {farm.from} / {farm.to}
                   </div> */}
                   </div>
-                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
+                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-100 dark:bg-gray-900 border border-slate-500 rounded-md">
                   {farm.to === "USDT" ? <a href="/usdc-usdt">View Vault Details</a> : farm.to === "FRAX" ? <a href="/usdc-frax">View Vault Details</a> : farm.to === "MIMATIC" ? <a href="/usdc-mimatic">View Vault Details</a> : ''}
                   </div>
                   <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
@@ -1402,15 +1424,16 @@ const FarmsPage: NextPageWithLayout = () => {
                     </Button>
                     
                   </div>
-                  <div className="relative">
+                  <div className="relative h-13 w-full flex flex-row items-center rounded-lg border border-slate-500 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600">
+                    <Image height={"20"} width={"20"} src={usdcsvgImage} alt="usdc-img" />
                     <input
                       type="text"
                       placeholder="0.0"
                       value={zappAmount1}
                       onChange={inputZapp1}
-                      className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-400 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
+                      className="spin-button-hidden h-10 w-full appearance-none rounded-lg border-solid border-body bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-900 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-900"
                     />
-                    <span onClick={maxZappInput1} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                    <span onClick={maxZappInput1} className="cursor-pointer rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
                       Max
                     </span>
                   </div>
@@ -1438,16 +1461,35 @@ const FarmsPage: NextPageWithLayout = () => {
               <TabPanel value="4">
                 <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
-                  <div className="inline-flex">
+                  <div className="inline-flex items-center">
                     <div onClick={zappTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
                     </div>&nbsp;
+                    <Image height={"20"} width={"20"} src={usdcsvgImage} alt="usdc-img" />&nbsp;
                     {farm.from === "USDC" ? tB1 : '0.00'}&nbsp;{farm.from}
                   </div>
                   <div className="inline-flex">
                     <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
                       <div className="bg-white h-full w-full rounded-full"></div>
                     </div>&nbsp;
-                    {farm.to === "USDT" ? tB2 : farm.to === "FRAX" ? tB3 : farm.to === "MIMATIC" ? tB4 : '0.00'} {farm.to}
+                    {farm.to === "USDT" ? 
+                      <div className="inline-flex items-center">
+                        <Image height={"20"} width={"20"} src={tethersvgImage} alt="usdc-img" />&nbsp;
+                          {tB2} 
+                      </div>
+                      : 
+                     farm.to === "FRAX" ? 
+                      <div className="inline-flex items-center">
+                        <Image height={"21"} width={"20"} src={fraxsvgImage} alt="usdc-img" />&nbsp;
+                          {tB3} 
+                      </div>
+                     : farm.to === "MIMATIC" ? 
+                      <div className="inline-flex items-center">
+                        <div className="-ml-1.5 -mr-2 inline-flex items-center">
+                          <Image height={"23"} width={"34"} src={mimaticsvgImage} alt="usdc-img" />&nbsp;
+                        </div>
+                        {tB4} 
+                      </div>
+                     : '0.00'}&nbsp;{farm.to}
                   </div>
                   {/* <div className="inline-flex">
                     <div onClick={switchTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
@@ -1455,7 +1497,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     {farm.from} / {farm.to}
                   </div> */}
                   </div>
-                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
+                  <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-100 dark:bg-gray-900 border border-slate-500 rounded-md">
                   {farm.to === "USDT" ? <a href="/usdc-usdt">View Vault Details</a> : farm.to === "FRAX" ? <a href="/usdc-frax">View Vault Details</a> : farm.to === "MIMATIC" ? <a href="/usdc-mimatic">View Vault Details</a> : ''}
                   </div>
                   <div className="flex flex-col gap-3 text-xs font-medium uppercase text-black ltr:text-right rtl:text-left dark:text-white sm:text-sm">
@@ -1476,15 +1518,22 @@ const FarmsPage: NextPageWithLayout = () => {
                     </Button>
                     
                   </div>
-                  <div className="relative">
+                  <div className="relative h-13 w-full flex flex-row items-center rounded-lg border border-slate-500 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600">
+                    {farm.to === "USDT" ? 
+                    <Image height={"20"} width={"20"} src={tethersvgImage} alt="usdt-img" />
+                    : farm.to === "FRAX" ? 
+                    <Image height={"21"} width={"21"} src={fraxsvgImage} alt="frax-img" />
+                    : farm.to === "MIMATIC" ? 
+                    <Image height={"22"} width={"22"} src={mimaticsvgImage} alt="mimatic-img" />
+                    : ""}
                     <input
                       type="text"
                       placeholder="0.0"
                       value={zappAmount2}
                       onChange={inputZapp2}
-                      className="spin-button-hidden h-13 w-full appearance-none rounded-lg border-solid border-gray-400 bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-600"
+                      className="spin-button-hidden h-10 w-full appearance-none rounded-lg border-solid border-body bg-body px-4 text-sm tracking-tighter text-gray-900 placeholder:text-gray-600 focus:border-gray-900 focus:shadow-none focus:outline-none focus:ring-0 dark:border-gray-900 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-900"
                     />
-                    <span onClick={maxZappInput2} className="cursor-pointer absolute top-1/2 -translate-y-1/2 rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                    <span onClick={maxZappInput2} className="cursor-pointer rounded-lg border border-solid bg-gray-100 px-2 py-1 text-xs uppercase text-gray-900 ltr:right-3 rtl:left-3 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
                       Max
                     </span>
                   </div>

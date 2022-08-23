@@ -20,7 +20,7 @@ const routes = {
   taurus: '/taurus',
   phantom: '/phantom',
   helios: '/helios',
-  feedback: 'feedback',
+  feedback: '/feedback',
   socials: '/socials'
 };
 

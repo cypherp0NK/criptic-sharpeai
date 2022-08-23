@@ -252,10 +252,15 @@ function NftFooter({
           </AnchorLink>
         
         <div className="mt-5 block w-1/2 shrink-0 md:w-3/5">
-              <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
-                  Next rebalance in
-              </h3>
-              <AuctionCountdown date={auctionTime} />
+        <Button
+            onClick={()=>{window.location.href = "../taurus"}}
+            size="large"
+            shape="rounded"
+            fullWidth={true}
+            className="w-36 bg-buttonMagenta"
+          >
+            Invest
+          </Button>
             </div>
         
       </div>
@@ -349,68 +354,53 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
               </div>
             </div>
             <div className="mt-2 flex flex-col pb-5 xl:mt-2">
-              <ParamTab
+            <ParamTab
                 tabMenu={[
                   {
                     title: 'Details',
                     path: 'details',
+                  },
+                  {
+                    title: 'Performance',
+                    path: 'performance',
+                  },
+                  {
+                    title: 'Fee Structure',
+                    path: 'feeStructure',
+                  },
+                  {
+                    title: 'Risk',
+                    path: 'risk',
                   }
                 ]}
               >
                 <TabPanel className="focus:outline-none">
                   <div className="space-y-6">
                     <div className="block">
-                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                      USDC-MIMATIC VAULT AUTOMATICALLY MANAGES LIQUIDITY ON UNISWAP V3. IT CONCENTRATES ITS LIQUIDITY TO EARN HIGHER YIELDS AND AUTOMATICALLY ADJUSTS ITS RANGE ORDERS AS THE UNDERLYING PRICE MOVES IN ORDER TO CONTINUE CAPTURING FEES.
+                      <h3 className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
+                      USDC-USDT vault automatically manages on uniswap V3. It concentrates its liquidity to earn higher yields and automatically adjusts its range orders as the underlying price moves in order to continue capturing fees.
                       </h3>
                       {/* className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400" */}
-                      <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
-                        Performance:<br></br>
-                        This strategy works best in both bull and bear markets, collecting premiums earned for supplying concentrated range orders on Uni v3 pools. 
-                        Check out our vault’s performance on <a className="underline" href="">Dune</a>.<br></br><br></br>
-                        Risk:<br></br>
-                        • Smart contract risk: The smart contracts are audit pending.<br></br>
-                        • Stablecoin risk: This strategy could have an impermanent loss if the stablecoin loses its peg.
-                      </div>
                     </div>
-                    <div className="block">
-                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        Fee structure
-                      </h3>
-                      <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
-                      The vault fee structure includes a 0% annualised management fee and a 10% performance fee.
-                      </div>
-                    </div>
-                    {/* <div className="block">
-                      <h3 className="text-heading-style mb-2 uppercase text-gray-900 dark:text-white">
-                        Block Chain
-                      </h3>
-                      <div className="flex flex-col gap-2">
-                        {block_chains?.map((item: any) => (
-                          <AnchorLink
-                            href="#"
-                            className="inline-flex"
-                            key={item?.id}
-                          >
-                            <ListCard
-                              item={item}
-                              className="rounded-full p-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                            />
-                          </AnchorLink>
-                        ))}
-                      </div>
-                    </div> */}
+                    
                   </div>
                 </TabPanel>
                 <TabPanel className="focus:outline-none">
-                  <div className="flex flex-col-reverse">
-                    {nftData?.bids?.map((bid) => (
-                      <FeaturedCard
-                        item={bid}
-                        key={bid?.id}
-                        className="mb-3 first:mb-0"
-                      />
-                    ))}
+                  <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
+                  This strategy works best in both bull and bear markets, collecting premiums earned for supplying concentrated range orders on Uni v3 pools. 
+                  Check out our vault’s performance on <a target="_blank" className="underline" href="https://dune.com/sharpeai/sharpe-vault">Dune</a>.<br></br><br></br>
+                  
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                <div className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
+                      The vault fee structure includes a 0% annualised management fee and a 10% performance fee.
+                      </div>
+                </TabPanel>
+                <TabPanel className="text-sm leading-6 -tracking-wider text-gray-600 dark:text-gray-400">
+                  <div className="flex">
+                  • Smart contract risk: The smart contracts are audit pending.<br></br>
+                  • Stablecoin risk: This strategy could have an impermanent loss if the stablecoin loses its peg.
                   </div>
                 </TabPanel>
                 {/* <TabPanel className="focus:outline-none">

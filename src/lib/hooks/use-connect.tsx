@@ -134,7 +134,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         const [userYield1, userYield2, userYield3, e] = await allEarnings(web3Address)
         const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(web3Address)
 
-        let forDeposits = pos1 + pos2 + pos3
+        let forDeposits = (pos1 + pos2 + pos3) - (e)
 
         const [apy1, apy2, apy3, totalAPY, monthlyAPY] = await fetchAPY(web3Address)
         const [sBal1, sBal2, sBal3, sBal4] = await singleBalances(web3Address)

@@ -77,7 +77,7 @@ export default function Sidebar({ className }: SidebarProps) {
       )}
     >
       <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        <div className='pl-5 pt-4'><Logo /></div>
+        <div className='pt-4 flex w-full flex-row items-center justify-center'><Logo /></div>
         <div className="md:hidden">
           <Button
             title="Close"
@@ -111,12 +111,12 @@ export default function Sidebar({ className }: SidebarProps) {
             ))}
           </div>
           {theme === "light" ? 
-          <div className='fixed bottom-10 ml-5 z-50 py-2.5 px-5 text-gray-500 light:hover:text-white hover:bg-brand dark:hover:text-white w-fit cursor-pointer flex flex-row gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          <div className='fixed bottom-10 ml-6 z-50 py-2.5 px-5 text-gray-500 light:hover:text-white hover:bg-brand dark:hover:text-white w-fit cursor-pointer flex flex-row gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
           onClick={()=>{setTheme("dark")}}>
             <Moon />
             <div className='text-sm text-center'>Switch to dark</div>
           </div> : 
-          <div className='fixed bottom-10 ml-5 z-50 py-2.5 px-4 text-gray-500 hover:text-brand dark:hover:text-white w-fit cursor-pointer flex flex-row gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          <div className='fixed bottom-10 ml-6 z-50 py-2.5 px-4 text-gray-500 hover:text-brand dark:hover:text-white w-fit cursor-pointer flex flex-row gap-3 justify-center items-center border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
           onClick={()=>{setTheme("light")}}>
             {/* <div className="h-6 w-7 flex justify-center items-center"><Image src={sun} alt="Sharpe" /></div> */}
             <Sun />

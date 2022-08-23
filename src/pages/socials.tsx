@@ -11,6 +11,7 @@ import discord from '@/assets/images/discord.svg';
 import docs from '@/assets/images/docs.svg'
 import medium from '@/assets/images/medium.svg'
 import github from '@/assets/images/github.svg'
+import angellist from '@/assets/images/angellist.svg'
 
 const VotePage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const VotePage: NextPageWithLayout = () => {
       <h1 className="text-2xl font-medium dark:text-gray-100 mb-3">Socials</h1>
       <div className="mx-auto w-full max-w-[1160px] text-sm md:pt-7 4xl:pt-12">
       
-        <div className="grid grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-4">
           <motion.a
             whileTap={{ scale: 0.98 }}
             whileHover={{ scale: 1.015 }}
@@ -79,14 +80,14 @@ const VotePage: NextPageWithLayout = () => {
             whileHover={{ scale: 1.015 }}
             target="_blank"
             rel="noopener noreferrer"
-            href="https://docs.sharpe.ai/"
+            href="https://angel.co/company/sharpeai"
             className="cursor-pointer rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
           >
             <div className="h-auto w-12 sm:w-auto">
-              <Image alt="Docs" src={docs} />
+              <div className='bg-white flex justify-center items-center w-fit h-fit rounded-full'><Image alt="careers" src={angellist} /></div>
             </div>
-            <h3 className="mt-6 text-sm font-medium uppercase text-blue-500 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
-              View Documentation
+            <h3 className="mt-6 h-fit text-sm font-medium uppercase text-blue-500 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
+              Careers
             </h3>
           </motion.a>
           <motion.a
@@ -97,11 +98,41 @@ const VotePage: NextPageWithLayout = () => {
             href="https://github.com/SharpeAI"
             className="rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
           >
+            <span className="inline-block h-auto w-12 sm:w-auto">
+              <Image alt="github" src={github} />
+            </span>
+            <h3 className="mt-6 text-sm font-medium uppercase text-blue-500 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
+              View Github
+            </h3>
+          </motion.a>
+          <motion.a
+            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.015 }}
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://dune.com/sharpeai/sharpe-vault"
+            className="rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
+          >
             <span className="inline-block h-auto w-11 sm:w-auto">
-              <Image alt="Github" src={github} />
+              <Image alt="Analytics" src={github} />
             </span>
             <h3 className="mt-6 text-sm font-medium uppercase text-gray-400 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
-              View Github
+              Analytics
+            </h3>
+          </motion.a>
+          <motion.a
+            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.015 }}
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://docs.sharpe.ai/"
+            className="cursor-pointer rounded-lg bg-white p-6 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark"
+          >
+            <div className="h-auto w-12 sm:w-auto">
+              <Image alt="Docs" src={docs} />
+            </div>
+            <h3 className="mt-6 text-sm font-medium uppercase text-blue-500 sm:mt-8 sm:text-base 3xl:mt-11 3xl:text-lg">
+              View Documentation
             </h3>
           </motion.a>
         </div>

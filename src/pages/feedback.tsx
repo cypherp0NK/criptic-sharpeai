@@ -11,22 +11,15 @@ import { Close as CloseIcon } from '@/components/icons/close';
 import Input from '@/components/ui/forms/input';
 import Textarea from '@/components/ui/forms/textarea';
 import Listbox, { ListboxOption } from '@/components/ui/list-box';
+import emailjs from "emailjs-com"
 // static data
 import votePool from '@/assets/images/vote-pool.svg';
 
 const actionOptions = [
   {
-    name: 'Ethereum address',
-    value: 'eth_address',
-  },
-  {
     name: 'Polygon address',
     value: 'polygon_address',
-  },
-  {
-    name: 'Fantom address',
-    value: 'fantom_address',
-  },
+  }
 ];
 
 const reserveOptions = [
@@ -211,14 +204,14 @@ function ActionFields() {
             selectedOption={actionType}
             onChange={setActionType}
           />
-          {actionType.value === 'eth_address' && (
+          {actionType.value === 'polygon_address' && (
             <Input
               className="mt-4 ltr:xs:ml-6 rtl:xs:mr-6 ltr:sm:ml-12 rtl:sm:mr-12"
               useUppercaseLabel={false}
               placeholder="Enter contact address 0x1f9840a85..."
             />
           )}
-          {actionType.value === 'polygon_address' && (
+          {actionType.value === 'eth_address' && (
             <Input
             className="mt-4 ltr:xs:ml-6 rtl:xs:mr-6 ltr:sm:ml-12 rtl:sm:mr-12"
             useUppercaseLabel={false}
@@ -234,15 +227,37 @@ function ActionFields() {
           )}
         </>
       </div>
-      <Button variant="primary" className="mt-2 xs:mt-3 font-medium bg-transparent border-2 border-buttonMagenta text-buttonMagenta">
+      {/* <Button variant="primary" className="mt-2 xs:mt-3 font-medium bg-transparent border-2 border-buttonMagenta text-buttonMagenta">
         Submit
-      </Button>
+      </Button> */}
     </div>
   );
 }
 
 const CreateProposalPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const [titleMessage, setTitle] = useState<string>("")
+  const [message, setMessage] = useState<string>("")
+  const [done, doneState] = useState<boolean>(false)
+
+  const handleTitleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const tl = event.target.value === "" ? "" : (event.target.value)
+    setTitle(tl)
+  }
+  const handleMessageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const msg = event.target.value === "" ? "" : (event.target.value)
+    setMessage(msg)
+  }
+  const handleEmailSubmit = async () => {
+    if (titleMessage && message !== ""){
+      setTitle("")
+      setMessage("")
+      doneState(true)
+    }
+    else{
+      alert("fill the input fields")
+    }
+  }
   function goToAllProposalPage() {
     setTimeout(() => {
       router.push(routes.proposals);
@@ -309,7 +324,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
             Your title introduces your proposal to the voters. Make sure it is
             clear and to the point.
           </p> */}
-          <Input placeholder="Enter title of your Feedback" />
+          <Input value={titleMessage} onChange={handleTitleChange} placeholder="Enter title of your Feedback" />
         </div>
         <div className="mb-6 rounded-lg bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark xs:p-6 xs:pb-8">
           <h3 className="mb-2 text-base font-medium dark:text-gray-100 xl:text-lg">
@@ -320,13 +335,27 @@ const CreateProposalPage: NextPageWithLayout = () => {
             the proposal will do. This is where voters will educate themselves
             on what they are voting on.
           </p> */}
-          <Textarea
+          <Input
+            value={message}
+            type="textarea"
+            onChange={handleMessageChange}
             placeholder="Add the Feedback details here"
-            inputClassName="md:h-32 xl:h-36"
+            className="h-10 md:h-10 xl:h-10"
           />
         </div>
         <div className="mt-6">
-          <Button
+          {
+            done ? 
+            <Button
+            size="large"
+            shape="rounded"
+            fullWidth={true}
+            className="xs:w-64 md:w-72 bg-txngreen"
+          >
+            Done!
+          </Button>
+             : <Button
+            onClick={handleEmailSubmit}
             size="large"
             shape="rounded"
             fullWidth={true}
@@ -334,6 +363,8 @@ const CreateProposalPage: NextPageWithLayout = () => {
           >
             Submit Feedback
           </Button>
+          }
+          
         </div>
       </section>
     </>
