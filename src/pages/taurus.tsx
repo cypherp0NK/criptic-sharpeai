@@ -1317,7 +1317,7 @@ const FarmsPage: NextPageWithLayout = () => {
                */}
               </TabPanel>
               <TabPanel value="2">
-                <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
+                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
                     Shares Balance: {farm.to === 'USDT'? shareBalance4 : farm.to === 'FRAX' ? shareBalance2 : farm.to === 'MIMATIC' ? shareBalance3 : "0.00"}
                   </div>
@@ -1365,7 +1365,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 
               </TabPanel>
               <TabPanel value="3">
-                <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
+                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
                   <div className="inline-flex items-center">
                     <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
@@ -1459,7 +1459,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 
               </TabPanel>
               <TabPanel value="4">
-                <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3 sm:gap-6">
+                <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="flex flex-col gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
                   <div className="inline-flex items-center">
                     <div onClick={zappTab1} className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
