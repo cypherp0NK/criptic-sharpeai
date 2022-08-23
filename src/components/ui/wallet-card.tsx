@@ -1,9 +1,10 @@
 import cn from 'classnames';
-import { useState } from 'react';
+import {useContext, useEffect, useState} from "react"
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 import { ArrowUp } from '@/components/icons/arrow-up';
 import { LongArrowUp } from '@/components/icons/long-arrow-up';
 import { walletCurrencies } from '@/data/static/wallet-currencies';
+import {WalletContext} from "@/lib/hooks/use-connect"
 
 const data = [
   {

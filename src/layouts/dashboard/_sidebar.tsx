@@ -64,12 +64,12 @@ const menuItems = [
   },
   {
     name: 'Analytics',
-    icon: <AnalyticsIcon />,
+    icon: <PoolIcon />,
     href: routes.analytics,
   },
   {
     name: 'Documentation',
-    icon: <Docs />,
+    icon: <DiskIcon />,
     href: routes.docs,
   },
 ];
