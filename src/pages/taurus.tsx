@@ -525,7 +525,7 @@ const FarmsPage: NextPageWithLayout = () => {
 
               const maxBalance3 = async () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
-                  const newAmount = shareBalance1
+                  const newAmount = shareBalance4
                   amountState(newAmount)
                   }
                 else if (farm.from === "USDC" && farm.to === "FRAX"){
@@ -871,7 +871,7 @@ const FarmsPage: NextPageWithLayout = () => {
               liquidity={farm.liquidity}
               multiplier={farm.multiplier}
             >
-              <div className="fixed left-5 top-5 z-50 gap-2 flex flex-col bg-transparent w-96">
+              <div className="fixed text-white left-5 top-5 z-50 gap-2 flex flex-col bg-transparent w-96">
             {card0Of3 ? <div className="bg-dark border-2 border-txngrey rounded-sm">
               <div className="relative bg-txngreen p-2 w-1/6"></div>
               <div className="flex flex-row justify-between pt-3 pl-3 pr-1 pb-5">
@@ -972,7 +972,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 size="small" 
                 onClick={()=> {setCard0Of1(false)}}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-2.5 text-white" />
                 </Button>
               </div>
             </div> : ''}
@@ -1000,7 +1000,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 size="small" 
                 onClick={()=> {setCard1Of1(false)}}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-2.5 text-white" />
                 </Button>
               </div>
             </div> : ''}
@@ -1019,7 +1019,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 size="small" 
                 onClick={()=> {setZappCard0of2(false)}}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-2.5 text-white" />
                 </Button>
               </div>
             </div> : ''}
@@ -1038,7 +1038,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 size="small" 
                 onClick={()=> {setZappCard1of2(false)}}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-2.5 text-white" />
                 </Button>
               </div>
             </div> : ''}
@@ -1054,7 +1054,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     <a target="_blank"
                       rel="noopener noreferrer"
                       href={depositHash} className="inline-flex items-center">
-                        View on Explorer&nbsp;<ExportIcon className="h-auto w-2.5" /></a>
+                        View on Explorer&nbsp;<ExportIcon className="h-auto w-2.5 text-white" /></a>
                     </div>
                   </div>
                 </div>
@@ -1066,7 +1066,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 size="small" 
                 onClick={()=> {setZappCard2of2(false)}}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-2.5 text-white" />
                 </Button>
               </div>
             </div> : ''}
@@ -1087,7 +1087,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 size="small" 
                 onClick={()=> {setErrorCard(false)}}
                 >
-                  <Close className="h-auto w-2.5" />
+                  <Close className="h-auto w-2.5 text-white" />
                 </Button>
               </div>
             </div> : ''}

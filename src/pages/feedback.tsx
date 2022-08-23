@@ -1,5 +1,5 @@
 import type { NextPageWithLayout } from '@/types';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import routes from '@/config/routes';
@@ -235,6 +235,7 @@ function ActionFields() {
 }
 
 const CreateProposalPage: NextPageWithLayout = () => {
+  const form:any= useRef();
   const router = useRouter();
   const [titleMessage, setTitle] = useState<string>("")
   const [message, setMessage] = useState<string>("")
@@ -248,16 +249,16 @@ const CreateProposalPage: NextPageWithLayout = () => {
     const msg = event.target.value === "" ? "" : (event.target.value)
     setMessage(msg)
   }
-  const handleEmailSubmit = async () => {
-    if (titleMessage && message !== ""){
-      setTitle("")
-      setMessage("")
-      doneState(true)
-    }
-    else{
-      alert("fill the input fields")
-    }
-  }
+  const sendEmail = (e: any) => {
+    e.preventDefault();
+
+    emailjs.sendForm('service_57gw77f', 'template_aha4bo4', form.current, 't3wxstlKMsnutTXNi')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+  };
   function goToAllProposalPage() {
     setTimeout(() => {
       router.push(routes.proposals);
@@ -307,6 +308,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
         <h2 className="mb-5 text-lg font-medium dark:text-gray-100 sm:mb-6 lg:mb-7 xl:text-xl">
           Please submit your feedback
         </h2>
+        <form ref={form} onSubmit={sendEmail}>
         <div className="mb-6 rounded-lg bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark xs:p-6 xs:pb-8">
           {/* <h3 className="mb-2 text-base font-medium dark:text-gray-100 xl:text-lg">
             Actions
@@ -324,7 +326,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
             Your title introduces your proposal to the voters. Make sure it is
             clear and to the point.
           </p> */}
-          <Input value={titleMessage} onChange={handleTitleChange} placeholder="Enter title of your Feedback" />
+          <Input value={titleMessage} onChange={handleTitleChange} placeholder="Enter title of your Feedback" name='title' />
         </div>
         <div className="mb-6 rounded-lg bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-large dark:bg-light-dark xs:p-6 xs:pb-8">
           <h3 className="mb-2 text-base font-medium dark:text-gray-100 xl:text-lg">
@@ -341,6 +343,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
             onChange={handleMessageChange}
             placeholder="Add the Feedback details here"
             className="h-10 md:h-10 xl:h-10"
+            name='message'
           />
         </div>
         <div className="mt-6">
@@ -355,7 +358,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
             Done!
           </Button>
              : <Button
-            onClick={handleEmailSubmit}
+            type="submit" value="Send"
             size="large"
             shape="rounded"
             fullWidth={true}
@@ -366,6 +369,7 @@ const CreateProposalPage: NextPageWithLayout = () => {
           }
           
         </div>
+        </form>
       </section>
     </>
   );

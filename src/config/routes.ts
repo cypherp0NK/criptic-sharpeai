@@ -21,7 +21,9 @@ const routes = {
   phantom: '/phantom',
   helios: '/helios',
   feedback: '/feedback',
-  socials: '/socials'
+  socials: '/socials',
+  analytics: 'https://dune.com/sharpeai/sharpe-vault',
+  docs: 'https://docs.sharpe.ai'
 };
 
 export default routes;
