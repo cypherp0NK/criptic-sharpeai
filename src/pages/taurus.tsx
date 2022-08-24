@@ -572,7 +572,7 @@ const FarmsPage: NextPageWithLayout = () => {
                         setErrorMsg('Cannot withdraw tokens')
                       }
                       setErrorCard(true)
-                      setWithdrawEvent(false)
+                      
                     }
                  }
                  else{      
@@ -601,7 +601,7 @@ const FarmsPage: NextPageWithLayout = () => {
                           setErrorMsg('Cannot withdraw tokens')
                         }
                         setErrorCard(true)
-                        setWithdrawEvent(false)
+                        
                       }
                  }
             }
@@ -646,7 +646,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   }
                   setErrorCard(true)
                   setCard0Of3(false)
-                  setToken1Event(false)
+                  
                 }
           }
           
@@ -669,12 +669,13 @@ const FarmsPage: NextPageWithLayout = () => {
                 catch (err) {
                   if (err instanceof Error){
                     setErrorMsg(err.message)
+                  
                   }
                   else{
                     setErrorMsg('Cannot deposit')
                   }
                   setErrorCard(true)
-                  setDepositEvent(false)
+                  
                 }              
               }
 
@@ -724,7 +725,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   setErrorMsg('Something went wrong')
                 }
                 setErrorCard(true)
-                setToken2Event(false)
+                
               }
             }
             else{
@@ -757,7 +758,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   setErrorMsg('Something went wrong')
                 }
                 setErrorCard(true)
-                setToken2Event(false)
+                
               }
             }
           }
@@ -786,7 +787,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   setErrorMsg('Cannot deposit')
                 }
                 setErrorCard(true)
-                setDepositEvent(false)
+                
               }
             }
             else{
@@ -815,7 +816,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     setErrorMsg('Cannot deposit tokens')
                   }
                   setErrorCard(true)
-                  setDepositEvent(false)
+                  
                 }
                 
             }             
@@ -826,11 +827,12 @@ const FarmsPage: NextPageWithLayout = () => {
             useEffect(() => {
               
                 
-                if (usdtPending && usdcPending) {
-                  setCard1Of3(false)
-                }
+                // if (usdtPending && usdcPending) {
+                //   setCard1Of3(false)
+                // }
                 
               if (token1Event === true){
+                
                  contr.on("Approval", (from, to, amount, event) => {
                 
                   if (from === address && to === farm.vault)
@@ -879,7 +881,9 @@ const FarmsPage: NextPageWithLayout = () => {
                   }
             })
           }
-           if (withdrawEvent === true){sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
+           if (withdrawEvent === true){
+            
+            sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
               if (to === address)
                 {
                   setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
@@ -891,9 +895,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 }
           })}
          
-
-            
-            }, [])
+            }, [token1Event, token2Event, depositEvent, withdrawEvent])
            
           return (
             <FarmList
