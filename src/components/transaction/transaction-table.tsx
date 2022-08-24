@@ -19,10 +19,48 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import {useContext} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
 import AnchorLink from '@/components/ui/links/anchor-link';
+import { ethers } from "ethers"
+import {vaultData} from '@/data/utils/vaultData'
+import Web3Modal from 'web3modal';
 
 
 export default function TransactionTable() {
-  const { address, poolPos1, poolPos2, poolPos3, poolApy1, poolApy2, poolApy3 } = useContext(WalletContext);
+  const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
+  const {address} = useContext(WalletContext);
+  const [poolPos1, setPoolPos1] = useState<string>('--')
+  const [poolPos2, setPoolPos2] = useState<string>('--')
+  const [poolPos3, setPoolPos3] = useState<string>('--')
+  const [poolApy1, setPoolApy1] = useState<string>('--')
+  const [poolApy2, setPoolApy2] = useState<string>('--')
+  const [poolApy3, setPoolApy3] = useState<string>('--')
+
+  useEffect(() => {
+    if (address){
+      if (
+        (window && window.web3 === undefined) ||
+        (window && window.ethereum === undefined)
+      ) {
+        console.log('window not available; logged from live-price-feed')
+      }
+      else{
+        userPositions();
+        }
+    }
+    
+  }, [address, poolPos1, poolPos2, poolPos3, poolApy1, poolApy2, poolApy3, setPoolPos1, setPoolPos2, setPoolPos3, setPoolApy1, setPoolApy2, setPoolApy3]);
+  async function userPositions() {
+    let distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
+    const {allPositions, fetchAPY} = vaultData(distributedProvider)
+    const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(address)
+    const [apy1, apy2, apy3, tA, mA] = await fetchAPY(address)
+    setPoolPos1((pos1.toFixed(2)).toString())
+    setPoolPos2((pos2.toFixed(2)).toString())
+    setPoolPos3((pos3.toFixed(2)).toString())
+    setPoolApy1(((apy1.toFixed(2)).toString()).concat('%'))
+    setPoolApy2(((apy2.toFixed(2)).toString()).concat('%'))
+    setPoolApy3(((apy3.toFixed(2)).toString()).concat('%'))
+    
+  }
 
   const COLUMNS = [
     {
@@ -52,26 +90,6 @@ export default function TransactionTable() {
       maxWidth: 50,
     },
     
-    // {
-    //   Header: () => <div className="ltr:ml-auto rtl:mr-auto">Asset</div>,
-    //   accessor: 'symbol',
-    //   // @ts-ignore
-    //   Cell: ({ cell: { value } }) => (
-    //     <div className="ltr:text-right rtl:text-left">{value}</div>
-    //   ),
-    //   minWidth: 80,
-    //   maxWidth: 120,
-    // },
-    // {
-    //   Header: () => <div className="ltr:ml-auto rtl:mr-auto">STATUS</div>,
-    //   accessor: 'status',
-    //   // @ts-ignore
-    //   Cell: ({ cell: { value } }) => (
-    //     <div className="ltr:text-right rtl:text-left">{value}</div>
-    //   ),
-    //   minWidth: 60,
-    //   maxWidth: 80,
-    // },
     {
       Header: () => <div className="ltr:ml-auto rtl:mr-auto">APY</div>,
       accessor: 'apy',

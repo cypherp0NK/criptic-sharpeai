@@ -4,9 +4,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y } from 'swiper';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
-import {useContext} from "react"
+import {useContext, useState, useEffect} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
-
+import { ethers } from "ethers"
+import {vaultData} from '../../data/utils/vaultData'
+import Web3Modal from 'web3modal';
 type Price = {
   name: number;
   value: number;
@@ -40,8 +42,40 @@ export function LivePriceFeed({
   isChangePositive,
   prices,
 }: LivePriceFeedProps) {
-  const { address, deposits, totalTvl, earnings, totalPoolApy, monthlyApy, poolPos1, poolPos2, poolPos3, poolApy1, poolApy2, poolApy3 } = useContext(WalletContext);
-  
+  const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
+  const {address} = useContext(WalletContext);
+  const [deposits, setDeposits] = useState<string>('--')
+  const [earnings, setEarnings] = useState<string>('--')
+  const [totalAPY, setTotalAPY] = useState<string>('--')
+  const [monthlyAPY, setMonthlyAPY] = useState<string>('--')
+  useEffect(() => {
+    if (address){
+      if (
+        (window && window.web3 === undefined) ||
+        (window && window.ethereum === undefined)
+      ) {
+        console.log('window not available; logged from live-price-feed')
+      }
+      else{
+        userDashboard();
+        }
+    }
+    
+  }, [address, deposits, earnings, totalAPY, monthlyAPY, setDeposits, setEarnings, setTotalAPY, setMonthlyAPY]);
+
+  async function userDashboard() {
+    let distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
+    const {forROI, allEarnings, allPositions, fetchAPY} = vaultData(distributedProvider)
+    const [b, roi] = await forROI(address)
+    const [userYield1, userYield2, userYield3, e] = await allEarnings(address)
+    const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(address)
+    const [apy1, apy2, apy3, tA, mA] = await fetchAPY(address)
+    let d = (pos1 + pos2 + pos3) - (e)
+    setDeposits(('$').concat((d.toFixed(2)).toString()))
+    setEarnings(('$').concat((e.toFixed(2)).toString()))
+    setTotalAPY(((tA.toFixed(2)).toString()).concat('%'))
+    setMonthlyAPY(((mA.toFixed(2)).toString()).concat('%'))
+  } 
   return (
     <div className="flex items-center gap-4 rounded-lg bg-white p-5 shadow-card dark:bg-light-dark lg:flex-row">
       <div className="w-full flex-col">
@@ -54,7 +88,7 @@ export function LivePriceFeed({
 
         <div className="mb-2 text-sm font-medium tracking-tighter text-gray-900 dark:text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
           <span className="ml-3"></span>
-          {id === '0' ? deposits : id === '1' ? earnings : id === '2' ? totalPoolApy : id === '3' ? monthlyApy : '--' }
+          {id === '0' ? deposits : id === '1' ? earnings : id === '2' ? totalAPY : id === '3' ? monthlyAPY : '--' }
         </div>        
       </div>
     </div>

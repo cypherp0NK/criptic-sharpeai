@@ -20,9 +20,8 @@ import { priceFeedData } from '@/data/static/price-feed';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import WalletCard from '@/components/ui/wallet-card';
 import { ExportIcon } from '@/components/icons/export-icon';
-import {useContext} from "react"
+import {useContext, useState, useEffect} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
-
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -33,7 +32,8 @@ export const getStaticProps: GetStaticProps = async () => {
 const HomePage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  const { address } = useContext(WalletContext)
+  const {address} = useContext(WalletContext);
+
   return (
     <>
       <NextSeo

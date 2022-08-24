@@ -72,41 +72,27 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
           
           const distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
           const {forROI, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL} = vaultData(distributedProvider)
-          console.log(distributedProvider)
           const connection = web3Modal && (await web3Modal.connect());
           const provider = new ethers.providers.Web3Provider(connection);
 
           const signer = provider.getSigner();
           const web3Address = await signer.getAddress();
-
-          console.log(signer)
       
           const [b, roi] = await forROI(web3Address.toString())
           const [userYield1, userYield2, userYield3, e] = await allEarnings(web3Address.toString())
           const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(web3Address.toString())
 
-          let forDeposits = (pos1 + pos2 + pos3) - (e)
-
-          const [apy1, apy2, apy3, totalAPY, monthlyAPY] = await fetchAPY(web3Address.toString())
           const [sBal1, sBal2, sBal3, sBal4] = await singleBalances(web3Address.toString())
           const [tBal1, tBal2, tBal3, tBal4] = await fetchTokenBalances(web3Address.toString())
           const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
           const [t1, t2, t3, totalTVL] = await singleTVL()
-          setDeposits(('$').concat((forDeposits.toFixed(2)).toString()))
-          setEarnings(('$').concat((e.toFixed(2)).toString()))
           
-          setRoi(((roi.toFixed(2)).toString()).concat('%'))
           setUY1((userYield1.toFixed(2)).toString())
           setUY2((userYield2.toFixed(2)).toString())
           setUY3((userYield3.toFixed(2)).toString())
           setPoolPos1((pos1.toFixed(2)).toString())
           setPoolPos2((pos2.toFixed(2)).toString())
           setPoolPos3((pos3.toFixed(2)).toString())
-          setPoolApy1(((apy1.toFixed(2)).toString()).concat('%'))
-          setPoolApy2(((apy2.toFixed(2)).toString()).concat('%'))
-          setPoolApy3(((apy3.toFixed(2)).toString()).concat('%'))
-          setTotalPoolApy(((totalAPY.toFixed(2)).toString()).concat('%'))
-          setMonthlyApy(((monthlyAPY.toFixed(2)).toString()).concat('%'))
 
           setTB1((tBal1.toFixed(2)).toString())
           setTB2((tBal2.toFixed(2)).toString())
