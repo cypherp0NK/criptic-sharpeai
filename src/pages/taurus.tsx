@@ -244,6 +244,10 @@ const FarmsPage: NextPageWithLayout = () => {
             const [errorCard, setErrorCard] = useState<boolean>(false)
             const [errorMsg, setErrorMsg] = useState<string>('')
 
+            const [token1Event, setToken1Event] = useState<boolean>(false)
+            const [token2Event, setToken2Event] = useState<boolean>(false)
+            const [depositEvent, setDepositEvent] = useState<boolean>(false)
+            const [withdrawEvent, setWithdrawEvent] = useState<boolean>(false)
           //   const maxBalance1 = async () => {
           //     if (farm.from === "USDC" && farm.to === "USDT"){
           //       const newAmount = tB1
@@ -543,16 +547,20 @@ const FarmsPage: NextPageWithLayout = () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
                   try
                     {
+                    
                     const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
                     const status = await shareWithdrawn(amountAsWei.toString())
+                    
                     if (status === 'wallet error'){
                       setCard0Of1(false)
                       setErrorMsg('No WALLET detected!')
                       setErrorCard(true)
+                      
                     }
                     else{
                       setWithdrawalMining(true)
                       setCard0Of1(true)
+                      setWithdrawEvent(true)
                     }
                   }
                   catch (err) 
@@ -564,6 +572,7 @@ const FarmsPage: NextPageWithLayout = () => {
                         setErrorMsg('Cannot withdraw tokens')
                       }
                       setErrorCard(true)
+                      setWithdrawEvent(false)
                     }
                  }
                  else{      
@@ -575,10 +584,12 @@ const FarmsPage: NextPageWithLayout = () => {
                           setCard0Of1(false)
                           setErrorMsg('No WALLET detected!')
                           setErrorCard(true)
+
                         }
                         else{
                           setWithdrawalMining(true)
                           setCard0Of1(true)
+                          setWithdrawEvent(true)
                         }
                       }
                     catch (err) 
@@ -590,6 +601,7 @@ const FarmsPage: NextPageWithLayout = () => {
                           setErrorMsg('Cannot withdraw tokens')
                         }
                         setErrorCard(true)
+                        setWithdrawEvent(false)
                       }
                  }
             }
@@ -619,6 +631,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   else{
                       setZappCard0of2(true)
                       setIsMining1(true)
+                      setToken1Event(true)
                     }
                   }
               catch (err) {
@@ -633,6 +646,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   }
                   setErrorCard(true)
                   setCard0Of3(false)
+                  setToken1Event(false)
                 }
           }
           
@@ -649,6 +663,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   else{
                     setApproved(false)
                     setIsMining3(true)
+                    setDepositEvent(true)
                   }
                 }
                 catch (err) {
@@ -659,6 +674,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     setErrorMsg('Cannot deposit')
                   }
                   setErrorCard(true)
+                  setDepositEvent(false)
                 }              
               }
 
@@ -696,6 +712,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     
                   }
                   setIsMining2(true)
+                  setToken2Event(true)
                 }
               }
 
@@ -707,6 +724,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   setErrorMsg('Something went wrong')
                 }
                 setErrorCard(true)
+                setToken2Event(false)
               }
             }
             else{
@@ -727,6 +745,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     
                   }
                   setIsMining2(true)
+                  setToken2Event(true)
                 }
             }
 
@@ -738,6 +757,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   setErrorMsg('Something went wrong')
                 }
                 setErrorCard(true)
+                setToken2Event(false)
               }
             }
           }
@@ -755,6 +775,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 else{
                   setApproved(false)
                   setIsMining3(true)
+                  setDepositEvent(true)
                 }
               }
               catch (err) {
@@ -765,6 +786,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   setErrorMsg('Cannot deposit')
                 }
                 setErrorCard(true)
+                setDepositEvent(false)
               }
             }
             else{
@@ -781,6 +803,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 else{
                   setApproved(false)
                   setIsMining3(true)
+                  setDepositEvent(true)
                 }
               }
               catch (err) 
@@ -792,20 +815,23 @@ const FarmsPage: NextPageWithLayout = () => {
                     setErrorMsg('Cannot deposit tokens')
                   }
                   setErrorCard(true)
+                  setDepositEvent(false)
                 }
                 
             }             
           }
+          const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
+          const contr2 = new ethers.Contract(farm.token2, erc20ABI, provider)
+          const sharpeEvents = new ethers.Contract(farm.vault, abi, provider)
             useEffect(() => {
               
-                const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
-                const contr2 = new ethers.Contract(farm.token2, erc20ABI, provider)
-                const sharpeEvents = new ethers.Contract(farm.vault, abi, provider)
+                
                 if (usdtPending && usdcPending) {
                   setCard1Of3(false)
                 }
                 
-              contr.on("Approval", (from, to, amount, event) => {
+              if (token1Event === true){
+                 contr.on("Approval", (from, to, amount, event) => {
                 
                   if (from === address && to === farm.vault)
                     {
@@ -816,10 +842,15 @@ const FarmsPage: NextPageWithLayout = () => {
                       //setUsdcPending(true)
                       setIsMining1(false)                      
                       // setCard1Of3(true)
+                      console.log('token1')
+                      setToken1Event(false)
                     }
                   
               })
-              contr2.on("Approval", (from, to, amount) => {
+            }
+
+              if (token2Event === true){
+                contr2.on("Approval", (from, to, amount) => {
                 if (from === address && to === farm.vault)
                   {
                     setCard0Of3(false)
@@ -829,10 +860,12 @@ const FarmsPage: NextPageWithLayout = () => {
                     //setUsdtPending(true)
                     setIsMining2(false)
                     // setCard1Of3(true)
+                    setToken2Event(false)
                   }
-            })
+                 })
+               }
             
-              sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
+              if (depositEvent === true) {sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
                 if (to === address)
                   {
                     setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
@@ -842,9 +875,11 @@ const FarmsPage: NextPageWithLayout = () => {
                     setZappCard2of2(true)
                     //setCard3Of3(true)
                     setIsMining3(false)
+                    setDepositEvent(false)
                   }
             })
-            sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
+          }
+           if (withdrawEvent === true){sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
               if (to === address)
                 {
                   setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
@@ -852,8 +887,9 @@ const FarmsPage: NextPageWithLayout = () => {
 
                   setCard1Of1(true)
                   setWithdrawalMining(false)
+                  setWithdrawEvent(false)
                 }
-          })
+          })}
          
 
             

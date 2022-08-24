@@ -59,10 +59,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [v3P1, setV3P1] = useState<string>('--')
   const [v3P2, setV3P2] = useState<string>('--')
 
-
-
-
-
   const web3Modal =
     typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
 
@@ -70,25 +66,63 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   /* This effect will fetch wallet address if user has already connected his/her wallet */
   useEffect(() => {
     async function checkConnection() {
-      
-      
       try {
-       
         if (window && window.ethereum) {
           // Check if web3modal wallet connection is available on storage
-          if (localStorage.getItem(web3modalStorageKey)) {
-            const distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
-            const {allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL} = vaultData(distributedProvider)
-            await connectToWallet(allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL);
-            console.log(distributedProvider)
+          
+          const distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
+          const {forROI, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL} = vaultData(distributedProvider)
+          console.log(distributedProvider)
+          const connection = web3Modal && (await web3Modal.connect());
+          const provider = new ethers.providers.Web3Provider(connection);
 
-          }
-        } else {
-          const privateProvider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
-          const {fetchVolume, singleTVL} = vaultData(privateProvider);
+          const signer = provider.getSigner();
+          const web3Address = await signer.getAddress();
+
+          console.log(signer)
+      
+          const [b, roi] = await forROI(web3Address.toString())
+          const [userYield1, userYield2, userYield3, e] = await allEarnings(web3Address.toString())
+          const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(web3Address.toString())
+
+          let forDeposits = (pos1 + pos2 + pos3) - (e)
+
+          const [apy1, apy2, apy3, totalAPY, monthlyAPY] = await fetchAPY(web3Address.toString())
+          const [sBal1, sBal2, sBal3, sBal4] = await singleBalances(web3Address.toString())
+          const [tBal1, tBal2, tBal3, tBal4] = await fetchTokenBalances(web3Address.toString())
           const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
           const [t1, t2, t3, totalTVL] = await singleTVL()
+          setDeposits(('$').concat((forDeposits.toFixed(2)).toString()))
+          setEarnings(('$').concat((e.toFixed(2)).toString()))
           
+          setRoi(((roi.toFixed(2)).toString()).concat('%'))
+          setUY1((userYield1.toFixed(2)).toString())
+          setUY2((userYield2.toFixed(2)).toString())
+          setUY3((userYield3.toFixed(2)).toString())
+          setPoolPos1((pos1.toFixed(2)).toString())
+          setPoolPos2((pos2.toFixed(2)).toString())
+          setPoolPos3((pos3.toFixed(2)).toString())
+          setPoolApy1(((apy1.toFixed(2)).toString()).concat('%'))
+          setPoolApy2(((apy2.toFixed(2)).toString()).concat('%'))
+          setPoolApy3(((apy3.toFixed(2)).toString()).concat('%'))
+          setTotalPoolApy(((totalAPY.toFixed(2)).toString()).concat('%'))
+          setMonthlyApy(((monthlyAPY.toFixed(2)).toString()).concat('%'))
+
+          setTB1((tBal1.toFixed(2)).toString())
+          setTB2((tBal2.toFixed(2)).toString())
+          setTB3((tBal3.toFixed(2)).toString())
+          setTB4((tBal4.toFixed(2)).toString())
+          setShareBalance1((sBal1.toFixed(2)).toString())
+          setShareBalance2((sBal2.toFixed(2)).toString())
+          setShareBalance3((sBal3.toFixed(2)).toString())
+          setShareBalance4((sBal4.toFixed(2)).toString())
+          setV1P1((p1.toFixed(2)).toString())
+          setV1P2((p2.toFixed(2)).toString())
+          setV2P1((p3.toFixed(2)).toString())
+          setV2P2((p4.toFixed(2)).toString())
+          setV3P1((p5.toFixed(2)).toString())
+          setV3P2((p6.toFixed(2)).toString())
+
           setVol1(('$').concat((volume1.toFixed(2)).toString()))
           setVol2(('$').concat((volume2.toFixed(2)).toString()))
           setVol3(('$').concat((volume3.toFixed(2)).toString()))
@@ -97,76 +131,40 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
           setTVL2(('$').concat((t2.toFixed(2)).toString()))
           setTVL3(('$').concat((t3.toFixed(2)).toString()))
           setTotalTVL(('$').concat((totalTVL.toFixed(2)).toString()))
+          console.log('reached data')
+          if (localStorage.getItem(web3modalStorageKey)) {
+            
+            await connectToWallet();
+           
+          }
+
+        } else {
           console.log('window or window.ethereum is not available');
+          
         }
       } catch (error) {
+        
         console.log(error, 'Catch error Account is not connected');
+
       }
     }
     checkConnection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const setWalletAddress = async (provider: any, allBalances: any, allEarnings: any, allPositions: any, fetchAPY: any, singleBalances: any, fetchTokenBalances: any, fetchVolume: any, singleTVL: any) => {
+  
+  const setWalletAddress = async (provider: any) => {
     try {
       const signer = provider.getSigner();
-      const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
-      const [t1, t2, t3, totalTVL] = await singleTVL()
-      setVol1(('$').concat((volume1.toFixed(2)).toString()))
-      setVol2(('$').concat((volume2.toFixed(2)).toString()))
-      setVol3(('$').concat((volume3.toFixed(2)).toString()))
-      setTotalVol(('$').concat((totalVolume.toFixed(2)).toString()))
-      setTVL1(('$').concat((t1.toFixed(2)).toString()))
-      setTVL2(('$').concat((t2.toFixed(2)).toString()))
-      setTVL3(('$').concat((t3.toFixed(2)).toString()))
-      setTotalTVL(('$').concat((totalTVL.toFixed(2)).toString()))
-      
-      if (signer) {
         const web3Address = await signer.getAddress();
-        setAddress(web3Address);
-        const [b, roi] = await allBalances(web3Address)
-        const [userYield1, userYield2, userYield3, e] = await allEarnings(web3Address)
-        const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(web3Address)
-
-        let forDeposits = (pos1 + pos2 + pos3) - (e)
-
-        const [apy1, apy2, apy3, totalAPY, monthlyAPY] = await fetchAPY(web3Address)
-        const [sBal1, sBal2, sBal3, sBal4] = await singleBalances(web3Address)
-        const [tBal1, tBal2, tBal3, tBal4] = await fetchTokenBalances(web3Address)
-        setDeposits(('$').concat((forDeposits.toFixed(2)).toString()))
-        setEarnings(('$').concat((e.toFixed(2)).toString()))
-        setRoi(((roi.toFixed(2)).toString()).concat('%'))
-        setUY1((userYield1.toFixed(2)).toString())
-        setUY2((userYield2.toFixed(2)).toString())
-        setUY3((userYield3.toFixed(2)).toString())
-        setPoolPos1((pos1.toFixed(2)).toString())
-        setPoolPos2((pos2.toFixed(2)).toString())
-        setPoolPos3((pos3.toFixed(2)).toString())
-        setPoolApy1(((apy1.toFixed(2)).toString()).concat('%'))
-        setPoolApy2(((apy2.toFixed(2)).toString()).concat('%'))
-        setPoolApy3(((apy3.toFixed(2)).toString()).concat('%'))
-        setTotalPoolApy(((totalAPY.toFixed(2)).toString()).concat('%'))
-        setMonthlyApy(((monthlyAPY.toFixed(2)).toString()).concat('%'))
-
-        setTB1((tBal1.toFixed(2)).toString())
-        setTB2((tBal2.toFixed(2)).toString())
-        setTB3((tBal3.toFixed(2)).toString())
-        setTB4((tBal4.toFixed(2)).toString())
-        setShareBalance1((sBal1.toFixed(2)).toString())
-        setShareBalance2((sBal2.toFixed(2)).toString())
-        setShareBalance3((sBal3.toFixed(2)).toString())
-        setShareBalance4((sBal4.toFixed(2)).toString())
-        setV1P1((p1.toFixed(2)).toString())
-        setV1P2((p2.toFixed(2)).toString())
-        setV2P1((p3.toFixed(2)).toString())
-        setV2P2((p4.toFixed(2)).toString())
-        setV3P1((p5.toFixed(2)).toString())
-        setV3P2((p6.toFixed(2)).toString())
-      }
+        if (signer) {
+          setAddress(web3Address);
+        }
+        
     } catch (error) {
       console.log(
         'Account not connected; logged from setWalletAddress function'
       );
+      
       
     }
   };
@@ -175,6 +173,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const disconnectWallet = () => {
     setAddress(undefined);
     web3Modal && web3Modal.clearCachedProvider();
+    
   };
 
   const checkIfExtensionIsAvailable = () => {
@@ -182,12 +181,14 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       (window && window.web3 === undefined) ||
       (window && window.ethereum === undefined)
     ) {
+      
       setError(true);
       web3Modal && web3Modal.toggleModal();
+      
     }
   };
 
-  const connectToWallet = async (allBalances: any, allEarnings: any, allPositions: any, fetchAPY: any, singleBalances: any, fetchTokenBalances: any, fetchVolume: any, singleTVL: any) => {
+  const connectToWallet = async () => {
     try {
       setLoading(true);
       checkIfExtensionIsAvailable();
@@ -195,7 +196,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       const provider = new ethers.providers.Web3Provider(connection);
       await subscribeProvider(connection);
 
-      setWalletAddress(provider, allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL);
+      await setWalletAddress(provider);
       setLoading(false);
     } catch (error) {
       setLoading(false);

@@ -134,7 +134,7 @@ export const vaultData = (provider: any) => {
             return [v1FirstFee, v2SecondFee, v2FirstFee, v2SecondFee, v3FirstFee,v3SecondFee]
     
         }
-        const allBalances = async (address: string) => {
+        const forROI = async (address: string) => {
 
             const bal1 = await SC1.balanceOf(address)
             const bal2 = await SC2.balanceOf(address)
@@ -234,5 +234,5 @@ export const vaultData = (provider: any) => {
 
         }
         
-    return{allBalances, allEarnings, income, fetchVolume, singleTVL, allPositions, fetchAPY, singleBalances, fetchTokenBalances};
+    return{forROI, allEarnings, income, fetchVolume, singleTVL, allPositions, fetchAPY, singleBalances, fetchTokenBalances};
 };
