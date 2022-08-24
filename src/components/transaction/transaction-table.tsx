@@ -177,21 +177,21 @@ export default function TransactionTable() {
       <td>USDC-USDT</td>
       <td>{poolPos1}</td>
       <td>{poolApy1}</td>
-      <td><b>VIEW</b></td>
+      <td><a href="/usdc-usdt"><b>VIEW</b></a></td>
     </tr>
     <tr>
       <td className='py-3.5 !important' >1</td>
       <td>USDC-FRAX</td>
       <td>{poolPos2}</td>
       <td>{poolApy2}</td>
-      <td><b>VIEW</b></td>
+      <td><a href="/usdc-frax"><b>VIEW</b></a></td>
     </tr>
     <tr>
     <td className='py-3.5 !important'>2</td>
       <td>USDC-MIMATIC</td>
       <td>{poolPos3}</td>
       <td>{poolApy3}</td>
-      <td><b>VIEW</b></td>
+      <td><a href="/usdc-mimatic"><b>VIEW</b></a></td>
     </tr>
                 
               </tbody>
