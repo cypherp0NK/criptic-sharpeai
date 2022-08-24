@@ -1,21 +1,19 @@
-import { ethers, providers } from 'ethers'
+import { ethers, providers} from 'ethers'
+import {useState, useEffect, createContext, ReactNode } from 'react'
 import Sharpe from '../static/chain_info/Sharpe.json'
 import ERC20 from '../static/chain_info/WethToken.json'
-
 import {formatUnits} from '@ethersproject/units'
-export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: string) => {
+
+export const vaultData = (provider: any) => {
         
         const { abi } = Sharpe
         const erc20ABI = ERC20.abi
-        const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
-        // new ethers.providers.Web3Provider(window.ethereum);
-        const SharpeaiContract = new ethers.Contract(vault, abi, provider)
-        const tokenContract1 = new ethers.Contract(tokenAddress1, erc20ABI, provider)
-        const tokenContract2 = new ethers.Contract(tokenAddress2, erc20ABI, provider)
+        // const provider =  new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
 
         const SC1 = new ethers.Contract("0x4E32A48F4f4f7B2594733dd7ffED871D9441e2c4", abi, provider)
-        const SC2 = new ethers.Contract("0xFD3B52fDF0CE5E0919400Fc90C2C5183BE517eE8", abi, provider)
-        const SC3 = new ethers.Contract("0x9db685d9E4f2e5A7fAEC5760F2946C32c8422b91", abi, provider)
+        const SC2 = new ethers.Contract("0xa25a0384B525FE79286d329ab7bbd89D41a3250f", abi, provider)
+        const SC3 = new ethers.Contract("0x4aAc6511455FfAc1B51ED60C3B7A29e6E56B9008", abi, provider)
 
         const token1 = new ethers.Contract("0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", erc20ABI, provider)
         const token2 = new ethers.Contract("0xc2132D05D31c914a87C6611C10748AEb04B58e8F", erc20ABI, provider)
@@ -183,41 +181,16 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
 
             return [totalBal, estRoi]
         }
-        const sharesBalance = async (address: string, decimal: number) => {
-            const bal = await SharpeaiContract.balanceOf(address)
-            const b = parseFloat(formatUnits(bal, decimal))
-            return b
-        }
-        const tokenBalances = async (address: string, decimal: number) => {
-            const bal1 = await tokenContract1.balanceOf(address)
-            const bal2 = await tokenContract2.balanceOf(address)
-            const b1 = parseFloat(formatUnits(bal1, 6))
-            const b2 = parseFloat(formatUnits(bal2, decimal))
-            return [b1, b2]
-        }
-        const tokenPositions = async (address: string, decimal: number) => {
-            const [total0, total1] = await SharpeaiContract.getTotalAmounts() 
-            const totalSupply = await SharpeaiContract.totalSupply()
-            const value = await SharpeaiContract.balanceOf(address)
-
-            const tvl0 = parseFloat(formatUnits(total0, 6))
-            const tvl1 = parseFloat(formatUnits(total1, decimal))
-            const tS = parseFloat(formatUnits(totalSupply, decimal))
-
-            const newBalance = parseFloat(formatUnits(value, 6))
-            const p0 = (tvl0*newBalance) / tS
-            const p1 = (tvl1*newBalance) / tS
-            return [p0, p1]
-        }
-        const fetchPrice = async (decimal: number) => {
-            const [t0, t1] = await SharpeaiContract.getTotalAmounts() 
-            const total0 = parseFloat(formatUnits(t0, 6))
-            const total1 = parseFloat(formatUnits(t1, decimal))
-            const minimum = Math.min(total1, total0)
-            const price2 = (minimum)/(total0)
-            const price1 = 1/price2
-            return[price1, price2]
-        }
+       
+        // const fetchPrice = async (decimal: number) => {
+        //     const [t0, t1] = await SharpeaiContract.getTotalAmounts() 
+        //     const total0 = parseFloat(formatUnits(t0, 6))
+        //     const total1 = parseFloat(formatUnits(t1, decimal))
+        //     const minimum = Math.min(total1, total0)
+        //     const price2 = (minimum)/(total0)
+        //     const price1 = 1/price2
+        //     return[price1, price2]
+        // }
         const singleBalances = async (address: string) => {
             const balance1 = await SC1.balanceOf(address)
             const balance2 = await SC2.balanceOf(address)
@@ -261,10 +234,5 @@ export const vaultData = (vault: string, tokenAddress1: string, tokenAddress2: s
 
         }
         
-        const totalSupply = () => {
-            const tSupply = SharpeaiContract.totalSupply()
-            return tSupply
-        }
-        
-    return {totalSupply, fetchPrice, tokenBalances, sharesBalance, allBalances, allEarnings, income, fetchVolume, singleTVL, allPositions, fetchAPY, tokenPositions, singleBalances, fetchTokenBalances}
-}
+    return{allBalances, allEarnings, income, fetchVolume, singleTVL, allPositions, fetchAPY, singleBalances, fetchTokenBalances};
+};

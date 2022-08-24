@@ -222,7 +222,6 @@ const FarmsPage: NextPageWithLayout = () => {
               tB4, error } = useContext(WalletContext);
 
             const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
-            const {totalSupply, fetchPrice, tokenBalances, } = vaultData(farm.vault, farm.token1, farm.token2)
             const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
@@ -517,7 +516,6 @@ const FarmsPage: NextPageWithLayout = () => {
               // Withdraw Tab
 
               const {shareWithdrawn, shareWithdrawState} = useWithdrawTokens(farm.vault)
-              const {sharesBalance} = vaultData(farm.vault, farm.token1, farm.token2)
               const [ amount, amountState ] = useState<string>('')
               const [card0Of1, setCard0Of1] = useState<boolean>(false)
               const [card1Of1, setCard1Of1] = useState<boolean>(false)

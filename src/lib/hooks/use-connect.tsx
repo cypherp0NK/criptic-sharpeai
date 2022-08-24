@@ -1,6 +1,6 @@
-import { useEffect, useState, createContext, ReactNode } from 'react';
+import { useContext, useEffect, useState, createContext, ReactNode } from 'react';
 import Web3Modal from 'web3modal';
-import { ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import {vaultData} from '../../data/utils/vaultData'
 import { setPriority } from 'os';
 import { IncomingMessage } from 'http';
@@ -70,25 +70,33 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   /* This effect will fetch wallet address if user has already connected his/her wallet */
   useEffect(() => {
     async function checkConnection() {
+      
+      
       try {
-        const {fetchVolume, singleTVL, allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances} = vaultData('a','a','a')
-        const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
-        const [t1, t2, t3, totalTVL] = await singleTVL()
-        
-        setVol1(('$').concat((volume1.toFixed(2)).toString()))
-        setVol2(('$').concat((volume2.toFixed(2)).toString()))
-        setVol3(('$').concat((volume3.toFixed(2)).toString()))
-        setTotalVol(('$').concat((totalVolume.toFixed(2)).toString()))
-        setTVL1(('$').concat((t1.toFixed(2)).toString()))
-        setTVL2(('$').concat((t2.toFixed(2)).toString()))
-        setTVL3(('$').concat((t3.toFixed(2)).toString()))
-        setTotalTVL(('$').concat((totalTVL.toFixed(2)).toString()))
+       
         if (window && window.ethereum) {
           // Check if web3modal wallet connection is available on storage
           if (localStorage.getItem(web3modalStorageKey)) {
-            await connectToWallet(allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances);
+            const distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
+            const {allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL} = vaultData(distributedProvider)
+            await connectToWallet(allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL);
+            console.log(distributedProvider)
+
           }
         } else {
+          const privateProvider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
+          const {fetchVolume, singleTVL} = vaultData(privateProvider);
+          const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
+          const [t1, t2, t3, totalTVL] = await singleTVL()
+          
+          setVol1(('$').concat((volume1.toFixed(2)).toString()))
+          setVol2(('$').concat((volume2.toFixed(2)).toString()))
+          setVol3(('$').concat((volume3.toFixed(2)).toString()))
+          setTotalVol(('$').concat((totalVolume.toFixed(2)).toString()))
+          setTVL1(('$').concat((t1.toFixed(2)).toString()))
+          setTVL2(('$').concat((t2.toFixed(2)).toString()))
+          setTVL3(('$').concat((t3.toFixed(2)).toString()))
+          setTotalTVL(('$').concat((totalTVL.toFixed(2)).toString()))
           console.log('window or window.ethereum is not available');
         }
       } catch (error) {
@@ -99,10 +107,20 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setWalletAddress = async (provider: any, allBalances: any, allEarnings: any, allPositions: any, fetchAPY: any, singleBalances: any, fetchTokenBalances: any) => {
+  const setWalletAddress = async (provider: any, allBalances: any, allEarnings: any, allPositions: any, fetchAPY: any, singleBalances: any, fetchTokenBalances: any, fetchVolume: any, singleTVL: any) => {
     try {
-
       const signer = provider.getSigner();
+      const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
+      const [t1, t2, t3, totalTVL] = await singleTVL()
+      setVol1(('$').concat((volume1.toFixed(2)).toString()))
+      setVol2(('$').concat((volume2.toFixed(2)).toString()))
+      setVol3(('$').concat((volume3.toFixed(2)).toString()))
+      setTotalVol(('$').concat((totalVolume.toFixed(2)).toString()))
+      setTVL1(('$').concat((t1.toFixed(2)).toString()))
+      setTVL2(('$').concat((t2.toFixed(2)).toString()))
+      setTVL3(('$').concat((t3.toFixed(2)).toString()))
+      setTotalTVL(('$').concat((totalTVL.toFixed(2)).toString()))
+      
       if (signer) {
         const web3Address = await signer.getAddress();
         setAddress(web3Address);
@@ -149,6 +167,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       console.log(
         'Account not connected; logged from setWalletAddress function'
       );
+      
     }
   };
 
@@ -168,7 +187,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const connectToWallet = async (allBalances: any, allEarnings: any, allPositions: any, fetchAPY: any, singleBalances: any, fetchTokenBalances: any) => {
+  const connectToWallet = async (allBalances: any, allEarnings: any, allPositions: any, fetchAPY: any, singleBalances: any, fetchTokenBalances: any, fetchVolume: any, singleTVL: any) => {
     try {
       setLoading(true);
       checkIfExtensionIsAvailable();
@@ -176,7 +195,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       const provider = new ethers.providers.Web3Provider(connection);
       await subscribeProvider(connection);
 
-      setWalletAddress(provider, allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances);
+      setWalletAddress(provider, allBalances, allEarnings, allPositions, fetchAPY, singleBalances, fetchTokenBalances, fetchVolume, singleTVL);
       setLoading(false);
     } catch (error) {
       setLoading(false);
