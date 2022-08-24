@@ -74,7 +74,7 @@ export default function TransactionTable() {
       accessor: 'transactionType',
       // @ts-ignore
       Cell: ({ cell: { value } }) => (
-        <div className="ltr:text-right rtl:text-left">{value}</div>
+        'a'
       ),
       minWidth: 70,
       maxWidth: 70,
@@ -154,80 +154,50 @@ export default function TransactionTable() {
         </div>
       </div>
       <div className="-mx-0.5">
-        <Scrollbar style={{ width: '100%' }}>
+        {poolPos1 !== '--' ? 
           <div className="px-0.5">
             <table
-              {...getTableProps()}
-              className="transaction-table w-full border-separate border-0"
+              
+              className="w-full border-collapse border-0"
             >
-              <thead className="text-sm text-gray-500 dark:text-gray-300">
-                {headerGroups.map((headerGroup, idx) => (
-                  <tr {...headerGroup.getHeaderGroupProps()} key={idx}>
-                    {headerGroup.headers.map((column, idx) => (
-                      <th
-                        {...column.getHeaderProps(
-                          column.getSortByToggleProps()
-                        )}
-                        key={idx}
-                        className="group bg-white px-2 py-5 font-normal first:rounded-bl-lg last:rounded-br-lg ltr:first:pl-8 ltr:last:pr-8 rtl:first:pr-8 rtl:last:pl-8 dark:bg-light-dark md:px-4"
-                      >
-                        <div className="flex items-center">
-                          {column.render('Header')}
-                          {column.canResize && (
-                            <div
-                              {...column.getResizerProps()}
-                              className={`resizer ${
-                                column.isResizing ? 'isResizing' : ''
-                              }`}
-                            />
-                          )}
-                          <span className="ltr:ml-1 rtl:mr-1">
-                            {column.isSorted ? (
-                              column.isSortedDesc ? (
-                                <ChevronDown />
-                              ) : (
-                                <ChevronDown className="rotate-180" />
-                              )
-                            ) : (
-                              <ChevronDown className="rotate-180 opacity-0 transition group-hover:opacity-50" />
-                            )}
-                          </span>
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+              <thead className="rounded-lg bg-white uppercase shadow-card dark:bg-light-dark text-sm lg:text-base text-gray-500 dark:text-gray-300">
+                <th className='py-4 !important'>#</th>
+                <th>POOL</th>
+                <th>VALUE</th>
+                <th>APY</th>
+                <th>ACTIONS</th>
               </thead>
               <tbody
-                {...getTableBodyProps()}
-                className="text-xs font-medium text-gray-900 dark:text-white 3xl:text-sm"
+                
+                className="rounded-lg bg-white uppercase shadow-card dark:bg-light-dark text-xs lg:text-sm text-center font-medium text-gray-900 dark:text-white 3xl:text-base"
               >
-                {page.map((row, idx) => {
-                  prepareRow(row);
-                  return (
-                    <tr
-                      {...row.getRowProps()}
-                      key={idx}
-                      className="mb-3 items-center rounded-lg bg-white uppercase shadow-card last:mb-0 dark:bg-light-dark"
-                    >
-                      {row.cells.map((cell, idx) => {
-                        return (
-                          <td
-                            {...cell.getCellProps()}
-                            key={idx}
-                            className="px-2 py-4 tracking-[1px] ltr:first:pl-4 ltr:last:pr-4 rtl:first:pr-8 rtl:last:pl-8 md:px-4 md:py-6 md:ltr:first:pl-8 md:ltr:last:pr-8 3xl:py-5"
-                          >
-                            {cell.render('Cell')}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
+                
+                <tr>
+      <td className='py-3.5 !important'>0</td>
+      <td>USDC-USDT</td>
+      <td>{poolPos1}</td>
+      <td>{poolApy1}</td>
+      <td><b>VIEW</b></td>
+    </tr>
+    <tr>
+      <td className='py-3.5 !important' >1</td>
+      <td>USDC-FRAX</td>
+      <td>{poolPos2}</td>
+      <td>{poolApy2}</td>
+      <td><b>VIEW</b></td>
+    </tr>
+    <tr>
+    <td className='py-3.5 !important'>2</td>
+      <td>USDC-MIMATIC</td>
+      <td>{poolPos3}</td>
+      <td>{poolApy3}</td>
+      <td><b>VIEW</b></td>
+    </tr>
+                
               </tbody>
             </table>
           </div>
-        </Scrollbar>
+         : <div></div>}
       </div>
       <div className="mt-3 flex items-center justify-center rounded-lg bg-white px-5 py-4 text-sm shadow-card dark:bg-light-dark lg:py-6">
         <div className="flex items-center gap-5">
