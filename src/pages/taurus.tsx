@@ -31,7 +31,7 @@ import tethersvgImage from '@/components/icons/tethersvgImage.svg'
 import fraxsvgImage from '@/components/icons/fraxsvgImage.svg'
 import mimaticsvgImage from '@/components/icons/mimaticsvgImage.svg'
 import Image from '@/components/ui/image';
-
+import Web3Modal from 'web3modal';
 const sort = [
   { id: 1, name: 'Hot' },
   { id: 2, name: 'APR' },
@@ -209,18 +209,8 @@ const FarmsPage: NextPageWithLayout = () => {
         </div>
 
         {FarmsData.map((farm) => {
-            const { address, shareBalance1, shareBalance2, shareBalance3, shareBalance4, poolPos1, poolPos2, poolPos3, 
-              v1P1,
-              v1P2,
-              v2P1,
-              v2P2,
-              v3P1,
-              v3P2,
-              tB1,
-              tB2,
-              tB3,
-              tB4, error } = useContext(WalletContext);
-
+            const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
+            const { address, error } = useContext(WalletContext);
             const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
             const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
             const [ amount1, setAmount ] = useState<string>('')
@@ -248,6 +238,136 @@ const FarmsPage: NextPageWithLayout = () => {
             const [token2Event, setToken2Event] = useState<boolean>(false)
             const [depositEvent, setDepositEvent] = useState<boolean>(false)
             const [withdrawEvent, setWithdrawEvent] = useState<boolean>(false)
+
+            const [shareBalance4, setShareBalance4] = useState<string>('--')
+            const [shareBalance2, setShareBalance2] = useState<string>('--')
+            const [shareBalance3, setShareBalance3] = useState<string>('--')
+            const [poolPos1, setPoolPos1] = useState<string>('--')
+            const [poolPos2, setPoolPos2] = useState<string>('--')
+            const [poolPos3, setPoolPos3] = useState<string>('--')
+            const [v1P1, setV1P1] = useState<string>('--')
+            const [v1P2, setV1P2] = useState<string>('--')
+            const [v2P1, setV2P1] = useState<string>('--')
+            const [v2P2, setV2P2] = useState<string>('--')
+            const [v3P1, setV3P1] = useState<string>('--')
+            const [v3P2, setV3P2] = useState<string>('--')
+            const [tB1, setTB1] = useState<string>('--')
+            const [tB2, setTB2] = useState<string>('--')
+            const [tB3, setTB3] = useState<string>('--')
+            const [tB4, setTB4] = useState<string>('--')
+
+            useEffect(() => {
+              if (address){
+                if (
+                  (window && window.web3 === undefined) ||
+                  (window && window.ethereum === undefined)
+                ) {
+                  console.log('window not available; logged from transaction-table')
+                }
+                else{
+                  let distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
+                  gettingVaultData(distributedProvider);
+                  
+                  }
+              }
+                
+              // if (usdtPending && usdcPending) {
+              //   setCard1Of3(false)
+              // }
+              
+            if (token1Event === true){
+              
+               contr.on("Approval", (from, to, amount, event) => {
+              
+                if (from === address && to === farm.vault)
+                  {
+                    setCard0Of3(false)
+                    setZappCard0of2(false)
+                    setZappCard1of2(true)
+                    setApprovedToken1(true)
+                    //setUsdcPending(true)
+                    setIsMining1(false)                      
+                    // setCard1Of3(true)
+                    console.log('token1')
+                    setToken1Event(false)
+                  }
+                
+            })
+          }
+
+            if (token2Event === true){
+              contr2.on("Approval", (from, to, amount) => {
+              if (from === address && to === farm.vault)
+                {
+                  setCard0Of3(false)
+                  setZappCard0of2(false)
+                  setZappCard1of2(true)
+                  setApprovedToken2(true)
+                  //setUsdtPending(true)
+                  setIsMining2(false)
+                  // setCard1Of3(true)
+                  setToken2Event(false)
+                }
+               })
+             }
+          
+            if (depositEvent === true) {sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
+              if (to === address)
+                {
+                  setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+                  setCard1Of3(false)
+                  setUsdcPending(false)
+                  setZappCard1of2(false)
+                  setZappCard2of2(true)
+                  //setCard3Of3(true)
+                  setIsMining3(false)
+                  gettingVaultData(window.ethereum)
+                  setDepositEvent(false)
+                }
+          })
+        }
+         if (withdrawEvent === true){
+          
+          sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
+            if (to === address)
+              {
+                setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+                setCard0Of1(false)
+
+                setCard1Of1(true)
+                setWithdrawalMining(false)
+                gettingVaultData(window.ethereum)
+                setWithdrawEvent(false)
+              }
+        })}
+       
+          }, [address,token1Event,token2Event,depositEvent,withdrawEvent,shareBalance4, shareBalance2,shareBalance3,poolPos1,poolPos2,poolPos3,v1P1,v1P2,v2P1,v2P2,v3P1,v3P2,tB1,tB2,tB3,tB4,setShareBalance4,setShareBalance2,setShareBalance3,setPoolPos1,setPoolPos2,setPoolPos3,setV1P1,setV1P2,setV2P1,setV2P2,setV3P1,setV3P2,setTB1,setTB2,setTB3,setTB4,gettingVaultData])
+
+          async function gettingVaultData(p: any){
+            const {allPositions, fetchTokenBalances, singleBalances} = vaultData(p)
+            const [pos1, pos2, pos3, p1, p2, p3, p4, p5, p6] = await allPositions(address)
+            const [tBal1, tBal2, tBal3, tBal4] = await fetchTokenBalances(address)
+            const [sBal1, sBal2, sBal3, sBal4] = await singleBalances(address)
+            
+            setShareBalance4((sBal4.toFixed(2)).toString())
+            setShareBalance2((sBal2.toFixed(2)).toString())
+            setShareBalance3((sBal3.toFixed(2)).toString())
+            setPoolPos1((pos1.toFixed(2)).toString())
+            setPoolPos2((pos2.toFixed(2)).toString())
+            setPoolPos3((pos3.toFixed(2)).toString())
+            setV1P1((p1.toFixed(2)).toString())
+            setV1P2((p2.toFixed(2)).toString())
+            setV2P1((p3.toFixed(2)).toString())
+            setV2P2((p4.toFixed(2)).toString())
+            setV3P1((p5.toFixed(2)).toString())
+            setV3P2((p6.toFixed(2)).toString())
+
+            setTB1((tBal1.toFixed(2)).toString())
+            setTB2((tBal2.toFixed(2)).toString())
+            setTB3((tBal3.toFixed(2)).toString())
+            setTB4((tBal4.toFixed(2)).toString())
+          
+          }
           //   const maxBalance1 = async () => {
           //     if (farm.from === "USDC" && farm.to === "USDT"){
           //       const newAmount = tB1
@@ -620,7 +740,8 @@ const FarmsPage: NextPageWithLayout = () => {
             }
             
             const zappApprove1 = async () => {
-              try{ 
+             if (Number(zappAmount1) >= 1) {
+                try{ 
                   const amountAsWei = Number(zappAmount1) * 1e6
                   const status = await approveToken1(amountAsWei.toString())
                   if (status === 'wallet error'){
@@ -648,6 +769,12 @@ const FarmsPage: NextPageWithLayout = () => {
                   setCard0Of3(false)
                   
                 }
+              }
+              else{
+                setZappCard0of2(false)
+                setErrorMsg('Amount must be more than 1 USD in valuation')
+                setErrorCard(true)
+              }
           }
           
             const zappDeposit1 = async () => {
@@ -824,78 +951,7 @@ const FarmsPage: NextPageWithLayout = () => {
           const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
           const contr2 = new ethers.Contract(farm.token2, erc20ABI, provider)
           const sharpeEvents = new ethers.Contract(farm.vault, abi, provider)
-            useEffect(() => {
-              
-                
-                // if (usdtPending && usdcPending) {
-                //   setCard1Of3(false)
-                // }
-                
-              if (token1Event === true){
-                
-                 contr.on("Approval", (from, to, amount, event) => {
-                
-                  if (from === address && to === farm.vault)
-                    {
-                      setCard0Of3(false)
-                      setZappCard0of2(false)
-                      setZappCard1of2(true)
-                      setApprovedToken1(true)
-                      //setUsdcPending(true)
-                      setIsMining1(false)                      
-                      // setCard1Of3(true)
-                      console.log('token1')
-                      setToken1Event(false)
-                    }
-                  
-              })
-            }
-
-              if (token2Event === true){
-                contr2.on("Approval", (from, to, amount) => {
-                if (from === address && to === farm.vault)
-                  {
-                    setCard0Of3(false)
-                    setZappCard0of2(false)
-                    setZappCard1of2(true)
-                    setApprovedToken2(true)
-                    //setUsdtPending(true)
-                    setIsMining2(false)
-                    // setCard1Of3(true)
-                    setToken2Event(false)
-                  }
-                 })
-               }
             
-              if (depositEvent === true) {sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
-                if (to === address)
-                  {
-                    setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
-                    setCard1Of3(false)
-                    setUsdcPending(false)
-                    setZappCard1of2(false)
-                    setZappCard2of2(true)
-                    //setCard3Of3(true)
-                    setIsMining3(false)
-                    setDepositEvent(false)
-                  }
-            })
-          }
-           if (withdrawEvent === true){
-            
-            sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
-              if (to === address)
-                {
-                  setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
-                  setCard0Of1(false)
-
-                  setCard1Of1(true)
-                  setWithdrawalMining(false)
-                  setWithdrawEvent(false)
-                }
-          })}
-         
-            }, [token1Event, token2Event, depositEvent, withdrawEvent])
            
           return (
             <FarmList

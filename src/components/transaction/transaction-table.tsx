@@ -40,7 +40,7 @@ export default function TransactionTable() {
         (window && window.web3 === undefined) ||
         (window && window.ethereum === undefined)
       ) {
-        console.log('window not available; logged from live-price-feed')
+        console.log('window not available; logged from taurus')
       }
       else{
         userPositions();

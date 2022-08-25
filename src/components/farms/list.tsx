@@ -1,12 +1,13 @@
 // @ts-nocheck
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CurrencySwapIcons from '@/components/ui/currency-swap-icons';
 import { CoinList } from '@/components/ui/currency-swap-icons';
 import TransactionInfo from '@/components/ui/transaction-info';
-import {useContext} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
-
+import { ethers, providers } from "ethers"
+import {vaultData} from '@/data/utils/vaultData'
+import Web3Modal from 'web3modal';
 interface FarmListTypes {
   from: string;
   to: string;
@@ -25,7 +26,57 @@ export default function FarmList({
   multiplier,
   children,
 }: React.PropsWithChildren<FarmListTypes>) {
-  const { UY1, UY2, UY3, vol1, vol2, vol3, tvl1, tvl2, tvl3} = useContext(WalletContext);
+  const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
+  const { address } = useContext(WalletContext);
+  const [ UY1, setUY1 ] = useState<string>('--')
+  const [ UY2, setUY2 ] = useState<string>('--')
+  const [ UY3, setUY3] = useState<string>('--')
+  const [vol1, setVol1] = useState<string>('--')
+  const [vol2, setVol2] = useState<string>('--')
+  const [vol3, setVol3] = useState<string>('--')
+  const [tvl1, setTVL1] = useState<string>('--')
+  const [tvl2, setTVL2] = useState<string>('--')
+  const [tvl3, setTVL3] = useState<string>('--')
+  useEffect(() => {
+    if (address){
+      if (
+        (window && window.web3 === undefined) ||
+        (window && window.ethereum === undefined)
+      ) {
+        console.log('window not available; logged from transaction-table')
+      }
+      else{
+        let distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
+        poolList(distributedProvider);
+        poolEarnedList(distributedProvider);
+        }
+    }
+    else if (address === undefined){
+      let privateProvider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
+      poolList(privateProvider)
+    }
+    
+  }, [address, UY1, UY2, UY3, vol1, vol2, vol3, tvl1, tvl2, tvl3, setUY1,setUY2,setUY3,setVol1,setVol2,setVol3,setTVL1,setTVL2,setTVL3]);
+  
+  async function poolList(p: any) {
+    const {fetchVolume, singleTVL} = vaultData(p)
+    const [volume1, volume2, volume3, totalVolume] = await fetchVolume()
+    const [t1, t2, t3, totalTVL] = await singleTVL()
+    
+    setVol1(('$').concat((volume1.toFixed(2)).toString()))
+    setVol2(('$').concat((volume2.toFixed(2)).toString()))
+    setVol3(('$').concat((volume3.toFixed(2)).toString()))
+    setTVL1(('$').concat((t1.toFixed(2)).toString()))
+    setTVL2(('$').concat((t2.toFixed(2)).toString()))
+    setTVL3(('$').concat((t3.toFixed(2)).toString()))
+  }
+  async function poolEarnedList(p: any) {
+    const {allEarnings} = vaultData(p)
+    const [userYield1, userYield2, userYield3, e] = await allEarnings(address)
+    setUY1((userYield1.toFixed(2)).toString())
+    setUY2((userYield2.toFixed(2)).toString())
+    setUY3((userYield3.toFixed(2)).toString())
+  }
 
   let [isExpand, setIsExpand] = useState(false);
   const setFrom = from as CoinList;
