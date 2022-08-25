@@ -741,26 +741,27 @@ const FarmsPage: NextPageWithLayout = () => {
             
             const zappApprove1 = async () => {
               try{ 
+                // approveToken1(amountAsWei.toString())
+                //   .then(()=>{console.log('running')})
+                //   .catch((e: any)=>{
+                //     console.log(txnError)
+                //   })
                   const amountAsWei = Number(zappAmount1) * 1e6
-                  approveToken1(amountAsWei.toString())
-                  .then(()=>{console.log('running')})
-                  .catch((e: any)=>{
-                    console.log(e)
-                  })
-                  // if (status === 'wallet error'){
-                  //   setZappCard0of2(false)
-                  //   setErrorMsg('No WALLET detected!')
-                  //   setErrorCard(true)
-                  // }
-                  // else{
-                  //     setZappCard0of2(true)
-                  //     // setIsMining1(true)
-                  //     // setToken1Event(true)
-                  //   }
+                  const status = await approveToken1(amountAsWei.toString())
+                  if (status === 'wallet error'){
+                    setZappCard0of2(false)
+                    setErrorMsg('No WALLET detected!')
+                    setErrorCard(true)
                   }
-              catch (error) {
-                  if (error instanceof Error){
-                    setErrorMsg(error.message)
+                  else{
+                      setZappCard0of2(true)
+                      // setIsMining1(true)
+                      // setToken1Event(true)
+                    }
+                  }
+              catch (err) {
+                  if (err instanceof Error){
+                    setErrorMsg(err.message)
                   }
                   if (error){
                     setErrorMsg('No WALLET detected!')
