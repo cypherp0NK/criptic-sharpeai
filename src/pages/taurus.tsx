@@ -1,16 +1,8 @@
 import {useContext, useEffect, useState} from "react"
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
-import { motion } from 'framer-motion';
-import cn from 'classnames';
-import { Transition } from '@/components/ui/transition';
 import DashboardLayout from '@/layouts/dashboard/_dashboard';
-import { RadioGroup } from '@/components/ui/radio-group';
-import { Listbox } from '@/components/ui/listbox';
 import Button from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { ChevronDown } from '@/components/icons/chevron-down';
-import { SearchIcon } from '@/components/icons/search';
 import FarmList from '@/components/farms/list';
 import { FarmsData } from '@/data/static/farms-data';
 import { useDepositTokens } from '@/data/utils/useDepositTokens';
@@ -20,164 +12,16 @@ import { formatUnits } from "@ethersproject/units"
 import {WalletContext} from "@/lib/hooks/use-connect"
 import {TabContext, TabPanel} from "@material-ui/lab"
 import { useWithdrawTokens } from '@/data/utils/useWithdrawTokens';
-import { getEventListeners } from "events";
 import { Divider } from "@material-ui/core";
 import { Close } from '@/components/icons/close';
 import { ExportIcon } from '@/components/icons/export-icon';
 import { Spinner } from '../components/icons/spinner';
-import { ERROR_EVENT } from "web3modal";
 import usdcsvgImage from '@/components/icons/usdcsvgImage.svg';
 import tethersvgImage from '@/components/icons/tethersvgImage.svg'
 import fraxsvgImage from '@/components/icons/fraxsvgImage.svg'
 import mimaticsvgImage from '@/components/icons/mimaticsvgImage.svg'
 import Image from '@/components/ui/image';
 import Web3Modal from 'web3modal';
-const sort = [
-  { id: 1, name: 'Hot' },
-  { id: 2, name: 'APR' },
-  { id: 3, name: 'Earned' },
-  { id: 4, name: 'Total staked' },
-  { id: 5, name: 'Latest' },
-];
-
-function SortList() {
-  const [selectedItem, setSelectedItem] = useState(sort[0]);
-
-  return (
-    <div className="relative w-full md:w-auto">
-      <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-11 w-full items-center justify-between rounded-lg bg-gray-100 px-4 text-sm text-gray-900 dark:bg-light-dark dark:text-white md:w-36 lg:w-40 xl:w-56">
-          {selectedItem.name}
-          <ChevronDown />
-        </Listbox.Button>
-        <Transition
-          enter="ease-out duration-300"
-          enterFrom="opacity-0 "
-          enterTo="opacity-100"
-          leave="ease-in duration-300"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0 "
-        >
-          <Listbox.Options className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-lg bg-white p-3 shadow-large dark:bg-light-dark">
-            {sort.map((item) => (
-              <Listbox.Option key={item.id} value={item}>
-                {({ selected }) => (
-                  <div
-                    className={`block cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-gray-900 transition dark:text-white  ${
-                      selected
-                        ? 'my-1 bg-gray-100 dark:bg-dark'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    {item.name}
-                  </div>
-                )}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-        </Transition>
-      </Listbox>
-    </div>
-  );
-}
-
-function Search() {
-  return (
-    <form
-      className="relative flex w-full rounded-full md:w-auto lg:w-64 xl:w-80"
-      noValidate
-      role="search"
-    >
-      <label className="flex w-full items-center">
-        <input
-          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-200 bg-transparent py-1 text-sm tracking-tighter text-gray-900 outline-none transition-all placeholder:text-gray-600 focus:border-gray-900 ltr:pr-5 ltr:pl-10 rtl:pr-10 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-500"
-          placeholder="Search farms"
-          autoComplete="off"
-        />
-        <span className="pointer-events-none absolute flex h-full w-8 cursor-pointer items-center justify-center text-gray-600 hover:text-gray-900 ltr:left-0 ltr:pl-2 rtl:right-0 rtl:pr-2 dark:text-gray-500 sm:ltr:pl-3 sm:rtl:pr-3">
-          <SearchIcon className="h-4 w-4" />
-        </span>
-      </label>
-    </form>
-  );
-}
-
-function StackedSwitch() {
-  let [isStacked, setIsStacked] = useState(false);
-  return (
-    <Switch
-      checked={isStacked}
-      onChange={setIsStacked}
-      className="flex items-center gap-2 text-gray-400 sm:gap-3"
-    >
-      <div
-        className={cn(
-          isStacked ? 'bg-brand' : 'bg-gray-200 dark:bg-gray-500',
-          'relative inline-flex h-[22px] w-10 items-center rounded-full transition-colors duration-300'
-        )}
-      >
-        <span
-          className={cn(
-            isStacked
-              ? 'bg-white ltr:translate-x-5 rtl:-translate-x-5 dark:bg-light-dark'
-              : 'bg-white ltr:translate-x-0.5 rtl:-translate-x-0.5 dark:bg-light-dark',
-            'inline-block h-[18px] w-[18px] transform rounded-full bg-white transition-transform duration-200'
-          )}
-        />
-      </div>
-      <span className="inline-flex text-xs font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:text-sm">
-        Staked only
-      </span>
-    </Switch>
-  );
-}
-
-function Status() {
-  let [status, setStatus] = useState('live');
-
-  return (
-    <RadioGroup
-      value={status}
-      onChange={setStatus}
-      className="flex items-center sm:gap-3"
-    >
-      <RadioGroup.Option value="live">
-        {({ checked }) => (
-          <span
-            className={`relative flex h-11 w-20 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-24 sm:text-sm ${
-              checked ? 'text-white' : 'text-brand'
-            }`}
-          >
-            {checked && (
-              <motion.span
-                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
-                layoutId="statusIndicator"
-              />
-            )}
-            <span className="relative">LIVE</span>
-          </span>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="finished">
-        {({ checked }) => (
-          <span
-            className={`relative flex h-11 w-20 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-24 sm:text-sm ${
-              checked ? 'text-white' : 'text-brand'
-            }`}
-          >
-            {checked && (
-              <motion.span
-                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
-                layoutId="statusIndicator"
-              />
-            )}
-            <span className="relative">FINISHED</span>
-          </span>
-        )}
-      </RadioGroup.Option>
-    </RadioGroup>
-  );
-}
 
 const FarmsPage: NextPageWithLayout = () => {
 
@@ -188,8 +32,6 @@ const FarmsPage: NextPageWithLayout = () => {
         description="Sharpe - Structured Investment Products, For the World."
       />
       <div className="mx-auto w-full sm:pt-8">
-        
-
         <div className="mb-3 hidden grid-cols-3 gap-6 rounded-lg bg-white shadow-card dark:bg-light-dark sm:grid lg:grid-cols-5">
           <span className="px-8 py-6 text-sm tracking-wider text-gray-500 dark:text-gray-300">
             Pool

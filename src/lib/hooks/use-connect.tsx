@@ -10,6 +10,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [network, setNetwork] = useState<string[]>();
+
   const web3Modal =
     typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
 
@@ -83,17 +85,24 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const subscribeProvider = async (connection: any) => {
-    connection.on('close', () => {
-      disconnectWallet();
-    });
+    // connection.on('disconnect', () => {
+    //   disconnectWallet();
+    // });
     connection.on('accountsChanged', async (accounts: string[]) => {
       if (accounts?.length) {
         setAddress(accounts[0]);
-        const provider = new ethers.providers.Web3Provider(connection);
       } else {
         disconnectWallet();
       }
     });
+    connection.on('chainChanged', async (chainId: string[]) => {
+      if (chainId?.length) {
+        setNetwork(chainId);
+        window.location.reload();
+      }
+    });
+    
+
   };
 
   return (
@@ -101,6 +110,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       value={{
         address,
         loading,
+        network,
         error,
         connectToWallet,
         disconnectWallet,

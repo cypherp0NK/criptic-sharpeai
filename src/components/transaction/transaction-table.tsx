@@ -35,16 +35,19 @@ export default function TransactionTable() {
   const [poolApy3, setPoolApy3] = useState<string>('--')
 
   useEffect(() => {
-    if (address){
-      if (
-        (window && window.web3 === undefined) ||
-        (window && window.ethereum === undefined)
-      ) {
-        console.log('window not available; logged from taurus')
-      }
-      else{
-        userPositions();
+    try{
+      if (address){
+        if (
+          (window && window.web3 === undefined) ||
+          (window && window.ethereum === undefined)
+        ) {
+          console.log('window not available; logged from transaction-table')
         }
+        else{
+          userPositions();
+          }
+    }}catch{
+      console.log('error logged from transaction-table;')
     }
     
   }, [address, poolPos1, poolPos2, poolPos3, poolApy1, poolApy2, poolApy3, setPoolPos1, setPoolPos2, setPoolPos3, setPoolApy1, setPoolApy2, setPoolApy3]);

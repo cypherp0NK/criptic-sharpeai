@@ -2,26 +2,19 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
 import DashboardLayout from '@/layouts/dashboard/_dashboard';
-import CoinSlider from '@/components/ui/coin-card';
-import OverviewChart from '@/components/ui/chats/overview-chart';
+
 import LiquidityChart from '@/components/ui/chats/liquidity-chart';
 import VolumeChart from '@/components/ui/chats/volume-chart';
-import TopPools from '@/components/ui/top-pools';
 import TransactionTable from '@/components/transaction/transaction-table';
-import TopCurrencyTable from '@/components/top-currency/currency-table';
-import { coinSlideData } from '@/data/static/coin-slide-data';
-import Avatar from '@/components/ui/avatar';
-import TopupButton from '@/components/ui/topup-button';
-//images
-import AuthorImage from '@/assets/images/author.jpg';
 
 import PriceFeedSlider from '@/components/ui/live-price-feed';
 import { priceFeedData } from '@/data/static/price-feed';
-import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import WalletCard from '@/components/ui/wallet-card';
 import { ExportIcon } from '@/components/icons/export-icon';
 import {useContext, useState, useEffect} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
+import {ethers} from 'ethers'
+import Web3Modal from 'web3modal';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -32,7 +25,28 @@ export const getStaticProps: GetStaticProps = async () => {
 const HomePage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  const {address} = useContext(WalletContext);
+  const {address, network} = useContext(WalletContext);
+  const web3Modal =
+    typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
+  const [network2, setNetwork2] = useState<number>();
+
+  useEffect(() => {
+    async function checkNetwork(){
+      try{
+        if (window && window.ethereum) {
+          const provider = new ethers.providers.Web3Provider(window.ethereum)
+          const {chainId} = await provider.getNetwork()
+          setNetwork2(chainId)
+        } else {
+          console.log('no window; log from wallet-connect');
+          }
+        }
+      catch{
+        console.log('No wallet detected; log from wallet-connect')
+      }
+      }
+    checkNetwork()
+  }, []);
 
   return (
     <>
@@ -41,12 +55,43 @@ const HomePage: NextPageWithLayout<
         description="Sharpe - Structured Investment Products, For the World."
       />
       <div className="flex flex-wrap">
-        { address ? <div 
+        { address ? (
+          network == ['0x89'] || network2 === 137 ? (
+            <div 
               className="mb-8 w-full"
         >
           {/* <CoinSlider coins={coinSlideData} /> */}
           <PriceFeedSlider priceFeeds={priceFeedData} />
-        </div> :
+        </div>
+          ) : (
+            <div className="w-full flex flex-col items-center justify-center rounded-lg bg-white px-4 py-16 text-center shadow-card dark:bg-light-dark h-52 sm:h-6 xs:px-6 md:px-5 md:py-24">
+            <div className="w-full mb-2 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white shadow-card md:h-24 md:w-24">
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                strokeWidth="0"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-auto w-8 md:w-10"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  d="M1,13 L6,2 L18,2 L23,13 L23,22 L1,22 L1,13 Z M1,13 L8,13 L8,16 L16,16 L16,13 L23,13"
+                />
+              </svg>
+            </div>
+            <h2 className="mb-1 text-sm font-large leading-relaxed dark:text-gray-100 md:text-xl xl:text-xl">
+               Connect your wallet to Polygon Mainnet
+            </h2>
+            <p className="leading-relaxed text-xs text-gray-600 dark:text-gray-400 md:text-sm xl:text-sm">
+              click on Polygon
+            </p>
+          </div>
+          )
+        ) 
+        :
         <div className="w-full flex flex-col items-center justify-center rounded-lg bg-white px-4 py-16 text-center shadow-card dark:bg-light-dark h-52 sm:h-6 xs:px-6 md:px-5 md:py-24">
             <div className="w-full mb-2 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white shadow-card md:h-24 md:w-24">
               <svg

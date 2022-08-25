@@ -18,7 +18,7 @@ const ErrorPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Phantom"
-        description="React Next Web3 NFT Crypto Dashboard Template"
+        description="Sharpe - Structured Investment Products, For the World."
       />
       <div className="flex max-w-full flex-col items-center justify-center text-center"> 
           <Button shape="rounded">Coming Soon</Button>
