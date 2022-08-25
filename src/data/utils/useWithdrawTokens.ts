@@ -26,11 +26,11 @@ export const useWithdrawTokens = ( vault: string ) => {
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                console.log(tx.hash)
+                
               })
             })
             .catch((error: any)=>{
-              setWithdrawError(error.message)
+              setWithdrawError((error.message).slice(0,225).concat("..."))
             })
             }
     }

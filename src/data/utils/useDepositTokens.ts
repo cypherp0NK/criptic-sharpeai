@@ -29,11 +29,11 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                console.log(tx.hash)
+                
               })
             })
             .catch((error: any)=>{
-              setTxnError(error.message)
+              setTxnError((error.message).slice(0,225).concat("..."))
             })
             }
     }
@@ -54,11 +54,11 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                console.log(tx.hash)
+                
               })
             })
             .catch((error: any)=>{
-              setTxnError(error.message)
+              setTxnError((error.message).slice(0,225).concat("..."))
             })
         }
     }
@@ -79,11 +79,11 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                console.log(tx.hash)
+                
               })
             })
             .catch((error: any)=>{
-              setTxnError(error.message)
+              setTxnError((error.message).slice(0,225).concat("..."))
             })
         }
     }
