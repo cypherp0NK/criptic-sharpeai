@@ -29,11 +29,10 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                console.log('success')
+                console.log(tx.hash)
               })
             })
             .catch((error: any)=>{
-              console.log(error.message)
               setTxnError(error.message)
             })
             }
@@ -51,7 +50,16 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const erc20Contract2 = new ethers.Contract(tokenAddress2, erc20ABI, provider.getSigner())
-            const approvingToken2 = erc20Contract2.approve(vault, amount2)
+            erc20Contract2.approve(vault, amount2)
+            .then((tx: any) => {
+              provider.waitForTransaction(tx.hash)
+              .then(()=>{
+                console.log(tx.hash)
+              })
+            })
+            .catch((error: any)=>{
+              setTxnError(error.message)
+            })
         }
     }
     
@@ -67,9 +75,18 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
-            const deposit = SharpeaiContract.deposit(amountA, amountB, 0, 0, 0, address)
+            SharpeaiContract.deposit(amountA, amountB, 0, 0, 0, address)
+            .then((tx: any) => {
+              provider.waitForTransaction(tx.hash)
+              .then(()=>{
+                console.log(tx.hash)
+              })
+            })
+            .catch((error: any)=>{
+              setTxnError(error.message)
+            })
         }
     }
     
-    return {approveToken1, txnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi}
+    return {approveToken1, txnError, setTxnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi}
 }

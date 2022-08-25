@@ -211,7 +211,7 @@ const FarmsPage: NextPageWithLayout = () => {
         {FarmsData.map((farm) => {
             const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
             const { address, error } = useContext(WalletContext);
-            const {approveToken1, txnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
+            const {approveToken1, txnError, setTxnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
             const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
@@ -256,6 +256,13 @@ const FarmsPage: NextPageWithLayout = () => {
             const [tB3, setTB3] = useState<string>('--')
             const [tB4, setTB4] = useState<string>('--')
 
+            // Withdraw Tab
+            const {shareWithdrawn, shareWithdrawState, withdrawError, setWithdrawError} = useWithdrawTokens(farm.vault)
+            const [ amount, amountState ] = useState<string>('')
+            const [card0Of1, setCard0Of1] = useState<boolean>(false)
+            const [card1Of1, setCard1Of1] = useState<boolean>(false)
+            const [withdrawalMining, setWithdrawalMining] = useState<boolean>(false)
+
             useEffect(() => {
               if (address){
                 if (
@@ -288,7 +295,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     //setUsdcPending(true)
                     setIsMining1(false)                      
                     // setCard1Of3(true)
-                    console.log('token1')
+                    
                     setToken1Event(false)
                   }
                 
@@ -340,8 +347,27 @@ const FarmsPage: NextPageWithLayout = () => {
                 setWithdrawEvent(false)
               }
         })}
+        if (txnError !== '' || withdrawError !== ''){
+          setZappCard0of2(false)
+          setZappCard1of2(false)
+          setZappCard2of2(false)
+          //withdraw
+          setCard0Of1(false)
+
+          setIsMining1(false)
+          setIsMining2(false)
+          setIsMining3(false)
+          setWithdrawalMining(false)
+
+          setToken1Event(false)
+          setToken2Event(false)
+          setDepositEvent(false)
+          setWithdrawEvent(false)
+          setErrorMsg(txnError !== '' ? txnError : withdrawError !== '' ? withdrawError : 'Transaction Error')
+          setErrorCard(true)
+        }
        
-          }, [address,token1Event,token2Event,depositEvent,withdrawEvent,shareBalance4, shareBalance2,shareBalance3,poolPos1,poolPos2,poolPos3,v1P1,v1P2,v2P1,v2P2,v3P1,v3P2,tB1,tB2,tB3,tB4,setShareBalance4,setShareBalance2,setShareBalance3,setPoolPos1,setPoolPos2,setPoolPos3,setV1P1,setV1P2,setV2P1,setV2P2,setV3P1,setV3P2,setTB1,setTB2,setTB3,setTB4,gettingVaultData])
+          }, [address,txnError,setTxnError,withdrawError,setWithdrawError,token1Event,token2Event,depositEvent,withdrawEvent,shareBalance4, shareBalance2,shareBalance3,poolPos1,poolPos2,poolPos3,v1P1,v1P2,v2P1,v2P2,v3P1,v3P2,tB1,tB2,tB3,tB4,setShareBalance4,setShareBalance2,setShareBalance3,setPoolPos1,setPoolPos2,setPoolPos3,setV1P1,setV1P2,setV2P1,setV2P2,setV3P1,setV3P2,setTB1,setTB2,setTB3,setTB4,gettingVaultData])
 
           async function gettingVaultData(p: any){
             const {allPositions, fetchTokenBalances, singleBalances} = vaultData(p)
@@ -637,14 +663,6 @@ const FarmsPage: NextPageWithLayout = () => {
                 setIsMining3(false)
               }
 
-              // Withdraw Tab
-
-              const {shareWithdrawn, shareWithdrawState} = useWithdrawTokens(farm.vault)
-              const [ amount, amountState ] = useState<string>('')
-              const [card0Of1, setCard0Of1] = useState<boolean>(false)
-              const [card1Of1, setCard1Of1] = useState<boolean>(false)
-              const [withdrawalMining, setWithdrawalMining] = useState<boolean>(false)
-
               const maxBalance3 = async () => {
                 if (farm.from === "USDC" && farm.to === "USDT"){
                   const newAmount = shareBalance4
@@ -664,10 +682,11 @@ const FarmsPage: NextPageWithLayout = () => {
                 amountState(newAmount)
             }
             const handleWithdrawSubmit = async () => {
+                setWithdrawError('')
+                setErrorCard(false)
                 if (farm.from === "USDC" && farm.to === "USDT"){
                   try
                     {
-                    
                     const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
                     const status = await shareWithdrawn(amountAsWei.toString())
                     
@@ -741,11 +760,8 @@ const FarmsPage: NextPageWithLayout = () => {
             
             const zappApprove1 = async () => {
               try{ 
-                // approveToken1(amountAsWei.toString())
-                //   .then(()=>{console.log('running')})
-                //   .catch((e: any)=>{
-                //     console.log(txnError)
-                //   })
+                  setTxnError('')
+                  setErrorCard(false)
                   const amountAsWei = Number(zappAmount1) * 1e6
                   const status = await approveToken1(amountAsWei.toString())
                   if (status === 'wallet error'){
@@ -755,8 +771,8 @@ const FarmsPage: NextPageWithLayout = () => {
                   }
                   else{
                       setZappCard0of2(true)
-                      // setIsMining1(true)
-                      // setToken1Event(true)
+                      setIsMining1(true)
+                      setToken1Event(true)
                     }
                   }
               catch (err) {
@@ -777,6 +793,8 @@ const FarmsPage: NextPageWithLayout = () => {
           
             const zappDeposit1 = async () => {
                 try {
+                  setTxnError('')
+                  setErrorCard(false)
                   const amountAsWei = Number(zappAmount1) * 1e6
                   const amount2AsWei = 0
                   const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
@@ -822,7 +840,8 @@ const FarmsPage: NextPageWithLayout = () => {
                   } 
           }
           const zappApprove2 = async () => {
-              
+            setTxnError('')
+            setErrorCard(false)
             if (farm.from === "USDC" && farm.to === "USDT"){
               try{
                 const amount2AsWei = Number(zappAmount2) * 1e6
@@ -835,7 +854,6 @@ const FarmsPage: NextPageWithLayout = () => {
                 else{
                   if (approvedToken1 === false) {
                     setZappCard0of2(true)
-                    
                   }
                   setIsMining2(true)
                   setToken2Event(true)
@@ -888,6 +906,8 @@ const FarmsPage: NextPageWithLayout = () => {
             }
           }
           const zappDeposit2 = async () => {
+            setTxnError('')
+            setErrorCard(false)
             if (farm.from === "USDC" && farm.to === "USDT"){
               try {
                 const amountAsWei = 0
@@ -1175,7 +1195,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 shape="circle"
                 variant="transparent"
                 size="small" 
-                onClick={()=> {setErrorCard(false)}}
+                onClick={()=> {setTxnError("");setWithdrawError("");setErrorCard(false)}}
                 >
                   <Close className="h-auto w-2.5 text-white" />
                 </Button>
@@ -1638,7 +1658,7 @@ const FarmsPage: NextPageWithLayout = () => {
                           DEPOSIT
                         </Button>)}
                       </>)
-                  : isMining1 ? (
+                  : isMining2 ? (
                   <Button shape="rounded" fullWidth size="large">
                     <Spinner/>
                   </Button>)
