@@ -740,8 +740,7 @@ const FarmsPage: NextPageWithLayout = () => {
             }
             
             const zappApprove1 = async () => {
-             if (Number(zappAmount1) >= 1) {
-                try{ 
+              try{ 
                   const amountAsWei = Number(zappAmount1) * 1e6
                   const status = await approveToken1(amountAsWei.toString())
                   if (status === 'wallet error'){
@@ -769,12 +768,6 @@ const FarmsPage: NextPageWithLayout = () => {
                   setCard0Of3(false)
                   
                 }
-              }
-              else{
-                setZappCard0of2(false)
-                setErrorMsg('Amount must be more than 1 USD in valuation')
-                setErrorCard(true)
-              }
           }
           
             const zappDeposit1 = async () => {
