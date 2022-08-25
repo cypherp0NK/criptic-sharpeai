@@ -53,7 +53,7 @@ const menuItems = [
     href: routes.helios,
   },
   {
-    name: 'Issue/ Feedback',
+    name: 'Issue/Feedback',
     icon: <VoteIcon />,
     href: routes.feedback,
   },
