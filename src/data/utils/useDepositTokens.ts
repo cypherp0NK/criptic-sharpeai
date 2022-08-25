@@ -1,7 +1,7 @@
 import Sharpe from "../static/chain_info/Sharpe.json"
 import ERC20 from "../static/chain_info/WethToken.json"
 import { utils, ethers } from "ethers"
-import {useContext} from "react"
+import {useContext, useState} from "react"
 import {WalletContext} from "@/lib/hooks/use-connect"
 import Web3Modal from 'web3modal';
 
@@ -10,6 +10,7 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
     const { address, balance } = useContext(WalletContext);
     const { abi } = Sharpe
     const erc20ABI = ERC20.abi
+    const [txnError, setTxnError] = useState<string>('')
     // new ethers.providers.Web3Provider(window.ethereum);
     const approvingToken1State = false
     
@@ -24,7 +25,17 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const erc20Contract1 = new ethers.Contract(tokenAddress1, erc20ABI, provider.getSigner())
-            const approvingToken1 = erc20Contract1.approve(vault, amount1)
+            erc20Contract1.approve(vault, amount1)
+            .then((tx: any) => {
+              provider.waitForTransaction(tx.hash)
+              .then(()=>{
+                console.log('success')
+              })
+            })
+            .catch((error: any)=>{
+              console.log(error.message)
+              setTxnError(error.message)
+            })
             }
     }
     
@@ -60,5 +71,5 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
         }
     }
     
-    return {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi}
+    return {approveToken1, txnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi}
 }

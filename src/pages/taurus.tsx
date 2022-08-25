@@ -211,7 +211,7 @@ const FarmsPage: NextPageWithLayout = () => {
         {FarmsData.map((farm) => {
             const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
             const { address, error } = useContext(WalletContext);
-            const {approveToken1, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
+            const {approveToken1, txnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
             const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
@@ -742,21 +742,25 @@ const FarmsPage: NextPageWithLayout = () => {
             const zappApprove1 = async () => {
               try{ 
                   const amountAsWei = Number(zappAmount1) * 1e6
-                  const status = await approveToken1(amountAsWei.toString())
-                  if (status === 'wallet error'){
-                    setZappCard0of2(false)
-                    setErrorMsg('No WALLET detected!')
-                    setErrorCard(true)
+                  approveToken1(amountAsWei.toString())
+                  .then(()=>{console.log('running')})
+                  .catch((e: any)=>{
+                    console.log(e)
+                  })
+                  // if (status === 'wallet error'){
+                  //   setZappCard0of2(false)
+                  //   setErrorMsg('No WALLET detected!')
+                  //   setErrorCard(true)
+                  // }
+                  // else{
+                  //     setZappCard0of2(true)
+                  //     // setIsMining1(true)
+                  //     // setToken1Event(true)
+                  //   }
                   }
-                  else{
-                      setZappCard0of2(true)
-                      setIsMining1(true)
-                      setToken1Event(true)
-                    }
-                  }
-              catch (err) {
-                  if (err instanceof Error){
-                    setErrorMsg(err.message)
+              catch (error) {
+                  if (error instanceof Error){
+                    setErrorMsg(error.message)
                   }
                   if (error){
                     setErrorMsg('No WALLET detected!')
