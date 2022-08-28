@@ -7,10 +7,14 @@ import Web3Modal from 'web3modal';
 
 export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, vault: string) => {
     const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
-    const { address, balance } = useContext(WalletContext);
+    const { address} = useContext(WalletContext);
     const { abi } = Sharpe
     const erc20ABI = ERC20.abi
     const [txnError, setTxnError] = useState<string>('')
+    const [token1Event, setToken1Event] = useState<boolean>(false)
+    const [token2Event, setToken2Event] = useState<boolean>(false)
+    const [depositEvent, setDepositEvent] = useState<boolean>(false)
+    const [depositHash, setDepositHash] = useState<string>('https://polygonscan.com/tx/')
     // new ethers.providers.Web3Provider(window.ethereum);
     const approvingToken1State = false
     
@@ -29,7 +33,7 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                
+                setToken1Event(true)
               })
             })
             .catch((error: any)=>{
@@ -54,7 +58,7 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                
+                setToken2Event(true)
               })
             })
             .catch((error: any)=>{
@@ -75,11 +79,12 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
-            SharpeaiContract.deposit(amountA, amountB, 0, 0, 0, address)
+            SharpeaiContract.deposit(amountA, amountB, 0, 0, address)
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                
+                setDepositHash(('https://polygonscan.com/tx/').concat(tx.hash))
+                setDepositEvent(true)
               })
             })
             .catch((error: any)=>{
@@ -88,5 +93,5 @@ export const useDepositTokens = (tokenAddress1: string, tokenAddress2: string, v
         }
     }
     
-    return {approveToken1, txnError, setTxnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi}
+    return {approveToken1, txnError, setTxnError, token1Event, setToken1Event, token2Event, setToken2Event,depositEvent, setDepositEvent,depositHash, setDepositHash, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi}
 }

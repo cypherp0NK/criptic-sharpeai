@@ -5,15 +5,15 @@ import ERC20 from '../static/chain_info/WethToken.json'
 import {formatUnits} from '@ethersproject/units'
 
 export const vaultData = (provider: any) => {
-        
+    
         const { abi } = Sharpe
         const erc20ABI = ERC20.abi
         // const provider =  new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-        const SC1 = new ethers.Contract("0x4E32A48F4f4f7B2594733dd7ffED871D9441e2c4", abi, provider)
-        const SC2 = new ethers.Contract("0xa25a0384B525FE79286d329ab7bbd89D41a3250f", abi, provider)
-        const SC3 = new ethers.Contract("0x4aAc6511455FfAc1B51ED60C3B7A29e6E56B9008", abi, provider)
+        
+        const SC1 = new ethers.Contract("0x2f1A893f4b42D49bE8C98AAF2EF61532A10Ec1Cf", abi, provider)
+        const SC2 = new ethers.Contract("0xeC7314e9ca71b2a3375f925BEe326e84f1a1eFe8", abi, provider)
+        const SC3 = new ethers.Contract("0xeb24a13d7783eEd5716d30e06602083aE09f6DFD", abi, provider)
 
         const token1 = new ethers.Contract("0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", erc20ABI, provider)
         const token2 = new ethers.Contract("0xc2132D05D31c914a87C6611C10748AEb04B58e8F", erc20ABI, provider)

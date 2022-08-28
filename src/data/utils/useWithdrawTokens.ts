@@ -10,8 +10,10 @@ export const useWithdrawTokens = ( vault: string ) => {
     const { abi } = Sharpe
     const shareWithdrawState = false
     const [withdrawError, setWithdrawError] = useState<string>('')
+    const [withdrawEvent, setWithdrawEvent] = useState<boolean>(false)
+    const [withdrawHash, setWithdrawHash] = useState<string>('https://polygonscan.com/tx/')
 
-    const shareWithdrawn = async (amount: string) => {
+    const shareWithdrawn = async (amount: string, output: boolean) => {
         if (
             (window && window.web3 === undefined) ||
             (window && window.ethereum === undefined)
@@ -19,21 +21,41 @@ export const useWithdrawTokens = ( vault: string ) => {
             return('wallet error')
           }
         else{
+          if (output === true){
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
-            SharpeaiContract.withdraw(amount, 0, 0, address)
+            SharpeaiContract.withdraw(amount, 1, 0, address)
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
-                
+                setWithdrawHash(('https://polygonscan.com/tx/').concat(tx.hash))
+                setWithdrawEvent(true)
               })
             })
             .catch((error: any)=>{
               setWithdrawError((error.message).slice(0,225).concat("..."))
             })
+          }
+          else if (output === false){
+            const connection = web3Modal && (await web3Modal.connect());
+            const provider = new ethers.providers.Web3Provider(connection);
+            const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
+            SharpeaiContract.withdraw(amount, 0, 1, address)
+            .then((tx: any) => {
+              provider.waitForTransaction(tx.hash)
+              .then(()=>{
+                setWithdrawHash(('https://polygonscan.com/tx/').concat(tx.hash))
+                setWithdrawEvent(true)
+              })
+            })
+            .catch((error: any)=>{
+              setWithdrawError((error.message).slice(0,225).concat("..."))
+            })
+          }
+            
             }
     }
-    return { shareWithdrawn, shareWithdrawState, withdrawError, setWithdrawError }
+    return { shareWithdrawn, shareWithdrawState, withdrawError, setWithdrawError,withdrawEvent, setWithdrawEvent, withdrawHash, setWithdrawHash }
 
 } 

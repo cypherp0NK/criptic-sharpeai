@@ -237,14 +237,14 @@ function NftFooter({
           </div>
         )}
         
-          <AnchorLink href="https://polygonscan.com/address/0x4aAc6511455FfAc1B51ED60C3B7A29e6E56B9008" className="inline-flex items-center -tracking-wider">
+          <AnchorLink href="https://polygonscan.com/address/0xeb24a13d7783eEd5716d30e06602083aE09f6DFD" className="inline-flex items-center -tracking-wider">
             <div className="text-sm leading-6 -tracking-wider text-white-600 dark:black-gray-400">
                 Vault Address
             </div>
             <ArrowLinkIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
           </AnchorLink><br></br>
 
-          <AnchorLink href="https://polygonscan.com/address/0xf0f577c2Fa8052e8620360eC063757F623364c75" className="inline-flex items-center -tracking-wider">
+          <AnchorLink href="https://polygonscan.com/address/0x699aDb395456acE060dfD4B9CEF268233eD7f650" className="inline-flex items-center -tracking-wider">
             <div className="text-sm leading-6 -tracking-wider text-white-600 dark:black-gray-400">
                 Strategy Address
             </div>
@@ -325,7 +325,7 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
                 </h2>
               </div>
               <AnchorLink
-                href="https://polygonscan.com/address/0x4aAc6511455FfAc1B51ED60C3B7A29e6E56B9008"
+                href="https://polygonscan.com/address/0xeb24a13d7783eEd5716d30e06602083aE09f6DFD"
                 className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white xl:mt-2.5"
               >
                 Started on June 27, 2022

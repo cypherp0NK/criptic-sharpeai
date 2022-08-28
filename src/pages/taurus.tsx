@@ -8,11 +8,9 @@ import { FarmsData } from '@/data/static/farms-data';
 import { useDepositTokens } from '@/data/utils/useDepositTokens';
 import { vaultData } from '@/data/utils/vaultData';
 import { utils, ethers, providers } from 'ethers';
-import { formatUnits } from "@ethersproject/units"
 import {WalletContext} from "@/lib/hooks/use-connect"
 import {TabContext, TabPanel} from "@material-ui/lab"
 import { useWithdrawTokens } from '@/data/utils/useWithdrawTokens';
-import { Divider } from "@material-ui/core";
 import { Close } from '@/components/icons/close';
 import { ExportIcon } from '@/components/icons/export-icon';
 import { Spinner } from '../components/icons/spinner';
@@ -24,7 +22,6 @@ import Image from '@/components/ui/image';
 import Web3Modal from 'web3modal';
 
 const FarmsPage: NextPageWithLayout = () => {
-
   return (
     <>
       <NextSeo
@@ -53,8 +50,7 @@ const FarmsPage: NextPageWithLayout = () => {
         {FarmsData.map((farm) => {
             const web3Modal = typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
             const { address, error } = useContext(WalletContext);
-            const {approveToken1, txnError, setTxnError, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
-            const provider = new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
+            const {approveToken1, txnError, setTxnError, token1Event, setToken1Event, token2Event, setToken2Event,depositEvent, setDepositEvent,depositHash, setDepositHash, approvingToken1State, approveToken2, approvingToken2State, depositTokens, depositState, erc20ABI, abi} = useDepositTokens(farm.token1, farm.token2, farm.vault)
             const [ amount1, setAmount ] = useState<string>('')
             const [ amount2, setAmount2 ] = useState<string>('')
             const [amt1, setAmt] = useState<string>('')
@@ -71,15 +67,9 @@ const FarmsPage: NextPageWithLayout = () => {
             const [isMining1, setIsMining1] = useState<boolean>(false)
             const [isMining2, setIsMining2] = useState<boolean>(false)
             const [isMining3, setIsMining3] = useState<boolean>(false)
-            const [depositHash, setDepositHash] = useState<string>('https://polygonscan.com/tx/')
-            const [withdrawHash, setWithdrawHash] = useState<string>('https://polygonscan.com/tx/')
+            
             const [errorCard, setErrorCard] = useState<boolean>(false)
             const [errorMsg, setErrorMsg] = useState<string>('')
-
-            const [token1Event, setToken1Event] = useState<boolean>(false)
-            const [token2Event, setToken2Event] = useState<boolean>(false)
-            const [depositEvent, setDepositEvent] = useState<boolean>(false)
-            const [withdrawEvent, setWithdrawEvent] = useState<boolean>(false)
 
             const [shareBalance4, setShareBalance4] = useState<string>('--')
             const [shareBalance2, setShareBalance2] = useState<string>('--')
@@ -99,8 +89,9 @@ const FarmsPage: NextPageWithLayout = () => {
             const [tB4, setTB4] = useState<string>('--')
 
             // Withdraw Tab
-            const {shareWithdrawn, shareWithdrawState, withdrawError, setWithdrawError} = useWithdrawTokens(farm.vault)
+            const {shareWithdrawn, shareWithdrawState, withdrawEvent, setWithdrawEvent, withdrawError, setWithdrawError, withdrawHash, setWithdrawHash} = useWithdrawTokens(farm.vault)
             const [ amount, amountState ] = useState<string>('')
+            const [output, setOutput] = useState<boolean>(true)
             const [card0Of1, setCard0Of1] = useState<boolean>(false)
             const [card1Of1, setCard1Of1] = useState<boolean>(false)
             const [withdrawalMining, setWithdrawalMining] = useState<boolean>(false)
@@ -111,7 +102,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   (window && window.web3 === undefined) ||
                   (window && window.ethereum === undefined)
                 ) {
-                  console.log('window not available; logged from transaction-table')
+                  console.log('window not available; logged from taurus')
                 }
                 else{
                   let distributedProvider = new ethers.providers.Web3Provider(window.ethereum);
@@ -125,70 +116,52 @@ const FarmsPage: NextPageWithLayout = () => {
               // }
               
             if (token1Event === true){
-              
-               contr.on("Approval", (from, to, amount, event) => {
-              
-                if (from === address && to === farm.vault)
-                  {
-                    setCard0Of3(false)
-                    setZappCard0of2(false)
-                    setZappCard1of2(true)
-                    setApprovedToken1(true)
-                    //setUsdcPending(true)
-                    setIsMining1(false)                      
-                    // setCard1Of3(true)
-                    
-                    setToken1Event(false)
-                  }
+                setCard0Of3(false)
+                setZappCard0of2(false)
+                setZappCard1of2(true)
+                setApprovedToken1(true)
+                //setUsdcPending(true)
+                setIsMining1(false)                      
+                // setCard1Of3(true)
                 
-            })
+                setToken1Event(false)
           }
 
             if (token2Event === true){
-              contr2.on("Approval", (from, to, amount) => {
-              if (from === address && to === farm.vault)
-                {
-                  setCard0Of3(false)
-                  setZappCard0of2(false)
-                  setZappCard1of2(true)
-                  setApprovedToken2(true)
-                  //setUsdtPending(true)
-                  setIsMining2(false)
-                  // setCard1Of3(true)
-                  setToken2Event(false)
-                }
-               })
+              setCard0Of3(false)
+              setZappCard0of2(false)
+              setZappCard1of2(true)
+              setApprovedToken2(true)
+              //setUsdtPending(true)
+              setIsMining2(false)
+              // setCard1Of3(true)
+              setToken2Event(false)
+                
              }
           
-            if (depositEvent === true) {sharpeEvents.on("Deposit", (sender, to, shares, amount0, amount1, event) => {
-              if (to === address)
-                {
-                  setDepositHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
+            if (depositEvent === true) {
+                  
                   setCard1Of3(false)
                   setUsdcPending(false)
                   setZappCard1of2(false)
                   setZappCard2of2(true)
                   //setCard3Of3(true)
                   setIsMining3(false)
-                  gettingVaultData(window.ethereum)
+                  let distributedProvider = new ethers.providers.Web3Provider(window.ethereum)
+                  gettingVaultData(distributedProvider)
+                  setApprovedToken1(false)
+                  setApprovedToken2(false)
                   setDepositEvent(false)
-                }
-          })
         }
          if (withdrawEvent === true){
-          
-          sharpeEvents.on("Withdraw", (sender, to, shares, amount0, amount1, event) => {
-            if (to === address)
-              {
-                setWithdrawHash(('https://polygonscan.com/tx/').concat(event.transactionHash))
                 setCard0Of1(false)
 
                 setCard1Of1(true)
                 setWithdrawalMining(false)
-                gettingVaultData(window.ethereum)
+                let distributedProvider = new ethers.providers.Web3Provider(window.ethereum)
+                gettingVaultData(distributedProvider)
                 setWithdrawEvent(false)
               }
-        })}
         if (txnError !== '' || withdrawError !== ''){
           setZappCard0of2(false)
           setZappCard1of2(false)
@@ -236,248 +209,6 @@ const FarmsPage: NextPageWithLayout = () => {
             setTB4((tBal4.toFixed(2)).toString())
           
           }
-          //   const maxBalance1 = async () => {
-          //     if (farm.from === "USDC" && farm.to === "USDT"){
-          //       const newAmount = tB1
-          //       const [p1, p2] = await fetchPrice(6)
-          //       const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-          //       setAmount(newAmount)
-          //       setAmount2(calcEquiv)
-          //       setAmt(newAmount)
-          //       setAmt2(calcEquiv)
-          //       }
-          //     else{
-          //       const newAmount = tB1
-          //       const [p1, p2] = await fetchPrice(18)
-          //       const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-          //       setAmount(newAmount)
-          //       setAmount2(calcEquiv)
-          //       setAmt(newAmount)
-          //       setAmt2(calcEquiv)
-          //     }         
-          // }
-          // const maxBalance2 = async () => {
-          //   if (farm.from === "USDC" && farm.to === "USDT"){
-          //     const newAmount = tB2
-          //     const [p1, p2] = await fetchPrice(6)
-          //     const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-          //     setAmount2(newAmount)
-          //     setAmount(calcEquiv)
-          //     setAmt2(newAmount)
-          //     setAmt(calcEquiv)
-          //     }
-          // else if (farm.from === "USDC" && farm.to === "FRAX"){
-          //   const newAmount = tB3
-          //     const [p1, p2] = await fetchPrice(18)
-          //     const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-          //     setAmount2(newAmount)
-          //     setAmount(calcEquiv)
-          //     setAmt2(newAmount)
-          //     setAmt(calcEquiv)
-          //     }
-          // else if (farm.from === "USDC" && farm.to === "MIMATIC"){
-          //   const newAmount = tB4
-          //     const [p1, p2] = await fetchPrice(18)
-          //     const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-          //     setAmount2(newAmount)
-          //     setAmount(calcEquiv)
-          //     setAmt2(newAmount)
-          //     setAmt(calcEquiv)
-          //     }
-          // }
-          //   const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-          //         if (farm.from === "USDC" && farm.to === "USDT"){
-          //           const newAmount = event.target.value === "" ? "" : (event.target.value)
-          //           const [p1, p2] = await fetchPrice(6)
-          //           const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-          //           setAmount(newAmount)
-          //           setAmount2(calcEquiv)
-          //           setAmt(newAmount)
-          //           setAmt2(calcEquiv)
-          //           }
-          //         else{
-          //           const newAmount = event.target.value === "" ? "" : (event.target.value)
-          //           const [p1, p2] = await fetchPrice(18)
-          //           const calcEquiv = String((parseFloat(newAmount) * p2).toFixed(5))
-          //           setAmount(newAmount)
-          //           setAmount2(calcEquiv)
-          //           setAmt(newAmount)
-          //           setAmt2(calcEquiv)
-          //         }
-          //       }
-          //   const handleInputChange2 = async (event: React.ChangeEvent<HTMLInputElement>) => {
-          //     if (farm.from === "USDC" && farm.to === "USDT"){
-          //         const newAmount = event.target.value === "" ? "" : (event.target.value)
-          //         const [p1, p2] = await fetchPrice(6)
-          //         const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-          //         setAmount2(newAmount)
-          //         setAmount(calcEquiv)
-          //         setAmt2(newAmount)
-          //         setAmt(calcEquiv)
-          //         }
-          //     else{
-          //       const newAmount = event.target.value === "" ? "" : (event.target.value)
-          //         const [p1, p2] = await fetchPrice(18)
-          //         const calcEquiv = String((parseFloat(newAmount) * p1).toFixed(5))
-          //         setAmount2(newAmount)
-          //         setAmount(calcEquiv)
-          //         setAmt2(newAmount)
-          //         setAmt(calcEquiv)
-          //         }
-          //       }
-
-          //   const handleApproveSubmit1 = async () => {
-          //       try{ 
-          //           const amountAsWei = Number(amt1) * 1e6
-          //           const status = await approveToken1(amountAsWei.toString())
-          //           if (status === 'wallet error'){
-          //             setCard0Of3(false)
-          //             setErrorMsg('No WALLET detected!')
-          //             setErrorCard(true)
-          //           }
-          //           else{
-          //             if (approvedToken2 === false) {
-          //               setCard0Of3(true)
-                        
-          //               }
-          //               setIsMining1(true)
-          //             }
-          //           }
-          //       catch (err) {
-          //           if (err instanceof Error){
-          //             setErrorMsg(err.message)
-          //           }
-          //           if (error){
-          //             setErrorMsg('No WALLET detected!')
-          //           }
-          //           else{
-          //             setErrorMsg('Something went wrong')
-          //           }
-          //           setErrorCard(true)
-          //           setCard0Of3(false)
-          //         }
-          //   }
-
-          //   const handleApproveSubmit2 = async () => {
-              
-          //     if (farm.from === "USDC" && farm.to === "USDT"){
-          //       try{
-          //         const amount2AsWei = Number(amt2) * 1e6
-          //         const status = await approveToken2(amount2AsWei.toString())
-          //         if (status === 'wallet error'){
-          //           setCard0Of3(false)
-          //           setErrorMsg('No WALLET detected!')
-          //           setErrorCard(true)
-          //         }
-          //         else{
-          //           if (approvedToken1 === false) {
-          //             setCard0Of3(true)
-                      
-          //           }
-          //           setIsMining2(true)
-          //         }
-          //       }
-
-          //       catch (err) {
-          //         if (err instanceof Error){
-          //           setErrorMsg(err.message)
-          //         }
-          //         else{
-          //           setErrorMsg('Something went wrong')
-          //         }
-          //         setErrorCard(true)
-          //       }
-          //     }
-          //     else{
-          //       try{
-          //         const amount2AsWei = utils.parseEther(amt2.toString())
-          //         if (approvedToken1 === false) {
-          //           setCard0Of3(true)
-          //         }
-          //         const status = await approveToken2(amount2AsWei.toString())
-          //         if (status === 'wallet error'){
-          //           setCard0Of3(false)
-          //           setErrorMsg('No WALLET detected!')
-          //           setErrorCard(true)
-          //         }
-          //         else{
-          //           if (approvedToken1 === false) {
-          //             setCard0Of3(true)
-                      
-          //           }
-          //           setIsMining2(true)
-          //         }
-          //     }
-
-          //       catch (err) {
-          //         if (err instanceof Error){
-          //           setErrorMsg(err.message)
-          //         }
-          //         else{
-          //           setErrorMsg('Something went wrong')
-          //         }
-          //         setErrorCard(true)
-          //       }
-          //     }
-          //   }
-              
-              
-          //   const handleDepositSubmit = async () => {
-          //     if (farm.from === "USDC" && farm.to === "USDT"){
-          //       try {
-          //         const amountAsWei = Number(amt1) * 1e6
-          //         const amount2AsWei = Number(amt2) * 1e6
-          //         const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
-          //         if (status === 'wallet error'){
-          //           setCard0Of3(false)
-          //           setErrorMsg('No WALLET detected!')
-          //           setErrorCard(true)
-          //         }
-          //         else{
-          //           setApproved(false)
-          //           setIsMining3(true)
-          //         }
-          //       }
-          //       catch (err) {
-          //         if (err instanceof Error){
-          //           setErrorMsg(err.message)
-          //         }
-          //         else{
-          //           setErrorMsg('Cannot deposit')
-          //         }
-          //         setErrorCard(true)
-          //       }
-          //     }
-          //     else{
-          //       try
-          //         {
-          //         const amountAsWei = Number(amt1) * 1e6
-          //         const amount2AsWei = utils.parseEther(amt2.toString())
-          //         const status = await depositTokens((amountAsWei.toString()), (amount2AsWei.toString()))
-          //         if (status === 'wallet error'){
-          //           setCard0Of3(false)
-          //           setErrorMsg('No WALLET detected!')
-          //           setErrorCard(true)
-          //         }
-          //         else{
-          //           setApproved(false)
-          //           setIsMining3(true)
-          //         }
-          //       }
-          //       catch (err) 
-          //         {
-          //           if (err instanceof Error){
-          //             setErrorMsg(err.message)
-          //           }
-          //           else{
-          //             setErrorMsg('Cannot deposit tokens')
-          //           }
-          //           setErrorCard(true)
-          //         }
-                  
-          //     }
-              
-          //     }
 
               const [SelectedTab, setSelectedTab] = useState("3")
               const switchTab1 = () => {
@@ -530,7 +261,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   try
                     {
                     const amountAsWei = ethers.utils.parseUnits((amount).toString(), 1)
-                    const status = await shareWithdrawn(amountAsWei.toString())
+                    const status = await shareWithdrawn(amountAsWei.toString(), output)
                     
                     if (status === 'wallet error'){
                       setCard0Of1(false)
@@ -541,7 +272,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     else{
                       setWithdrawalMining(true)
                       setCard0Of1(true)
-                      setWithdrawEvent(true)
+                      // setWithdrawEvent(true)
                     }
                   }
                   catch (err) 
@@ -560,7 +291,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     try
                       {
                         const amountAsWei = utils.parseEther((amount).toString())
-                        const status = await shareWithdrawn(amountAsWei.toString())
+                        const status = await shareWithdrawn(amountAsWei.toString(), output)
                         if (status === 'wallet error'){
                           setCard0Of1(false)
                           setErrorMsg('No WALLET detected!')
@@ -570,7 +301,7 @@ const FarmsPage: NextPageWithLayout = () => {
                         else{
                           setWithdrawalMining(true)
                           setCard0Of1(true)
-                          setWithdrawEvent(true)
+                          // setWithdrawEvent(true)
                         }
                       }
                     catch (err) 
@@ -614,7 +345,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   else{
                       setZappCard0of2(true)
                       setIsMining1(true)
-                      setToken1Event(true)
+                      // setToken1Event(true)
                     }
                   }
               catch (err) {
@@ -648,7 +379,7 @@ const FarmsPage: NextPageWithLayout = () => {
                   else{
                     setApproved(false)
                     setIsMining3(true)
-                    setDepositEvent(true)
+                    //setDepositEvent(true)
                   }
                 }
                 catch (err) {
@@ -698,7 +429,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     setZappCard0of2(true)
                   }
                   setIsMining2(true)
-                  setToken2Event(true)
+                  // setToken2Event(true)
                 }
               }
 
@@ -731,7 +462,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     
                   }
                   setIsMining2(true)
-                  setToken2Event(true)
+                  // setToken2Event(true)
                 }
             }
 
@@ -763,7 +494,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 else{
                   setApproved(false)
                   setIsMining3(true)
-                  setDepositEvent(true)
+                  // setDepositEvent(true)
                 }
               }
               catch (err) {
@@ -791,7 +522,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 else{
                   setApproved(false)
                   setIsMining3(true)
-                  setDepositEvent(true)
+                  // setDepositEvent(true)
                 }
               }
               catch (err) 
@@ -807,11 +538,7 @@ const FarmsPage: NextPageWithLayout = () => {
                 }
                 
             }             
-          }
-          const contr = new ethers.Contract(farm.token1, erc20ABI, provider)
-          const contr2 = new ethers.Contract(farm.token2, erc20ABI, provider)
-          const sharpeEvents = new ethers.Contract(farm.vault, abi, provider)
-            
+          }           
            
           return (
             <FarmList
@@ -1271,7 +998,23 @@ const FarmsPage: NextPageWithLayout = () => {
               <TabPanel value="2">
                 <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-6">
                   <div className="text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
-                    Shares Balance: {farm.to === 'USDT'? shareBalance4 : farm.to === 'FRAX' ? shareBalance2 : farm.to === 'MIMATIC' ? shareBalance3 : "0.00"}
+                    Shares Balance: {farm.to === 'USDT'? (parseFloat(shareBalance4) < 0 ? '0.00' : shareBalance4) : farm.to === 'FRAX' ? shareBalance2 : farm.to === 'MIMATIC' ? shareBalance3 : "0.00"}
+                    <div className= "text-sm py-1">Expected token output:</div>
+                    <div className="flex flex-row gap-2 text-xs font-medium uppercase text-black ltr:text-left rtl:text-left dark:text-white sm:text-sm">
+                    <div onClick={()=>{setOutput(true)}} className="inline-flex items-center">
+                      <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                        {output ? <div className="bg-white h-full w-full rounded-full"></div> : '' }
+                      </div>&nbsp;{farm.from}
+                    </div>
+                    <div onClick={()=>{setOutput(false)}} className="inline-flex">
+                      <div className="cursor-pointer bg-gray-900 h-5 w-5 rounded-full p-1 border border-white">
+                      {!output ? <div className="bg-white h-full w-full rounded-full"></div> : '' }
+                      </div>&nbsp;
+                      {farm.to}
+                    </div>
+                    
+                    </div>
+
                   </div>
                   <div className="cursor-pointer flex text-sm text-center justify-center align-center w-full py-px h-fit bg-gray-900 border border-slate-300 rounded-md">
                   {farm.to === "USDT" ? <a href="/usdc-usdt">View Vault Details</a> : farm.to === "FRAX" ? <a href="/usdc-frax">View Vault Details</a> : farm.to === "MIMATIC" ? <a href="/usdc-mimatic">View Vault Details</a> : ''}
@@ -1294,6 +1037,7 @@ const FarmsPage: NextPageWithLayout = () => {
                     </Button>
                     
                   </div>
+                  
                   <div className="relative">
                     <input
                       type="text"

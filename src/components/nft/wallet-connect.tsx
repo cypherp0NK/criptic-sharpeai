@@ -1,10 +1,5 @@
 import Button from '@/components/ui/button';
 import { WalletContext } from '@/lib/hooks/use-connect';
-import { Menu } from '@/components/ui/menu';
-import { Transition } from '@/components/ui/transition';
-import ActiveLink from '@/components/ui/links/active-link';
-import { ChevronForward } from '@/components/icons/chevron-forward';
-import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
 import { useState, useContext, useEffect } from 'react';
 import Listbox, { ListboxOption } from '@/components/ui/list-box';
@@ -40,7 +35,6 @@ export default function WalletConnect() {
   const web3Modal =
     typeof window !== 'undefined' && new Web3Modal({ cacheProvider: true });
   const [chain, setChain] = useState(chains[0]);
-  // const [network, setNetwork] = useState<string[]>();
   const { address , network} = useContext(WalletContext);
   const [network2, setNetwork2] = useState<number>();
 
@@ -132,104 +126,3 @@ export default function WalletConnect() {
     </>
   );
 }
-// if (address){
-  //       const connection = web3Modal && (await web3Modal.connect());
-  //       connection.on('chainChanged', async (chainId: string[]) => {
-  //         if (chainId?.length) {
-  //           setNetwork(chainId);
-  //           window.location.reload();
-  //         }
-  //       });
-  //     }
-  //   }
-  //   checkNetwork()
-
-    // if (network != ['0x89']){
-    //   try {
-    //       window.ethereum.request({
-    //       method: "wallet_addEthereumChain",
-    //       params: [
-    //         {
-    //           chainId: '0x89',
-    //           rpcUrls: ['https://polygon-rpc.com/'],
-    //           chainName: 'Polygon Mainnet'
-    //         }
-    //       ]
-    //     });
-    //   }
-    //   catch{
-    //     console.log('No wallet detected')
-    //   }
-    // }
-    
-    // try {
-      
-    //   if (chain.value === "polygon"){
-    //     window.ethereum.request({
-    //       method: "wallet_addEthereumChain",
-    //       params: [
-    //         {
-    //           chainId: '0x89',
-    //           rpcUrls: ['https://polygon-rpc.com/'],
-    //           chainName: 'Polygon Mainnet'
-    //         }
-    //       ]
-    //     });
-        
-    //   }
-      // else if (chain.value === "bsc"){
-      //   window.ethereum.request({
-      //     method: "wallet_addEthereumChain",
-      //     params: [
-      //       {
-      //         chainId: '0x38',
-      //         rpcUrls: ['https://bsc-dataseed.binance.org/'],
-      //         chainName: 'BSC Mainnet'
-      //       }
-      //     ]
-      //   });
-      //   setNetwork(56)
-      // }
-      // else if (chain.value === "mainnet"){
-      //   window.ethereum.request({
-      //     method: "wallet_switchEthereumChain",
-      //     params: [
-      //       {
-      //         chainId: '0x1',
-              
-      //       }
-      //     ]
-      //   });
-      //   setNetwork(1)
-      // }
-      // else if (chain.value === "fantom"){
-      //   window.ethereum.request({
-      //     method: "wallet_addEthereumChain",
-      //     params: [
-      //       {
-      //         chainId: '0xFA',
-      //         rpcUrls: ['https://rpc.ftm.tools'],
-      //         chainName: 'Fantom Opera'
-      //       }
-      //     ]
-      //   });
-      //   setNetwork(250)
-      // }
-      // else if (chain.value === "avalanche"){
-      //   window.ethereum.request({
-      //     method: "wallet_addEthereumChain",
-      //     params: [
-      //       {
-      //         chainId: '0xA86A',
-      //         rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-      //         chainName: 'Avalanche C-Chain'
-      //       }
-      //     ]
-      //   });
-      //   setNetwork(43113)
-      // }
-      
-    // }
-    // catch {
-    //   console.log('No wallet detected')
-    // }
