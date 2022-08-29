@@ -12,8 +12,8 @@ export const vaultData = (provider: any) => {
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
         
         const SC1 = new ethers.Contract("0x31EDB1f1f60C1f3358b034793bA4f7957cfbe2a1", abi, provider)
-        const SC2 = new ethers.Contract("0xeC7314e9ca71b2a3375f925BEe326e84f1a1eFe8", abi, provider)
-        const SC3 = new ethers.Contract("0xeb24a13d7783eEd5716d30e06602083aE09f6DFD", abi, provider)
+        const SC2 = new ethers.Contract("0xeba1439BCeacB0945C472E1139a0221F4de26CC6", abi, provider)
+        const SC3 = new ethers.Contract("0x9e6A7B0532184c7Eb7DC536E1cA7c7606B299a8f", abi, provider)
 
         const token1 = new ethers.Contract("0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", erc20ABI, provider)
         const token2 = new ethers.Contract("0xc2132D05D31c914a87C6611C10748AEb04B58e8F", erc20ABI, provider)
