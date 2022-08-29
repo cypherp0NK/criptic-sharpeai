@@ -5,7 +5,7 @@ export const FarmsData = [
     to: 'USDT',
     token1: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     token2: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-    vault: '0x2f1A893f4b42D49bE8C98AAF2EF61532A10Ec1Cf',
+    vault: '0x31EDB1f1f60C1f3358b034793bA4f7957cfbe2a1',
     earned: '0',
     apr: '29.72%',
     liquidity: '$232,941,720',

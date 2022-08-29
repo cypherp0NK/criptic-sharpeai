@@ -11,7 +11,7 @@ export const vaultData = (provider: any) => {
         // const provider =  new providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/2VsZl1VcrmWJ44CvrD9pt1HFieK6TQfZ')
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
         
-        const SC1 = new ethers.Contract("0x2f1A893f4b42D49bE8C98AAF2EF61532A10Ec1Cf", abi, provider)
+        const SC1 = new ethers.Contract("0x31EDB1f1f60C1f3358b034793bA4f7957cfbe2a1", abi, provider)
         const SC2 = new ethers.Contract("0xeC7314e9ca71b2a3375f925BEe326e84f1a1eFe8", abi, provider)
         const SC3 = new ethers.Contract("0xeb24a13d7783eEd5716d30e06602083aE09f6DFD", abi, provider)
 

@@ -208,7 +208,7 @@ function NftFooter({
     >
       <div className="-mx-4 border-t-2 border-gray-900 px-4 pt-4 pb-5 dark:border-gray-700 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
         {isAuction && (
-          <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
+          <div className="flex items-center justify-center gap-4 pb-3.5 md:pb-4 xl:gap-5">
             <div className="block w-1/2 shrink-0 md:w-2/5">
               <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:mb-1.5 sm:text-sm">
                 Blockchain
@@ -242,14 +242,14 @@ function NftFooter({
           </div>
         )}
         
-          <AnchorLink href="https://polygonscan.com/address/0x2f1A893f4b42D49bE8C98AAF2EF61532A10Ec1Cf" className="inline-flex items-center -tracking-wider">
+          <AnchorLink href="https://polygonscan.com/address/0x31EDB1f1f60C1f3358b034793bA4f7957cfbe2a1" className="inline-flex items-center -tracking-wider">
             <div className="text-sm leading-6 -tracking-wider text-white-600 dark:black-gray-400">
                 Vault Address
             </div>
             <ArrowLinkIcon className="h-3 w-3 ltr:ml-2 rtl:mr-2" />
           </AnchorLink><br></br>
 
-          <AnchorLink href="https://polygonscan.com/address/0xb6F27E1e09B1a8440d72D548Fb6c23073ab9A101" className="inline-flex items-center -tracking-wider">
+          <AnchorLink href="https://polygonscan.com/address/0x4f3280f8018994fb04Bf7E4ab10bFe292aC816b9" className="inline-flex items-center -tracking-wider">
             <div className="text-sm leading-6 -tracking-wider text-white-600 dark:black-gray-400">
                 Strategy Address
             </div>
@@ -329,7 +329,7 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
                 </h2>
               </div>
               <AnchorLink
-                href="https://polygonscan.com/address/0x2f1A893f4b42D49bE8C98AAF2EF61532A10Ec1Cf"
+                href="https://polygonscan.com/address/0x31EDB1f1f60C1f3358b034793bA4f7957cfbe2a1"
                 className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white xl:mt-2.5"
               >
                 Started on June 27, 2022

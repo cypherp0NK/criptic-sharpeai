@@ -25,7 +25,7 @@ export const useWithdrawTokens = ( vault: string ) => {
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
-            SharpeaiContract.withdraw(amount, 1, 0, address)
+            SharpeaiContract.withdraw(amount, 0, 0, address, true, false)
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
@@ -41,7 +41,7 @@ export const useWithdrawTokens = ( vault: string ) => {
             const connection = web3Modal && (await web3Modal.connect());
             const provider = new ethers.providers.Web3Provider(connection);
             const SharpeaiContract = new ethers.Contract(vault, abi, provider.getSigner())
-            SharpeaiContract.withdraw(amount, 0, 1, address)
+            SharpeaiContract.withdraw(amount, 0, 0, address, false, true)
             .then((tx: any) => {
               provider.waitForTransaction(tx.hash)
               .then(()=>{
