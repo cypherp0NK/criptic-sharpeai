@@ -124,18 +124,18 @@ export default function Sidebar({ className }: SidebarProps) {
             ))}
           </div>
           {theme === "light" ? 
-          <div className='relative hover:bg-brand dark:hover:text-white bottom-0 top-20 w-fit mx-auto flex h-12 cursor-pointer items-center px-4 py-2.5 gap-2 transition-all text-gray-500 hover:text-brand dark:hover:text-white border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          <div className='relative hover:bg-brand dark:hover:text-white bottom-0 top-20 sm:top-12 w-fit mx-auto flex h-12 cursor-pointer items-center px-4 py-2.5 gap-2 transition-all text-gray-500 hover:text-brand dark:hover:text-white border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
           onClick={()=>{setTheme("dark")}}>
             <Moon />
             <div className='text-sm text-center'>Switch to dark</div>
           </div> : 
-          <div className='relative bottom-0 top-20 w-fit mx-auto flex h-12 cursor-pointer items-center px-4 py-2.5 gap-2 transition-all text-gray-500 hover:text-brand dark:hover:text-white border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
+          <div className='relative bottom-0 top-20 sm:top-12 w-fit mx-auto flex h-12 cursor-pointer items-center px-4 py-2.5 gap-2 transition-all text-gray-500 hover:text-brand dark:hover:text-white border border-transparent bg-txnTheme bg-opacity-10 hover:text-white rounded-lg'
           onClick={()=>{setTheme("light")}}>
             {/* <div className="h-6 w-7 flex justify-center items-center"><Image src={sun} alt="Sharpe" /></div> */}
             <Sun />
             <div className='text-sm text-center'>Switch to light</div>
           </div>}
-          <div className='relative bottom-0 top-24 w-fit mx-auto flex text-xs items-center transition-all text-black dark:text-white'>v0.1.1</div>
+          <div className='relative bottom-0 top-24 sm:top-16 w-fit mx-auto flex text-xs items-center transition-all text-black dark:text-white'>v0.1.1</div>
         
         </div>
         
