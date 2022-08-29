@@ -135,7 +135,7 @@ export default function Sidebar({ className }: SidebarProps) {
             <Sun />
             <div className='text-sm text-center'>Switch to light</div>
           </div>}
-          <div className='relative bottom-0 top-24 sm:top-16 w-fit mx-auto flex text-xs items-center transition-all text-black dark:text-white'>v0.1.1</div>
+          <div className='relative bottom-0 top-24 sm:top-14 w-fit mx-auto flex text-xs items-center transition-all text-black dark:text-white'>v0.1.1</div>
         
         </div>
         
