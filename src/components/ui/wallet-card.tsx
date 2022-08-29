@@ -17,7 +17,7 @@ const data = [
     name: 'Tether',
     value: 300,
     volume: '8.47%',
-    isChangePositive: false,
+    isChangePositive: true,
   },
   {
     name: 'Cardano',
@@ -29,7 +29,7 @@ const data = [
     name: 'Binance Coin',
     value: 15,
     volume: '3.02%',
-    isChangePositive: false,
+    isChangePositive: true,
   },
 ];
 
